@@ -1,1 +1,1 @@
-# My website and data analysis portfolio
+# Welcome to behind-the-scenes of my website and data analysis portfolio. To view the published version of the website, please visit https://taylorglass16.github.io/taylorglass-MADA-portfolio/ 
