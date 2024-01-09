@@ -4,11 +4,12 @@ title: "My website and data analysis portfolio"
 
 # Welcome!
 
-### My name is Taylor Glass.
+#### My name is Taylor Glass.
 
-Welcome to **my website** and *data analysis portfolio.*
+Welcome to *my website* and *data analysis portfolio* for the Modern Applied Data Analysis course at the University of Georgia. 
 
 -   Please use the `Menu Bar` above to look around.
--   Have fun!
+-   I have added information about me, and I plan to add examples of my work from this course as the semester progresses. 
+-   Stay tuned for more updates and content! 
 
 
