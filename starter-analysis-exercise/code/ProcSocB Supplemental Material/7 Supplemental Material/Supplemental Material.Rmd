@@ -1,0 +1,411 @@
+---
+title: 'Supplemental Material: The Impact of Symptom and Activity Trade-offs on Transmission Potential of Patients Infected with Influenza'
+author: ""
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: article
+output:
+  bookdown::word_document2: 
+    toc: true
+bibliography: ["../SymptomActivity.bib"]
+csl: proceedings-of-the-royal-society-b.csl
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE, echo=FALSE, cache.lazy=FALSE}
+
+# Setting options for the rest of the document
+knitr::opts_chunk$set(warning = FALSE)
+# Rounding rules
+options(digits = 3)
+
+
+#Load data from "Data-Cleaning.R" script 
+SympAct_Any_Pos<-readRDS("../3 Clean Data/SympAct_Any_Pos.Rda") 
+SympAct_Lab_Pos<-readRDS("../3 Clean Data/SympAct_Lab_Pos.Rda")
+
+# Load Results for transscore sensitivity analysis from "Flu Symptoms Activity Models.R" Script 
+Trans_Trend_Lab<-readRDS("../5 Results/Models/Trans_Trend_Lab.Rda")
+Trans_Trend_Lab2<-readRDS("../5 Results/Models/Trans_Trend_Lab2.Rda")
+Trans_Trend_Lab3<-readRDS("../5 Results/Models/Trans_Trend_Lab3.Rda")
+Trans_Trend_Lab4<-readRDS("../5 Results/Models/Trans_Trend_Lab4.Rda")
+
+TvI_Trend_Lab<-readRDS("../5 Results/Models/TvI_Trend_Lab.Rda")
+TvI_Trend_Lab2<-readRDS("../5 Results/Models/TvI_Trend_Lab2.Rda")
+TvI_Trend_Lab3<-readRDS("../5 Results/Models/TvI_Trend_Lab3.Rda")
+TvI_Trend_Lab4<-readRDS("../5 Results/Models/TvI_Trend_Lab4.Rda")
+
+Trans_Cor_Lab<-readRDS("../5 Results/Models/Trans_Cor_Lab.Rda")
+Trans_Cor_Lab2<-readRDS("../5 Results/Models/Trans_Cor_Lab2.Rda")
+Trans_Cor_Lab3<-readRDS("../5 Results/Models/Trans_Cor_Lab3.Rda")
+Trans_Cor_Lab4<-readRDS("../5 Results/Models/Trans_Cor_Lab4.Rda")
+
+TvI_Cor_Lab<-readRDS("../5 Results/Models/TvI_Cor_Lab.Rda")
+TvI_Cor_Lab2<-readRDS("../5 Results/Models/TvI_Cor_Lab2.Rda")
+TvI_Cor_Lab3<-readRDS("../5 Results/Models/TvI_Cor_Lab3.Rda")
+TvI_Cor_Lab4<-readRDS("../5 Results/Models/TvI_Cor_Lab4.Rda")
+
+ImpactTrans2_LM_Lab<-readRDS("../5 Results/Models/ImpactTrans2_LM_Lab.Rda")
+ImpactTrans3_LM_Lab<-readRDS("../5 Results/Models/ImpactTrans3_LM_Lab.Rda")
+ImpactTrans4_LM_Lab<-readRDS("../5 Results/Models/ImpactTrans4_LM_Lab.Rda")
+
+## Predicted values of the different infect score based on the morbidity score  
+PredValueTrans2_Lab<-predict(ImpactTrans2_LM_Lab, newdata=data.frame(ImpactScore=c(min(SympAct_Lab_Pos$ImpactScore),max(SympAct_Lab_Pos$ImpactScore))))
+PredValueTrans3_Lab<-predict(ImpactTrans3_LM_Lab, newdata=data.frame(ImpactScore=c(min(SympAct_Lab_Pos$ImpactScore),max(SympAct_Lab_Pos$ImpactScore))))
+PredValueTrans4_Lab<-predict(ImpactTrans4_LM_Lab, newdata=data.frame(ImpactScore=c(min(SympAct_Lab_Pos$ImpactScore),max(SympAct_Lab_Pos$ImpactScore))))
+
+# Load Results for the morbidity sensitivity analysis from "Flu Symptoms Activity Models.R" Script 
+Impact2_Trend_Lab<-readRDS("../5 Results/Models/Impact2_Trend_Lab.Rda")
+Impact3_Trend_Lab<-readRDS("../5 Results/Models/Impact3_Trend_Lab.Rda")
+
+TvI2_Trend_Lab<-readRDS("../5 Results/Models/TvI2_Trend_Lab.Rda")
+TvI3_Trend_Lab<-readRDS("../5 Results/Models/TvI3_Trend_Lab.Rda")
+
+Impact2_Cor_Lab<-readRDS("../5 Results/Models/Impact2_Cor_Lab.Rda")
+Impact3_Cor_Lab<-readRDS("../5 Results/Models/Impact3_Cor_Lab.Rda")
+
+TvI2_Cor_Lab<-readRDS("../5 Results/Models/TvI2_Cor_Lab.Rda")
+TvI3_Cor_Lab<-readRDS("../5 Results/Models/TvI3_Cor_Lab.Rda")
+
+Impact2Act_LM_Lab<-readRDS("../5 Results/Models/Impact2Act_LM_Lab.Rda")
+Impact3Act_LM_Lab<-readRDS("../5 Results/Models/Impact3Act_LM_Lab.Rda")
+Impact2Trans1_LM_Lab<-readRDS("../5 Results/Models/Impact2Trans1_LM_Lab.Rda")
+Impact3Trans1_LM_Lab<-readRDS("../5 Results/Models/Impact3Trans1_LM_Lab.Rda")
+
+## Predicted values of activity based on the two morbidity scores
+PredImpact2Act_Lab<-predict(Impact2Act_LM_Lab, newdata=data.frame(ImpactScore2=c(min(SympAct_Lab_Pos$ImpactScore2),max(SympAct_Lab_Pos$ImpactScore2))))
+PredImpact3Act_Lab<-predict(Impact3Act_LM_Lab, newdata=data.frame(ImpactScore3=c(min(SympAct_Lab_Pos$ImpactScore3),max(SympAct_Lab_Pos$ImpactScore3))))
+
+## Predicted values of infect score based on the two morbidity scores
+Impact2Trans1_Lab<-predict(Impact2Trans1_LM_Lab, newdata=data.frame(ImpactScore2=c(min(SympAct_Lab_Pos$ImpactScore2),max(SympAct_Lab_Pos$ImpactScore2))))
+Impact3Trans1_Lab<-predict(Impact3Trans1_LM_Lab, newdata=data.frame(ImpactScore3=c(min(SympAct_Lab_Pos$ImpactScore3),max(SympAct_Lab_Pos$ImpactScore3))))
+
+
+#Load Results from "Flu Symptoms Activity Models.R" Script
+LmActvSympLab<-readRDS("../5 Results/Models/LmActvSympLab.Rda")
+LmActvSympAny<-readRDS("../5 Results/Models/LmActvSympAny.Rda")
+
+Trans_Cor_Lab<-readRDS("../5 Results/Models/Trans_Cor_Lab.Rda")
+TvI_Cor_Lab<-readRDS("../5 Results/Models/TvI_Cor_Lab.Rda")
+
+Impact_Trend_Any<-readRDS("../5 Results/Models/Impact_Trend_Any.Rda")
+Trans_Trend_Any<-readRDS("../5 Results/Models/Trans_Trend_Any.Rda")
+TvI_Trend_Any<-readRDS("../5 Results/Models/TvI_Trend_Any.Rda")
+
+Impact_Cor_Any<-readRDS("../5 Results/Models/Impact_Cor_Any.Rda")
+Trans_Cor_Any<-readRDS("../5 Results/Models/Trans_Cor_Any.Rda")
+TvI_Cor_Any<-readRDS("../5 Results/Models/TvI_Cor_Any.Rda")
+
+
+ImpactTrans_LM_Any<-readRDS("../5 Results/Models/ImpactTrans_LM_Any.Rda")
+ImpactAct_LM_Any<-readRDS("../5 Results/Models/ImpactAct_LM_Any.Rda")
+
+## Predicted values of activitiy and infect score based on morbidity 
+PredValueTrans_Any<-predict(ImpactTrans_LM_Any, newdata=data.frame(ImpactScore=c(min(SympAct_Any_Pos$ImpactScore),max(SympAct_Any_Pos$ImpactScore))))
+PredValueAct_Any<-predict(ImpactAct_LM_Any, newdata=data.frame(ImpactScore=c(min(SympAct_Any_Pos$ImpactScore),max(SympAct_Any_Pos$ImpactScore))))
+
+
+#Load Results from "Flu Sysmptoms Activity Tables.R"
+SympAnyTable<-readRDS("../5 Results/Tables/SympAnyTable.Rda")
+
+SympLabTable<-readRDS("../5 Results/Tables/SympLabTable.Rda")
+
+
+# Basic Data analysis for reporting results 
+
+#Counts for different score levels
+#infectiousness score
+TransAnytab<-table(SympAct_Any_Pos$TransScoreSMF)
+
+#Morbidity Score
+ImpactAnytab<-table(SympAct_Any_Pos$ImpactScoreF)
+
+#Total symptom number 
+TotalSympAnytab<-table(SympAct_Any_Pos$TotalSympF)
+
+
+
+# P value formatter found on stack overflow
+
+pvalr <- function(pvals, sig.limit = .01, digits = 2, html = FALSE) {
+
+  roundr <- function(x, digits = 1) {
+    res <- sprintf(paste0('%.', digits, 'f'), x)
+    zzz <- paste0('0.', paste(rep('0', digits), collapse = ''))
+    res[res == paste0('-', zzz)] <- zzz
+    res
+  }
+
+  sapply(pvals, function(x, sig.limit) {
+    if (x < sig.limit)
+      if (html)
+        return(sprintf('&lt; %s', format(sig.limit))) else
+          return(sprintf('< %s', format(sig.limit)))
+    if (x > .1)
+      return(roundr(x, digits = 2)) else
+        return(roundr(x, digits = digits))
+  }, sig.limit = sig.limit)
+}
+
+# Rho and 95% CI reporter 
+
+sprint_CI95 <- function(rho, lwr.ci, upr.ci) {
+  sprintf("%.2f (95%% CI: %.2f, %.2f)", rho, lwr.ci, upr.ci)
+}
+
+
+# Vector to make table of symptoms cat
+
+SympCatT<-c("**Infectiousness Symptoms**", "Chest Congestion", "Coughing", "Nasal Congestion", 
+           "Runny Nose", "Sneezing", "**Morbidity Symptoms**", "Abdominal Pain", "Breathlessness", 
+           "Chills/Sweats", "Chest Pain", "Diarrhea", "Ear Pain", "Eye Pain", "Fatigue", "Headache",
+           "Itchy Eyes", "Myalgia", "Nausea", "Sleeplessness","Sore Throat", "Subjective Fever", 
+           "Swollen Lymph Nodes", "Tooth Pain", "Vomiting Eye Pain", "Weakness", "Wheezing")
+
+```
+
+# Authors
+* Brian McKay^1^, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA
+* Mark Ebell, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA
+* Ariella Perry, Colorado Department of Public Health and Environment, Denver, CO, USA
+* Ye Shen, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA
+* Andreas Handel^1^, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA
+
+^1^ Corresponding Authors: Brian McKay and Andreas Handel
+
+Address: 101 Buck Rd, Miller Hall, Athens, Georgia 30606   
+
+Email: bmckay52@uga.edu or ahandel@uga.edu
+
+PROCEEDINGS OF THE ROYAL SOCIETY B  
+DOI: 10.1098/rspb.2020.0496
+
+# Documentation for additional SM files
+
+## Getting the files
+The files described below are available from Dryad https://doi.org/10.5061/dryad.51c59zw4v. 
+
+* "**Virulence_Trade-off.Rproj**" This file lets R know the relative file paths for loading and saving files.
+
+*	“**SymptomActivity.bib**” This file has all of the citation saved as a bibTex.
+
+* "**Symptom Questionnaire_Redacted.pdf**": This is a copy of the electronic questionnaire patients with an upper respiratory symptoms were required to fill out. All identifying information has been redacted.
+
+* "**DataDictionary_VirulenceTradeOff.xlsx**": This document provides a description of all the variables included in the analysis.
+
+* "**1 Anonymized Data**" folder contains the de-identified data for the analyses
+  + An R script that merges all of the individual data sets and creates and saves "Data.Rda" and "Data.csv" in the "1 Anonymized Data" Folder. This script is not included since the raw data sets are not included to protect patient privacy.
+
+* "**2 Data Cleaning Script**" folder contains one R script that cleans the data for the analyses
+  + "**Data Merging Script.R**": R script that merges all of the individual data sets and creates and saves "Data.Rda" in the "1 Anonymized Data" Folder. This script is not included since the raw data sets are not included to protect patient privacy.
+  + "**Data Cleaning.R**": This R script does all of the data preparation, creating all the required variables for the analysis. This script also produces the data sets used for the analyses and saves them in the "3 Clean Data" folder.
+
+* "**4 Analysis Scripts**" folder has 4 R scripts that analyze the clean data and produce the results presented in the main text and supplement.
+  + "**Flu Symptoms Activity Models.R**" This script creates the univariate/multivariate linear regression table, the Spearman rank correlation, and the CMH trend tests. Results are saved in "5 Results\Models"
+  + "**Flu Symptoms Activity Plots.R**" This script creates all of the plots. Results are saved in "5 Results\Figures"
+  + "**Flu Symptoms Activity Tables.R**" This script creates all of the tables. Results are saved in "5 Results\Tables"
+  + "**Multivariate Subset Selection.R**" This script does the variable selection for the multivariate model. Results are saved in "5 Results\Models"
+  
+* "**6 Manuscript**" folder has 2 files in it used to create the manuscript.
+  + "**Manuscript.Rmd**" This Rmd file creates the basic manuscript word document (formatting will not be identical)
+  + "**proceedings-of-the-royal-society-b.csl**" is a style file to format the citations in the manuscript
+  
+* "**7 Supplemental Material**" folder has 2 files used to create this document
+  + "**Supplemental Material.Rmd**" This Rmd file creates the basic supplemental material word document (formatting will not be identical)
+  + "**proceedings-of-the-royal-society-b.csl**" is a style file to format the citations in the supplement  
+
+ 
+  
+## Reproducing results
+The files required to reproduce the results are 2 R Markdown files, 4 R script, and one anonymized data file. These files allow the reproduction of all results shown in the main text and SM. To reproduce the results follow these steps. 
+
+First, install R, Rstudio, and Pandoc (when you install Rstudio Pandoc should automatically install). Microsoft Word or Open Office Word is also required. 
+
+Second, save the zip file from Dryad on your local computer. Open the folder and double click "Virulence_Trade-off". This should open Rstudio (if prompted, select Rstudio as the app to open this file type). Then open and run the files below in the specified order.  
+
+
+1. R script "Data Cleaning.R" in the "2 Data Cleaning Script" folder uses "Data.Rda" and produces two clean data sets used for all further analyses. The data sets are all saved in the "3 Clean Data" folder and include:
+    i) "SympAct_Any_Pos.Rda" Contains data for all influenza patients regardless of diagnosis method.
+    ii) "SympAct_Lab_Pos.Rda" Contains data for influenza patients diagnosed based on a PCR or rapid antigen test.
+  
+**It is important to note that "SympAct_Lab_Pos.Rda" is a subset of "SympAct_Any_Pos.Rda" based on the method of diagnosis.**      
+
+2. Four R scripts in the "4 Analysis Scripts" folder ("Flu Symptoms Activity Univariate Model.R", "Flu Symptoms Activity Univariate Plots.R", and "Flu Symptoms Activity Univariate Tables.R", "Multivariate Subset Selection.R"). The order you run these scripts does not matter. Results of each script are automatically saved in the "5 Results" folder.
+
+3. R Markdown "Manuscript.Rmd" is in the "6 Manuscript" folder. This combines all the relevant results and creates the main text as a Word document (some reformatting is required).
+
+4. R Markdown "Supplemental Material.Rmd" in the "7 Supplemental Material" folder generates the supplementary material as Word document.
+
+
+
+# Supplementary Results 
+
+
+## Histogram of reported activity levels
+Reported activity levels ranging from `r min(SympAct_Lab_Pos$ActivityLevel)` to `r max(SympAct_Lab_Pos$ActivityLevel)` with a median of `r median(SympAct_Lab_Pos$ActivityLevel)` for those patients with a lab diagnosis of influenza (SM Figure \@ref(fig:ActivityLabBarChart))
+
+```{r ActivityLabBarChart, fig.cap="Histogram of reported activity levels for patients with a lab diagnosis of influenza.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/ActivityLabBarChart.tiff")
+```
+
+## Table of symptoms
+
+SM Table \@ref(tab:SympLabTable) shows the symptoms among patients with a lab-based diagnosis.
+
+```{r SympLabTable, echo=FALSE}
+knitr::kable(SympLabTable, caption = "**Symptoms of the 324 patients with laboratory based flu diagnosis. The table shows the number of patients who reported having the following symptoms and the corresponding percentage.**")
+```
+
+## Univariate and subset selection
+
+Correlations between activity level and each symptom from the univariate linear analysis and the multivariate regression model selected using cross-validation (SM Table \@ref(tab:LmActvSympLab)).
+
+```{r LmActvSympLab, echo=FALSE, results='asis'}
+knitr::kable(LmActvSympLab, row.names=FALSE, caption = "**Results of the univariate and multivariate linear regression of symptoms and activity. The coefficients are the estimated effect on activity when the symptom is present. The multivariate model was selected with a sequential forward floating selection, minimizing the RMSE on test data through a 5-fold cross validation (20 times repeated). 95%CI = The 95% confidence interval for the coefficient.**")
+```
+
+## Distribution of scores
+
+The infectiousness score is skewed left with more than half of the patients having a score of 4 or 5 (SM Figure \@ref(fig:IandMLabBarChart)A). The morbidity score is more centered with no patient having a score of 0,1,19 or 20 (SM Figure \@ref(fig:IandMLabBarChart)B).
+
+```{r IandMLabBarChart, fig.cap="(A) Histogram of infectiousness score for patients with a lab diagnosis of influenza. (B) Histogram of morbidity score for patients with a lab diagnosis of influenza.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/IandMScoresLabBarChart.tiff")
+```
+
+
+
+## Correlation between number and severity of symptoms
+
+The data we have available reports most of the symptoms as absence or presence. If more symptoms correlate positively with stronger symptoms, using absence/presence data only is a valid, albeit less powerful approach. More problematically is a situation in which the number and strength of symptoms correlate negatively. For example, a person having fewer symptoms might "make up" for the lower number of symptoms by having a more severe form. Such a relation would invalidate our approach of adding presence/absence symptoms to arrive at a given score. While we cannot thoroughly test potential correlations between the quantity and strength of symptoms on all our data, we do have severity information on the cough, weakness, and body aches symptoms. This allows us to evaluate the relation between the number of symptoms and the severity of those symptoms.
+
+We find that as the number of infectiousness-related symptoms (i.e., our infectiousness scores) increases, there is an increase in cough intensity (SM Figure \@ref(fig:Infect1CoughFig)). The same relationship is found between the number of morbidity-related symptoms (i.e., our morbidity scores) and the severity of weakness and body aches (SM Figures \@ref(fig:Morbidity1WeaknessFig) and \@ref(fig:Morbidity1BodyAchesFig)). While not conclusive, this evidence suggests that our assumption that symptom absence/presence also captures symptom severity seems to be defensible.
+
+```{r Infect1CoughFig, fig.cap="Relationship between cough intensity and the infectiousness score from main text using all Y/N variables plausibly related to infectiousness.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/TransScorevsCoughIntensity_Lab_Score1.tiff")
+```
+
+
+```{r Morbidity1WeaknessFig, fig.cap="Relationship between weakness intensity and the morbidity score from main text using all Y/N variables related to morbidity.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/ImpactScorevsWeakness_Lab_Score1.tiff")
+```
+
+
+```{r Morbidity1BodyAchesFig, fig.cap="Relationship between body ache intensity and the morbidity score from main text using all Y/N variables related to morbidity.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/ImpactScorevsMyalgia_Lab_Score1.tiff")
+```
+
+## Alternative approaches to calculate the infectiousness score 
+
+In the main text, we use all of the available yes/no symptoms that can feasibly be related to infectiousness. Since there is no consensus about which symptoms or routes of transmission are the most important, we also consider how robust the results are using several different versions of infectiousness scores.  
+
+While chest congestion might be a proxy for pathogen load, i.e., more congestion could indicate higher levels of a pathogen, in which case it could impact infectiousness. However, it is true that chest congestion alone without coughing or sneezing might not lead to increased infectiousness (though some recent studies suggest that breathing alone accounts for a large fraction of expelled influenza virions [@Yan2018]). To explore if inclusion or exclusion of chest congestion in the infectiousness scores made a difference, we created a score excluding it to see if the overall conclusions would change. The new score values ranged from 0 to 4 (SM Figure \@ref(fig:InfectScore2Fig)A). 
+
+The same overall relationship is observed between the new infectiousness score and activity. There is still a curve. Spearman’s rank correlation indicates a negative relationship with ($r=$ `r sprint_CI95(Trans_Cor_Lab2[1], Trans_Cor_Lab2[2], Trans_Cor_Lab2[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r Trans_Trend_Lab2$table["cor","Chisq"]`, $df =$ `r Trans_Trend_Lab2$table["cor","Df"]`, $p$ `r pvalr(Trans_Trend_Lab2$table["cor","Prob"])`) (SM Figure \@ref(fig:InfectScore2Fig)B). 
+
+When compared to the morbidity score, the same overall trends from the primary analysis were observed. Spearman’s rank correlation ($r=$ `r sprint_CI95(TvI_Cor_Lab2[1], TvI_Cor_Lab2[2], TvI_Cor_Lab2[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r TvI_Trend_Lab2$table["cor","Chisq"]`, $df =$ `r TvI_Trend_Lab2$table["cor","Df"]`, $p$ `r pvalr(TvI_Trend_Lab2$table["cor","Prob"])`). We find a mean `r round(abs((as.numeric(PredValueTrans2_Lab[2])/as.numeric(PredValueTrans2_Lab[1]))),1)` fold increase in the new infectiousness score going from the lowest to the highest morbidity score (SM Figure \@ref(fig:InfectScore2Fig)C).   
+
+```{r InfectScore2Fig, fig.cap="Infectiousness score without chest congestion", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/SM_TransScore2_Lab.tiff")
+```
+
+How patients define congestion symptoms is very subjective [@McCoul2019], so we created a score excluding both of the congestion-related variables to see if the overall conclusions would change. The new score could have a value of 0 to 3 (SM Figure \@ref(fig:InfectScore3Fig)A). 
+
+The same overall relationship is observed between the new infectiousness score and activity. The curved relationship is not as clear but still present. Spearman's rank correlation indicates negative relationship with ($r=$ `r sprint_CI95(Trans_Cor_Lab3[1], Trans_Cor_Lab3[2], Trans_Cor_Lab3[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r Trans_Trend_Lab3$table["cor","Chisq"]`, $df =$ `r Trans_Trend_Lab3$table["cor","Df"]`, $p$ `r pvalr(Trans_Trend_Lab3$table["cor","Prob"])`) (SM Figure \@ref(fig:InfectScore3Fig)B). 
+
+When compared to the morbidity score again, the same trends were observed, and Spearman's rank correlation indicates positive relationship ($r=$ `r sprint_CI95(TvI_Cor_Lab3[1], TvI_Cor_Lab3[2], TvI_Cor_Lab3[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r TvI_Trend_Lab3$table["cor","Chisq"]`, $df =$ `r TvI_Trend_Lab3$table["cor","Df"]`, $p$ `r pvalr(TvI_Trend_Lab3$table["cor","Prob"])`). We find a mean `r round(abs((as.numeric(PredValueTrans3_Lab[2])/as.numeric(PredValueTrans3_Lab[1]))),1)` fold increase in the new infectiousness score going from the lowest to the highest morbidity score (SM Figure \@ref(fig:InfectScore3Fig)C). 
+
+```{r InfectScore3Fig, fig.cap="Infectiousness score without chest and nasal congestion variables", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/SM_TransScore3_Lab.tiff")
+```
+
+For the score used in the main text, we included all relevant symptoms even if they can be considered strongly related. This might lead to potential double-counting of some symptoms. To evaluate if this might cause problems, we created an alternative score that removed highly correlated variables based on two cut off values of Yule's Q [@Yule1919]. There is no commonly used value to define a cut-off at which correlated variables should be removed. We decided to use an absolute correlation of 0.9 or 0.75 for our cut off. When using the 0.9 cut off only very strongly correlated variables were removed, while for the 0.75 even intermediately strong correlations lead to the removal of one of the variables [@Warrens2008]. For any pair of symptoms with a positive or negative correlation of 0.9 or greater, the more informative symptom (having the proportion Yes/No closest to 50%) was kept[@Kuhn2008]. For our data, cough and chest congestion had a Yule's Q of `r DescTools::YuleQ(SympAct_Lab_Pos$CoughYN, SympAct_Lab_Pos$ChestCongestion) `, and chest congestion had the best balance between yes and no responses, so it was kept. When relaxing the correlation to 0.75, there is no change in the variables included in the score. 
+
+The score values range from 0 to 4 (SM Figure \@ref(fig:InfectScore4Fig)A). The same overall relationship is observed between the new infectiousness score and activity. The curve is present, Spearman's rank correlation indicates negative relationship with ($r=$ `r sprint_CI95(Trans_Cor_Lab4[1], Trans_Cor_Lab4[2], Trans_Cor_Lab4[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r Trans_Trend_Lab4$table["cor","Chisq"]`, $df =$ `r Trans_Trend_Lab4$table["cor","Df"]`, $p$ `r pvalr(Trans_Trend_Lab4$table["cor","Prob"])`) (SM Figure \@ref(fig:InfectScore4Fig)B). 
+
+When compared to the morbidity score again the same overall trends were observed with Spearman's rank correlation indicates positive relationship ($r=$ `r sprint_CI95(TvI_Cor_Lab4[1], TvI_Cor_Lab4[2], TvI_Cor_Lab4[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r TvI_Trend_Lab4$table["cor","Chisq"]`, $df =$ `r TvI_Trend_Lab4$table["cor","Df"]`, $p$ `r pvalr(TvI_Trend_Lab4$table["cor","Prob"])`). We find a mean `r round(abs((as.numeric(PredValueTrans4_Lab[2])/as.numeric(PredValueTrans4_Lab[1]))),1)` fold increase in the new infectiousness score going from the lowest to the highest morbidity score (SM Figure \@ref(fig:InfectScore4Fig)C). 
+
+```{r InfectScore4Fig, fig.cap="Infectiousness score removing variables determined to be redundant based on Yule's Q", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/SM_TransScore4_Lab.tiff")
+```
+
+
+## Alternative approaches to calculate morbidity score
+
+To see the impact of removing correlated variables from the morbidity score, we used the same methods applied to the infectiousness score above. Among the morbidity symptoms, only vomiting and weakness correlated greater than 0.9. Vomiting was included in the score since it was more balanced then weakness, which was present in 94% of patients. This score using 0.9 cut off had a possible range of 0 to 19. There are no patients with a morbidity score of 0,1,18,19 (SM Figure \@ref(fig:ImpactScore2Fig)A). The same relationships observed in the main text are seen when the morbidity score is compared to activity and infectiousness scores.
+
+There is a negative correlation between the morbidity score, and the patient's self-reported activity level suggests that higher morbidity score is associated with reduced activity levels. Spearman's rank correlation indicates negative relationship ($r=$ `r sprint_CI95(Impact2_Cor_Lab[1], Impact2_Cor_Lab[2], Impact2_Cor_Lab[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r Impact2_Trend_Lab$table["cor","Chisq"]`, $df =$ `r Impact2_Trend_Lab$table["cor","Df"]`, $p$ `r pvalr(Impact2_Trend_Lab$table["cor","Prob"])`). We find a mean `r round(abs((as.numeric(PredImpact2Act_Lab[1])/as.numeric(PredImpact2Act_Lab[2]))),1)` fold decrease in activity level going from the lowest to the highest morbidity score (SM Figure \@ref(fig:ImpactScore2Fig)B). 
+
+There is  a positive correlation between the morbidity and infectiousness scores show a positive correlation. Spearman's rank correlation indicates positive relationship ($r=$ `r sprint_CI95(TvI2_Cor_Lab[1], TvI2_Cor_Lab[2], TvI2_Cor_Lab[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r TvI2_Trend_Lab$table["cor","Chisq"]`, $df =$ `r TvI2_Trend_Lab$table["cor","Df"]`, $p$ `r pvalr(TvI2_Trend_Lab$table["cor","Prob"])`). We find a mean `r round(abs((as.numeric(Impact2Trans1_Lab[2])/as.numeric(Impact2Trans1_Lab[1]))),1)` fold in the infectiousness score going from the lowest to the highest morbidity score (SM Figure \@ref(fig:ImpactScore2Fig)C). 
+
+
+```{r ImpactScore2Fig, fig.cap="Morbidity score removing variables determined to be redundant using the absolute value of Yule's Q of 0.9 or more", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/SM_ImpactScore2_Lab.tiff")
+```
+
+The score created using the 0.75 cut off was different, with a total of 6 symptoms being excluded. Starting with the highest correlations first: Weakness/Vomit (Q=1) keep vomit, Tooth pain/Headache (Q=.86) keep Tooth pain, Chills Sweats/SoreThroat (Q=-.8) keep Chills Sweats, Fatigue/BodyAches (Q=.80) keep BodyAches, Vomit/Nausea (Q=.79) keep Nausea, SubjectiveFever/ChillsSweats (Q=.76) keep SubjectiveFever. The 0.75 cut off morbidity score included Subjective Fever, Myalgia, Sleeplessness, Breathlessness, Wheezing, Chest pain, Abdominal Pain, Diarrhea, Nausea, Ear Pain, Tooth pain, Eye pain, Itchy Eyes, and Swollen Lymph Nodes. This morbidity score has a possible value of 0 to 14. Compared to the morbidity score used in the main text and 0.9 cut off there are now 12 patients with a score of 0 or 1, but there are still no patients with a score of 13 or 14. (SM Figure \@ref(fig:ImpactScore3Fig)A). Again the overall results remain the same despite using a different version of the score. 
+
+There is a negative correlation between the morbidity score and the patient's self-reported activity level. Spearman's rank correlation indicates negative relationship ($r=$ `r sprint_CI95(Impact3_Cor_Lab[1], Impact3_Cor_Lab[2], Impact3_Cor_Lab[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r Impact3_Trend_Lab$table["cor","Chisq"]`, $df =$ `r Impact3_Trend_Lab$table["cor","Df"]`, $p$ `r pvalr(Impact3_Trend_Lab$table["cor","Prob"])`). We find a mean `r round(abs((as.numeric(PredImpact3Act_Lab[1])/as.numeric(PredImpact3Act_Lab[2]))),1)` fold reduction in activity level going from the lowest to the highest morbidity score (SM Figure \@ref(fig:ImpactScore3Fig)B). 
+
+The relationship between the morbidity and infectiousness scores show a positive correlation. Spearman's rank correlation indicates positive relationship ($r=$ `r sprint_CI95(TvI3_Cor_Lab[1], TvI3_Cor_Lab[2], TvI3_Cor_Lab[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r TvI3_Trend_Lab$table["cor","Chisq"]`, $df =$ `r TvI3_Trend_Lab$table["cor","Df"]`, $p$ `r pvalr(TvI3_Trend_Lab$table["cor","Prob"])`). We find a mean `r round(abs((as.numeric(Impact3Trans1_Lab[2])/as.numeric(Impact3Trans1_Lab[1]))),1)` fold increase in the infectiousness score going from the lowest to the highest morbidity score (SM Figure \@ref(fig:ImpactScore3Fig)C).   
+
+ 
+```{r ImpactScore3Fig, fig.cap="Morbidity score removing variables determined to be redundant using the absolute value of Yule's Q of 0.75 or more", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/SM_ImpactScore3_Lab.tiff")
+```
+
+# Analysis using patients with any diagnosis influenza (Lab or Empiric) 
+
+## Description of the population  
+Influenza diagnosis for our population is determined using three different methods a rapid antigen test, a PCR test, or an empirical diagnosis by a physician. In the main text, we considered any person who was diagnosed by either a rapid antigen or PCR test as having influenza. Here we repeat the analyses completed in the main text with the addition of patients with a diagnosis of influenza empirically based on symptoms. Patients with an empirical diagnosis are generally defined as having influenza-like illness (ILI). In total, there are `r length(SympAct_Any_Pos$Unique.Visit)` patients with any diagnosis of influenza. Among these patients, the activity levels ranged from `r min(SympAct_Any_Pos$ActivityLevel)` to `r max(SympAct_Any_Pos$ActivityLevel)`, with a median of `r median(SympAct_Any_Pos$ActivityLevel)`. All of the patients had symptoms of disease. The most common symptom is weakness, and the least common symptom is vomiting (SM Table \@ref(tab:SympAnyTable)).
+
+```{r SympAnyTable, echo=FALSE}
+knitr::kable(SympAnyTable, caption = "**Out of the 735 patients included the table shows the number of patients who reported having the following symptoms and the corresponding percentage.**")
+```
+
+## Univariate and subset selection
+
+We explored the univariate correlations between activity level and each symptom. All of the symptoms that were statistically significantly related to activity showed a negative correlation with activity level (SM Table \@ref(tab:LmActvSympAny)). Based on the cross-validated variable selection, we found that a model that included chills/sweats, subjective fever, headache, weakness, sleeplessness, and vomiting creates the most predictive model (SM Table \@ref(tab:LmActvSympAny)).       
+
+```{r LmActvSympAny, echo=FALSE, results='asis'}
+knitr::kable(LmActvSympAny, row.names=FALSE, caption = "**Results of the univariate and multivariate linear regression of symptoms and activity. The coefficients are the estimated effect on activity when the symptom is present. The multivariate model was selected with a sequential forward floating selection, minimizing the root mean square error on test data through a 5-fold cross validation (20 times repeated). 95%CI = The 95% confidence interval for the coefficient.**")
+```
+
+## Computation of infectiousness and morbidity scores
+
+We used the same symptom classification presented in the main text. The median infectiousness score is `r median(SympAct_Any_Pos$TransScore1)`, and a skewed distribution is present with most of the patients having a score of 4 or 5 (SM Figure \@ref(fig:InfectScoreFig)).
+
+```{r InfectScoreFig, fig.cap="Distribution of the infectiousness score.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/InfectScoreAnyBarChart.tiff")
+```
+
+The median morbidity score is `r median(SympAct_Any_Pos$ImpactScore)`, and no patients have a morbidity score of 0, 1, 19, 20 (SM Figure \@ref(fig:MorbScoreFig)).  Such a centered distribution is assumed to be a result of patients felling ill enough to seek medical care, but none were sick enough to require urgent care or hospitalization.
+
+```{r MorbScoreFig, fig.cap="Distribution of the morbidity score.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/MorbScoreAnyBarChart.tiff")
+```
+
+## Impact of infectiousness score on activity 
+Analysis of the impact of the infectiousness score on activity suggests that the value of this score has a negative correlation with the activity level. Spearman's rank correlation is $r =$ `r sprint_CI95(Trans_Cor_Any[1], Trans_Cor_Any[2], Trans_Cor_Any[3])` and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r Trans_Trend_Any$table["cor","Chisq"]`, $df =$ `r Trans_Trend_Any$table["cor","Df"]`, $p =$ `r pvalr(Trans_Trend_Any$table["cor","Prob"])`) (SM Figure \@ref(fig:AnyTvAFig)). This is different from the main analysis were we did not observe a clear relationship between activity and the infectiousness score. 
+
+```{r AnyTvAFig, fig.cap="Activity level for each level of the infectiousness score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/ActivityVSTransScore_Any.tiff")
+```
+
+## Impact of morbidity score on activity
+Analysis of the impact of the morbidity score on activity suggests that the value of this score is correlated with the activity level of a patient, with higher morbidity correlating with reduced activity. Spearman's rank correlation indicates a negative relationship $r =$ `r sprint_CI95(Impact_Cor_Any[1], Impact_Cor_Any[2], Impact_Cor_Any[3])` and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r Impact_Trend_Any$table["cor","Chisq"]`, $df =$ `r Impact_Trend_Any$table["cor","Df"]`, $p$ `r pvalr(Impact_Trend_Any$table["cor","Prob"])`) (SM Figure \@ref(fig:AnyMvAFig)). The observed pattern is clear, with a mean `r round(abs((as.numeric(PredValueAct_Any[1])/as.numeric(PredValueAct_Any[2]))),1)` fold decrease in activity level going from the lowest to the highest morbidity score.
+
+```{r AnyMvAFig, fig.cap="Activity level for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/ActivityVSImpactScore_Any.tiff")
+```
+
+## Impact of morbidity score on infectiousness score
+Analysis of the relationship between the morbidity and infectiousness scores show a positive correlation. Spearman's rank correlation indicates a positive relationship ( $r =$ `r sprint_CI95(TvI_Cor_Any[1], TvI_Cor_Any[2], TvI_Cor_Any[3])`) and the Cochran-Mantel-Haenszel trend test is statistically significant ($\chi^2 =$ `r TvI_Trend_Any$table["cor","Chisq"]`, $df =$ `r TvI_Trend_Any$table["cor","Df"]`, $p$ `r pvalr(TvI_Trend_Any$table["cor","Prob"])`) (SM Figure \@ref(fig:AnyMvTFig)). Apart from the values activity levels for low morbidity score (with small sample sizes), the pattern is consistent with a mean `r round(abs((as.numeric(PredValueTrans_Any[2])/as.numeric(PredValueTrans_Any[1]))),1)` fold increase in the infectiousness score going from the lowest to the highest morbidity score.
+
+```{r AnyMvTFig, fig.cap="Infectiousness score for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.", echo=FALSE}
+knitr::include_graphics("../5 Results/Figures/TransScoreVSImpactScore_Any.tiff")
+```
+
+# References
+
+
