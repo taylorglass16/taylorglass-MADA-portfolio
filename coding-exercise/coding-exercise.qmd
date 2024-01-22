@@ -2,4 +2,108 @@
 title: "R Coding Exercise"
 ---
 
-Placeholder file for the future R coding exercise.
+### This section will be utilized to learn basic R coding skills. 
+
+Data from the ds labs package will be utilized for this practice. The renv package is a great resource for keeping track of all the packages used within a project. I chose to install it here, so I can use it on class exercises and the final project. I loaded tidyverse to practice processing data and ggplot2 to visualize the processed data later in this exercise. I loaded naniar to determine missingness of the data. 
+```{r}
+library(dslabs)
+install.packages("renv")
+library(tidyverse)
+library(ggplot2)
+library(naniar)
+```
+
+## Exploring Gapminder
+I will explore the gapminder dataset included in this pacakge with the help(), str(), summary(), and class() functions. 
+```{r}
+help(gapminder)
+str(gapminder)
+summary(gapminder)
+class(gapminder)
+```
+
+## Processing Data
+
+To create a dataset with only African countries, I need to view the dataset using head() to determine a variable name that I can use to filter the dataset. Once I found "continent", I filtered for Africa. The str() function shows me there are 2,907 observations of 9 variables, which means 2,907 African countries are included in the gapminder dataset. The summary() function allowed me to see what Dr. Handle meant by R keeping all the continent categories but plugging in a zero as a placeholder. 
+```{r}
+head(gapminder) ##I see a variable name called continent that I will use to filter the dataset
+africadata <- gapminder %>% 
+                filter(continent == "Africa")  ##I created a new dataset that only includes African countries
+str(africadata) 
+summary(africadata)
+```
+To create two new objects from the 'africadata' object with only two columns each, I used the select() function to choose the columns I wanted to keep. The first object, 'IMLE', contains the infant mortality rates and life expectancies for each African country. I used the str() function to see there are 2907 observations of 2 variables, and the summary() function provides 5 data points for each numeric variable. The second object, "PLE', contains the population and life expectancies for each African county. Similarly, I used str() to confirm there are 2907 observations of 2 variables, and the summary() function to learn about the range of each variable. 
+
+```{r}
+IMLE <- africadata %>%  ##store a new object using the arrow notation
+        select("infant_mortality", "life_expectancy") ##pipe in the filtered dataset and select specific columns 
+str(IMLE) ##confirm there are only 2 variables 
+summary(IMLE) ##observe the range of each numerical variable
+
+PLE <- africadata %>%  ##store a new object using the arrow notation
+          select("population", "life_expectancy") ##pipe in the filtered dataset and select specific columns 
+str(PLE) ##confirm there are only 2 variables 
+summary(PLE) ##observe the range of each numerical variable
+```
+## Plotting
+
+To visualize the relationship between the two variables included in each of these objects, I will plot them using ggplot(). Using the IMLE object, I plotted infant mortality on the x axis and life expenctancy on the y axis using the aesthetics filter with ggplot. I added geom-point() to plot the data as points. I also chose to include a title, which I centered on the graph, to make the contents of the plot even clearer. This plot shows the inverse relationship between life expectancy and infant mortality. The graph shows a strong inverse relationship with only 3 major outliers. The majority of observations fall between an infant mortality rate of 30 to 150. 
+```{r}
+IMLE %>% 
+  ggplot(aes(x=infant_mortality, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Life Expectancy as a Function of Infant Mortality") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) ##center the title on the graph
+```
+I followed a similar process to plot life expectancy based on population using the PLE object. I used ggplot() again along with geom_point() to plot the data points. I used the same technique to create a title centered on the graph. I also added the scale_x_log10() function to convert the numeric population variable to the logarithmic scale, which helps to create a cleaner visualization. The graph shows the most observations around a population of 1 million with a life expectancy ranging from 40 to 60. There is one major outlier on the graph, but most observations are clustered to create easily definable streaks. 
+The streaks of data in both of these graphs correspond to observations in each African country over the years included in the dataset, which range from 1960 to 2016. As time passes, life expectancy increases which causes the population size to increase. Since infant mortality has decreased over this time period, life expectancy is increasing. These trends show up as streaks in the data because each country's observations are grouped together over time.   
+```{r}
+PLE %>% 
+  ggplot(aes(x=population, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Life Expectancy as a Function of Population") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) + ##center the title
+  scale_x_log10() ##change the x-axis to the log scale
+```
+## More data processing 
+Finding out which observations have missing data is an important part of data analysis. I used gg_miss_var() to visualize which variables were missing information. While GDP accounts for the most missing observations, infant_mortality is the variable with the second most missing values. To determine which years have missing infant_mortality data, I used AI to learn how to use dplyr functions to filter for the specific missing data I am looking for. I filtered for observations where infant mortality rate was missing, and I selected the year column since that is the variable I am interested in. After printing the data, I realized it showed all 226 observations by year, so I used the unique() function to more efficiently determine which years had at least 1 missing infant mortality rate observation. Infant mortality rate is missing from 1960 to 1981 and again in 2016. 
+```{r}
+gg_miss_var(africadata) ##explore missingness of the data
+missing_years <- africadata %>%
+                  filter(is.na(infant_mortality)) %>% ##find observations of infant mortality that are missing 
+                  select(year) ##keep only the year column of the observations with missing data
+print(missing_years) ##view the years with missing data
+unique(missing_years) ##organize the years with missing data
+```
+After choosing 2000 for the year to study infant mortality rate based on missingness in the data, I filtered for observations made during 2000 only. I used the dim() function to confirm that I have 51 observations of 9 variables. The str() function provides the variable type for each variable, and the summary() function provides more details for each variable. 
+```{r}
+year2000 <- africadata %>% 
+              filter(year == "2000") ##create a new object with only observations from the year 2000
+dim(year2000) ##confirm dimensions of year2000
+str(year2000) ##observe structure of year2000
+summary(year2000) ##view summaries of variables included in year 2000
+```
+## More plotting
+I made the same plots as above, excpet there is only data from the year 2000 this time. I made the same design choices to create a clear plot using labs() and theme() to visualize Infant Morality and Life Expectancy in 2000 and Population and Life Expectancy in 2000. Infant mortality and life expectancy still show an inverse relationship, but the relationship between population and life expectancy is no longer visible. 
+```{r}
+year2000 %>% 
+  ggplot(aes(x=infant_mortality, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Infant Mortality and Life Expectancy in 2000") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) ##center the title
+
+year2000 %>% 
+  ggplot(aes(x=population, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Infant Mortality and Life Expectancy in 2000") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) + ##center the title
+  scale_x_log10() ##convert the x axis to log sccale
+```
+## Simple model fits
+To explore the relationship between population and life expectancy in 2000, I will use the lm() function with the year2000 object to create a simple model comparing life expectancy to infant mortality in fit 1 and to population in fit 2. Based on the summary() function output for fit1, we can conclude that infant mortality rate has a statistically significant effect on life expectancy because the p-value for the coefficient estimate is 2.83e-08, which is much smaller than 0.05. For every 1 unit increase in infant mortality rate, life expectancy decreases by 0.18916 years. Based on the summary() function output for fit2, we can conclude that there is not a statistically significant relationship between life expectancy and population because the p-value for the coefficient estimate is 0.616, which is much greater than 0.05.
+```{r}
+fit1 <- lm(life_expectancy ~ infant_mortality, data = year2000) ##create a linear model with life expectancy as outcome and infant mortality as predictor and save it to an object called fit1
+summary(fit1) ##generate information about linear regression equation with p-values
+fit2 <- lm(life_expectancy ~ population, data = year2000) ##create a linear model with life expectancy as outcome and population as predictor and save it to an object called fit2
+summary(fit2) ##generate information about linear regression equation with p-values
+```
