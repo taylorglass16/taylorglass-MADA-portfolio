@@ -7,7 +7,7 @@ title: "R Coding Exercise"
 Data from the ds labs package will be utilized for this practice. The renv package is a great resource for keeping track of all the packages used within a project. I chose to install it here, so I can use it on class exercises and the final project. I loaded tidyverse to practice processing data and ggplot2 to visualize the processed data later in this exercise. I loaded naniar to determine missingness of the data. 
 ```{r}
 library(dslabs)
-install.packages("renv")
+##install.packages("renv")
 library(tidyverse)
 library(ggplot2)
 library(naniar)
@@ -186,7 +186,7 @@ Measles_plot <- ggplot(data = us_contagious_diseases6[grepl('Measles', us_contag
 print(Measles_plot)
 
 ```
-I had to open this figure to view the lines. It seems that every several years, there is a measels outbreak that hits many states in the U.S. at once witha  rapid peaking incidence and then rapidly declines as the population gains immunity. The peaks are particularly high for the state in the pink/ purple shade. Between 1980 to 2000 the measels IRweighted seems to diminish to near 0.
+I had to open this figure to view the lines. It seems that every several years, there is a measels outbreak that hits many states in the U.S. at once with a rapid peaking incidence and then rapidly declines as the population gains immunity. The peaks are particularly high for the state in the pink/ purple shade. Between 1980 to 2000 the measels IRweighted seems to diminish to near 0.
 
 It is difficult to distinguish between states, so I change the data to show an IRweighted total for all of the states. ChatGPT said that the aggregate function can be used to sum the IRweighted for the state values that are equal.
 ```{r}
