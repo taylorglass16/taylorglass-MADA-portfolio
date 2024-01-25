@@ -7,7 +7,6 @@ title: "R Coding Exercise"
 Data from the ds labs package will be utilized for this practice. The renv package is a great resource for keeping track of all the packages used within a project. I chose to install it here, so I can use it on class exercises and the final project. I loaded tidyverse to practice processing data and ggplot2 to visualize the processed data later in this exercise. I loaded naniar to determine missingness of the data. 
 ```{r}
 library(dslabs)
-install.packages("renv")
 library(tidyverse)
 library(ggplot2)
 library(naniar)
@@ -109,6 +108,12 @@ summary(fit2) ##generate information about linear regression equation with p-val
 ```
 **Rachel Robertson contributed to this portion of Taylor's portfolio.**
 
+```{r}
+library(dplyr)
+library(skimr)
+library(tidyr) ##I begin by opening the additional libraries that I will need for this analysis
+```
+
 ## Exploratory Data Analysis
 I used the dslabs reference manual on CRAN to identify a dataset that intersted me. I chose the dataset us_contagious_diseases, which contains the variables disease (factor), state (factor), year(num), weeks_reporting(num), count(num), and population(num).I will begin by exploring this dataset with the dim(), str(), and summary() functions. The libraries needed for this analysis include tidyverse, dslabs, and ggplot2, and have been opened by running the the first code chunk. 
 ```{r}
@@ -122,7 +127,7 @@ For the purposes of this project, I will analyze one disease, Measels. This is b
 
 str() reveals that there are 51 states listed, so I am curious what the 51st state is. To see all of the states listed I use the function, levels().
 ```{r}
-levels(us_contagious_diseases$state)
+levels(us_contagious_diseases$state) ##Examine the levels of the factor called states
 ```
 I found that the 51st state listed is District of Columbia. Since I am unsure if the Maryland values include or exclude District of Columbia, I will leave this state in the analysis but note this in the final figure.
 
@@ -130,14 +135,13 @@ summary() reveals that the years range from 1928 - 2011 and weeks reporting acco
 
 Before cleaning I will use gg_miss_var() to explore if there are any additional missing variables.
 ```{r}
-gg_miss_var(us_contagious_diseases)
+gg_miss_var(us_contagious_diseases) ##find missing values
 ```
 It seems that some population data might be missing as well so I will also have to filter the population data that has "NA" or missing data.
 
 ## Cleaning the data
 First, I will remove the rows with missing population data. I will do this by using the filter function. 
 ```{r}
-library(tidyr) ##I can use tidyr to drop NA values
 us_contagious_diseases2 <- us_contagious_diseases %>% ##create a new data frame
   drop_na(population) ##drop NA from the population factor
 gg_miss_var(us_contagious_diseases2) ##check that there are no longer missing variables
@@ -146,8 +150,6 @@ Now that the NA values for population have been dropped, we may continue to clea
 
 I will now remove the years that are missing data for weeks_reporting.I will find the identify the years that have a 0 value for weeks_reporting by using the filter() function and drop_na() function. I will then check the number of data rows using the skim() function.
 ```{r}
-library(dplyr)
-library(skimr) ##Opening additional libraries for these functions
 us_contagious_diseases3 <- us_contagious_diseases2 %>% ## creating new data frame
   dplyr::filter(weeks_reporting != 0) %>% ##finding the weeks_reporting 0 values with dplyr and setting then to NA
   tidyr::drop_na(weeks_reporting) ##dropping the NA in weeks_reporting and dropping them
@@ -155,25 +157,25 @@ skimr::skim(us_contagious_diseases3) ##checking the number of rows
 ```
 The data is now clean enough for additional processing.
 
-## Processing Data
+## Processing the Data
 I will find a flat incidence rate by diving count by population for each state.I will use the mutate function to create a new column called incidence.
 ```{r}
 us_contagious_diseases4 <- us_contagious_diseases3 %>% 
-  mutate(incidence = count/population)
-summary(us_contagious_diseases4)
+  mutate(incidence = count/population) ##create variable called incidence based on count/population
+summary(us_contagious_diseases4) ##confirm variable
 ```
 I am going to change raw incidence rate into incidence per 100,000, which is a standard measure and allows for easier visualization of the incidence rate.
 ```{r}
 us_contagious_diseases5 <- us_contagious_diseases4 %>% 
-  mutate(incidenceper100000 = incidence * 100000)
-summary(us_contagious_diseases4)
+  mutate(incidenceper100000 = incidence * 100000) ##create new variable incidenceper100000 based on incidence times 100000
+summary(us_contagious_diseases4) ##confirm variable
 ```
 
 I will add a weight to this value to account for missing weeks reported. To do this I will multiply each incidence rate by (weeks_reporting/52), where weeks_reporting is the total number of weeks where cases are counted and 52 is the total number of weeks in a year.I will call this new variable IRweighted.
 ```{r}
 us_contagious_diseases6 <- us_contagious_diseases5 %>% 
-  mutate(IRweighted = incidenceper100000*(weeks_reporting/52))
-summary(us_contagious_diseases6)
+  mutate(IRweighted = incidenceper100000*(weeks_reporting/52)) ##add weight to incidence rate per 100000 to account for differing numbers of weeks that case counts are captured
+summary(us_contagious_diseases6) ##confirm variable
 ```
 Now that I have the weighted measure of incidence rate (per 100000), I will make some exploratory figures to examine changes in Measels incidence over time for each state.
 
@@ -182,8 +184,8 @@ I will plot weighted incidence rate over time in a scatter plot and add color by
 ```{r}
 Measles_plot <- ggplot(data = us_contagious_diseases6[grepl('Measles', us_contagious_diseases6$disease), ], aes(x = year, y = IRweighted, color = state)) +
   geom_line() +
-  labs(x = 'Year', y = 'IRweighted', title = 'Measles Incidence Rates (per 100000) in the U.S. from 1928 to 2011')
-print(Measles_plot)
+  labs(x = 'Year', y = 'IRweighted', title = 'Measles Incidence Rates (per 100000) in the U.S. from 1928 to 2011') ##add line plot of measles in the U.S. from 1928 to 2011, depending the state
+print(Measles_plot) ##display the line plot
 
 ```
 I had to open this figure to view the lines. It seems that every several years, there is a measels outbreak that hits many states in the U.S. at once witha  rapid peaking incidence and then rapidly declines as the population gains immunity. The peaks are particularly high for the state in the pink/ purple shade. Between 1980 to 2000 the measels IRweighted seems to diminish to near 0.
@@ -196,8 +198,7 @@ USmeasles_plot <- ggplot(data = agg_data_measles, aes(x = year, y = IRweighted))
    geom_line() +
    labs(x = 'Year', y = 'Total IRweighted (Measles)', title = 'Total Measels Incidence Rate (per 100000) in the U.S. from 1928 to 2011') ##Another line plot is made with ggplot, but from the aggregated data frame
 
-print(USmeasles_plot)
-
+print(USmeasles_plot) ##display the cumulative plot
 
 ```
 A seasonal epi curve can be observed for the national sum of incidence rate of measels in the U.S. There are yearly peaks from 1928 until they begin to rapidly decrease around 1965, eventually reaching close to 0 in 1980. This might be do to the MMR development and distribution in the US in 1971.
@@ -212,7 +213,7 @@ USmumps_plot <- ggplot(data = agg_data_mumps, aes(x = year, y = IRweighted)) +
    geom_line() +
    labs(x = 'Year', y = 'Total IRweighted (Mumps)', title = 'Total Mumps Incidence Rate (per 100000) in the U.S. from 1928 to 2011')
 
-print(USmumps_plot)
+print(USmumps_plot) ##Display the Mumps IR plot
 ```
 Though with much lower incidence rates, the mumps data set also shows a rapid decrease in incidence rates from 1970 to 1980. There is no incidence rate data prior to around 1965. For this reason, I will also plot Rubella.
 
@@ -224,7 +225,7 @@ USrubella_plot <- ggplot(data = agg_data_rubella, aes(x = year, y = IRweighted))
    geom_line() +
    labs(x = 'Year', y = 'Total IRweighted (Rubella)', title = 'Total Rubella Incidence Rate (per 100000) in the U.S. from 1928 to 2011')
 
-print(USrubella_plot)
+print(USrubella_plot) ## Display the rubella IR plot
 ```
 The Rubella data shows a similar decrease from 1970 to 1980 but does not include data before around 1965. This makes it unclear whether the decrease in all three disease incidence rates is due to the MMR vaccine.
 
@@ -234,23 +235,25 @@ I am interested in looking at the MMR incidence rates decrease over time. For th
 I will start with Measels
 ```{r}
 Measels_fit <- lm(IRweighted~ year, data = agg_data_measles) ##create a linear model with Measels as outcome and year as predictor and save it to an object called Measels_fit
-summary(Measels_fit) ##generate information about linear regression equation with p-values
+Measels_fit_table <- broom::tidy(Measels_fit) ##Adding a simplified table of the linear model with tidy
+print(Measels_fit_table) ##print table of the linear regression equation with p-values
 ```
-This shows a strong negative correlation (-6.9) of incidence rate and year for measels in the U.S. The p-value is strongly significant as p<0.0001.
+Measels incidence rate (per 100000) decreased by 6.9 units per year in the U.S. This is a significant decrease with a p-value that is alpha<0.05.
 
 I will now use the lm() function to produce a linear model Mumps over year
 ```{r}
 Mumps_fit <- lm(IRweighted~ year, data = agg_data_mumps) ##create a linear model with Mumps as outcome and year as predictor and save it to an object called Mumps_fit
-summary(Mumps_fit) ##generate information about linear regression equation with p-values
+Mumps_fit_table <- broom::tidy(Mumps_fit) ##Adding a simplified table of the linear model with tidy
+print(Mumps_fit_table) ##print table of the linear regression equation with p-values
 ```
-
-The negative correlation between mumps and year is -1.8 and it is significant with p<0.0001.
+Mumps incidence rates (per 100000) decreased by 1.8 per one year. This is a smaller unit change, but still a significant decrease with a p-value of alpha<0.005.
 
 Lastly, I will confirm this relationship with the Rubella aggregate data in the U.S.
 ```{r}
 Rubella_fit <- lm(IRweighted~ year, data = agg_data_rubella) ##create a linear model with rubella as outcome and year as predictor and save it to an object called Rubella_fit
-summary(Rubella_fit) ##generate information about linear regression equation with p-values
+Rubella_fit_table <- broom::tidy(Rubella_fit) ##Adding a simplified table of the linear model with tidy
+print(Rubella_fit_table) ##print table of the linear regression equation with p-values
 ```
-There is a significant negative association between rubella and year as well with a -0.83 correlation and a p<0.0001.
+There is decrease in Rubella incidence rates (per 100000) of 0.83 over one year. This decrease, although the smallest, is significant with a p-value of alpha<0.05. 
 
 Overall, these exploratory analysis, figures, and models displayed a significant decrease in Measels, Mumps, and Rubella incident rates in the U.S. following the introduction of the MMR vaccine in 1971.
