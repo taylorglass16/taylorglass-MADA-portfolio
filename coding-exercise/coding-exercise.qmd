@@ -257,3 +257,260 @@ print(Rubella_fit_table) ##print table of the linear regression equation with p-
 There is decrease in Rubella incidence rates (per 100000) of 0.83 over one year. This decrease, although the smallest, is significant with a p-value of alpha<0.05. 
 
 Overall, these exploratory analysis, figures, and models displayed a significant decrease in Measels, Mumps, and Rubella incident rates in the U.S. following the introduction of the MMR vaccine in 1971.
+=======
+---
+title: "R Coding Exercise"
+---
+
+### This section will be utilized to learn basic R coding skills. 
+
+Data from the ds labs package will be utilized for this practice. The renv package is a great resource for keeping track of all the packages used within a project. I chose to install it here, so I can use it on class exercises and the final project. I loaded tidyverse to practice processing data and ggplot2 to visualize the processed data later in this exercise. I loaded naniar to determine missingness of the data. 
+```{r}
+library(dslabs)
+##install.packages("renv")
+library(tidyverse)
+library(ggplot2)
+library(naniar)
+```
+
+## Exploring Gapminder
+I will explore the gapminder dataset included in this pacakge with the help(), str(), summary(), and class() functions. 
+```{r}
+help(gapminder)
+str(gapminder)
+summary(gapminder)
+class(gapminder)
+```
+
+## Processing Data
+
+To create a dataset with only African countries, I need to view the dataset using head() to determine a variable name that I can use to filter the dataset. Once I found "continent", I filtered for Africa. The str() function shows me there are 2,907 observations of 9 variables, which means 2,907 African countries are included in the gapminder dataset. The summary() function allowed me to see what Dr. Handle meant by R keeping all the continent categories but plugging in a zero as a placeholder. 
+```{r}
+head(gapminder) ##I see a variable name called continent that I will use to filter the dataset
+africadata <- gapminder %>% 
+                filter(continent == "Africa")  ##I created a new dataset that only includes African countries
+str(africadata) 
+summary(africadata)
+```
+To create two new objects from the 'africadata' object with only two columns each, I used the select() function to choose the columns I wanted to keep. The first object, 'IMLE', contains the infant mortality rates and life expectancies for each African country. I used the str() function to see there are 2907 observations of 2 variables, and the summary() function provides 5 data points for each numeric variable. The second object, "PLE', contains the population and life expectancies for each African county. Similarly, I used str() to confirm there are 2907 observations of 2 variables, and the summary() function to learn about the range of each variable. 
+
+```{r}
+IMLE <- africadata %>%  ##store a new object using the arrow notation
+        select("infant_mortality", "life_expectancy") ##pipe in the filtered dataset and select specific columns 
+str(IMLE) ##confirm there are only 2 variables 
+summary(IMLE) ##observe the range of each numerical variable
+
+PLE <- africadata %>%  ##store a new object using the arrow notation
+          select("population", "life_expectancy") ##pipe in the filtered dataset and select specific columns 
+str(PLE) ##confirm there are only 2 variables 
+summary(PLE) ##observe the range of each numerical variable
+```
+## Plotting
+
+To visualize the relationship between the two variables included in each of these objects, I will plot them using ggplot(). Using the IMLE object, I plotted infant mortality on the x axis and life expenctancy on the y axis using the aesthetics filter with ggplot. I added geom-point() to plot the data as points. I also chose to include a title, which I centered on the graph, to make the contents of the plot even clearer. This plot shows the inverse relationship between life expectancy and infant mortality. The graph shows a strong inverse relationship with only 3 major outliers. The majority of observations fall between an infant mortality rate of 30 to 150. 
+```{r}
+IMLE %>% 
+  ggplot(aes(x=infant_mortality, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Life Expectancy as a Function of Infant Mortality") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) ##center the title on the graph
+```
+I followed a similar process to plot life expectancy based on population using the PLE object. I used ggplot() again along with geom_point() to plot the data points. I used the same technique to create a title centered on the graph. I also added the scale_x_log10() function to convert the numeric population variable to the logarithmic scale, which helps to create a cleaner visualization. The graph shows the most observations around a population of 1 million with a life expectancy ranging from 40 to 60. There is one major outlier on the graph, but most observations are clustered to create easily definable streaks. 
+The streaks of data in both of these graphs correspond to observations in each African country over the years included in the dataset, which range from 1960 to 2016. As time passes, life expectancy increases which causes the population size to increase. Since infant mortality has decreased over this time period, life expectancy is increasing. These trends show up as streaks in the data because each country's observations are grouped together over time.   
+```{r}
+PLE %>% 
+  ggplot(aes(x=population, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Life Expectancy as a Function of Population") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) + ##center the title
+  scale_x_log10() ##change the x-axis to the log scale
+```
+## More data processing 
+Finding out which observations have missing data is an important part of data analysis. I used gg_miss_var() to visualize which variables were missing information. While GDP accounts for the most missing observations, infant_mortality is the variable with the second most missing values. To determine which years have missing infant_mortality data, I used AI to learn how to use dplyr functions to filter for the specific missing data I am looking for. I filtered for observations where infant mortality rate was missing, and I selected the year column since that is the variable I am interested in. After printing the data, I realized it showed all 226 observations by year, so I used the unique() function to more efficiently determine which years had at least 1 missing infant mortality rate observation. Infant mortality rate is missing from 1960 to 1981 and again in 2016. 
+```{r}
+gg_miss_var(africadata) ##explore missingness of the data
+missing_years <- africadata %>%
+                  filter(is.na(infant_mortality)) %>% ##find observations of infant mortality that are missing 
+                  select(year) ##keep only the year column of the observations with missing data
+print(missing_years) ##view the years with missing data
+unique(missing_years) ##organize the years with missing data
+```
+After choosing 2000 for the year to study infant mortality rate based on missingness in the data, I filtered for observations made during 2000 only. I used the dim() function to confirm that I have 51 observations of 9 variables. The str() function provides the variable type for each variable, and the summary() function provides more details for each variable. 
+```{r}
+year2000 <- africadata %>% 
+              filter(year == "2000") ##create a new object with only observations from the year 2000
+dim(year2000) ##confirm dimensions of year2000
+str(year2000) ##observe structure of year2000
+summary(year2000) ##view summaries of variables included in year 2000
+```
+## More plotting
+I made the same plots as above, excpet there is only data from the year 2000 this time. I made the same design choices to create a clear plot using labs() and theme() to visualize Infant Morality and Life Expectancy in 2000 and Population and Life Expectancy in 2000. Infant mortality and life expectancy still show an inverse relationship, but the relationship between population and life expectancy is no longer visible. 
+```{r}
+year2000 %>% 
+  ggplot(aes(x=infant_mortality, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Infant Mortality and Life Expectancy in 2000") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) ##center the title
+
+year2000 %>% 
+  ggplot(aes(x=population, y=life_expectancy)) + ##use aesthetic layer to set the axis variables
+  geom_point() + ##create a scatter plot
+  labs(title = "Infant Mortality and Life Expectancy in 2000") + ##label the graph with a title
+  theme(plot.title = element_text(hjust = 0.5)) + ##center the title
+  scale_x_log10() ##convert the x axis to log sccale
+```
+## Simple model fits
+To explore the relationship between population and life expectancy in 2000, I will use the lm() function with the year2000 object to create a simple model comparing life expectancy to infant mortality in fit 1 and to population in fit 2. Based on the summary() function output for fit1, we can conclude that infant mortality rate has a statistically significant effect on life expectancy because the p-value for the coefficient estimate is 2.83e-08, which is much smaller than 0.05. For every 1 unit increase in infant mortality rate, life expectancy decreases by 0.18916 years. Based on the summary() function output for fit2, we can conclude that there is not a statistically significant relationship between life expectancy and population because the p-value for the coefficient estimate is 0.616, which is much greater than 0.05.
+```{r}
+fit1 <- lm(life_expectancy ~ infant_mortality, data = year2000) ##create a linear model with life expectancy as outcome and infant mortality as predictor and save it to an object called fit1
+summary(fit1) ##generate information about linear regression equation with p-values
+fit2 <- lm(life_expectancy ~ population, data = year2000) ##create a linear model with life expectancy as outcome and population as predictor and save it to an object called fit2
+summary(fit2) ##generate information about linear regression equation with p-values
+```
+**Rachel Robertson contributed to this portion of Taylor's portfolio.**
+
+## Exploratory Data Analysis
+I used the dslabs reference manual on CRAN to identify a dataset that intersted me. I chose the dataset us_contagious_diseases, which contains the variables disease (factor), state (factor), year(num), weeks_reporting(num), count(num), and population(num).I will begin by exploring this dataset with the dim(), str(), and summary() functions. The libraries needed for this analysis include tidyverse, dslabs, and ggplot2, and have been opened by running the the first code chunk. 
+```{r}
+dim(us_contagious_diseases)
+str(us_contagious_diseases)
+summary(us_contagious_diseases)
+```
+I found that there are 6 columns and 16065 rows in this dataset. These disease factors included are: Hepatitis A, Measles, Mumps, Pertussis, Polio, Rubella, and Smallpox.
+
+For the purposes of this project, I will analyze one disease, Measels. This is because, although the U.S. is trying to erradicate the virus, vaccine undercoverage in recent years has lead to sporatic outbreaks in the U.S. in naive pockets.
+
+str() reveals that there are 51 states listed, so I am curious what the 51st state is. To see all of the states listed I use the function, levels().
+```{r}
+levels(us_contagious_diseases$state)
+```
+I found that the 51st state listed is District of Columbia. Since I am unsure if the Maryland values include or exclude District of Columbia, I will leave this state in the analysis but note this in the final figure.
+
+summary() reveals that the years range from 1928 - 2011 and weeks reporting accounts for missing weeks. weeks reporting ranges from 0 - 52 which indicates some years with no data. I would like to find which years have missing data. A case count of 0 for any of the diseases is not necessarily missing data unless the there were 0 weeks_reporting for that year.
+
+Before cleaning I will use gg_miss_var() to explore if there are any additional missing variables.
+```{r}
+gg_miss_var(us_contagious_diseases)
+```
+It seems that some population data might be missing as well so I will also have to filter the population data that has "NA" or missing data.
+
+## Cleaning the data
+First, I will remove the rows with missing population data. I will do this by using the filter function. 
+```{r}
+library(tidyr) ##I can use tidyr to drop NA values
+us_contagious_diseases2 <- us_contagious_diseases %>% ##create a new data frame
+  drop_na(population) ##drop NA from the population factor
+gg_miss_var(us_contagious_diseases2) ##check that there are no longer missing variables
+```
+Now that the NA values for population have been dropped, we may continue to clean the data.
+
+I will now remove the years that are missing data for weeks_reporting.I will find the identify the years that have a 0 value for weeks_reporting by using the filter() function and drop_na() function. I will then check the number of data rows using the skim() function.
+```{r}
+library(dplyr)
+library(skimr) ##Opening additional libraries for these functions
+us_contagious_diseases3 <- us_contagious_diseases2 %>% ## creating new data frame
+  dplyr::filter(weeks_reporting != 0) %>% ##finding the weeks_reporting 0 values with dplyr and setting then to NA
+  tidyr::drop_na(weeks_reporting) ##dropping the NA in weeks_reporting and dropping them
+skimr::skim(us_contagious_diseases3) ##checking the number of rows
+```
+The data is now clean enough for additional processing.
+
+## Processing Data
+I will find a flat incidence rate by diving count by population for each state.I will use the mutate function to create a new column called incidence.
+```{r}
+us_contagious_diseases4 <- us_contagious_diseases3 %>% 
+  mutate(incidence = count/population)
+summary(us_contagious_diseases4)
+```
+I am going to change raw incidence rate into incidence per 100,000, which is a standard measure and allows for easier visualization of the incidence rate.
+```{r}
+us_contagious_diseases5 <- us_contagious_diseases4 %>% 
+  mutate(incidenceper100000 = incidence * 100000)
+summary(us_contagious_diseases4)
+```
+
+I will add a weight to this value to account for missing weeks reported. To do this I will multiply each incidence rate by (weeks_reporting/52), where weeks_reporting is the total number of weeks where cases are counted and 52 is the total number of weeks in a year.I will call this new variable IRweighted.
+```{r}
+us_contagious_diseases6 <- us_contagious_diseases5 %>% 
+  mutate(IRweighted = incidenceper100000*(weeks_reporting/52))
+summary(us_contagious_diseases6)
+```
+Now that I have the weighted measure of incidence rate (per 100000), I will make some exploratory figures to examine changes in Measels incidence over time for each state.
+
+## Exploratory Figures
+I will plot weighted incidence rate over time in a scatter plot and add color by state to examine potential state differences.I will make a separate figure for each disease. I had to ask ChatGPT how to plot a certain category of data from a column without making a new dataframe. this is where I found the grep1(value, dataframe$var) function and structure.
+```{r}
+Measles_plot <- ggplot(data = us_contagious_diseases6[grepl('Measles', us_contagious_diseases6$disease), ], aes(x = year, y = IRweighted, color = state)) +
+  geom_line() +
+  labs(x = 'Year', y = 'IRweighted', title = 'Measles Incidence Rates (per 100000) in the U.S. from 1928 to 2011')
+print(Measles_plot)
+
+```
+I had to open this figure to view the lines. It seems that every several years, there is a measels outbreak that hits many states in the U.S. at once with a rapid peaking incidence and then rapidly declines as the population gains immunity. The peaks are particularly high for the state in the pink/ purple shade. Between 1980 to 2000 the measels IRweighted seems to diminish to near 0.
+
+It is difficult to distinguish between states, so I change the data to show an IRweighted total for all of the states. ChatGPT said that the aggregate function can be used to sum the IRweighted for the state values that are equal.
+```{r}
+agg_data_measles <- aggregate(IRweighted ~ year + state, data = subset(us_contagious_diseases6, disease == 'Measles'), sum) ##This aggregate function and structure was found by using ChatGPT. The subset function was used to aggregate only the measels disease data.
+
+USmeasles_plot <- ggplot(data = agg_data_measles, aes(x = year, y = IRweighted)) +
+   geom_line() +
+   labs(x = 'Year', y = 'Total IRweighted (Measles)', title = 'Total Measels Incidence Rate (per 100000) in the U.S. from 1928 to 2011') ##Another line plot is made with ggplot, but from the aggregated data frame
+
+print(USmeasles_plot)
+
+
+```
+A seasonal epi curve can be observed for the national sum of incidence rate of measels in the U.S. There are yearly peaks from 1928 until they begin to rapidly decrease around 1965, eventually reaching close to 0 in 1980. This might be do to the MMR development and distribution in the US in 1971.
+
+MMR elicits protection against Measels, Mumps, and Rubella. Because of the vaccine distribution, we should also see a decrease in Mumps incidence. To determine whether this is the case, I will also plot the Mumps incidence rate over time in comparison to the latest plot.
+
+```{r}
+agg_data_mumps <- aggregate(IRweighted ~ year + state, data = subset(us_contagious_diseases6, disease == 'Mumps'), sum) ##Making a new aggregated data frame from the Mumps disease data
+
+## Plot the aggregated data for Mumps instead of measels
+USmumps_plot <- ggplot(data = agg_data_mumps, aes(x = year, y = IRweighted)) +
+   geom_line() +
+   labs(x = 'Year', y = 'Total IRweighted (Mumps)', title = 'Total Mumps Incidence Rate (per 100000) in the U.S. from 1928 to 2011')
+
+print(USmumps_plot)
+```
+Though with much lower incidence rates, the mumps data set also shows a rapid decrease in incidence rates from 1970 to 1980. There is no incidence rate data prior to around 1965. For this reason, I will also plot Rubella.
+
+```{r}
+agg_data_rubella <- aggregate(IRweighted ~ year + state, data = subset(us_contagious_diseases6, disease == 'Rubella'), sum) ##Making a new aggregated data frame from the Mumps disease data
+
+## Plot the aggregated data for Mumps instead of measels
+USrubella_plot <- ggplot(data = agg_data_rubella, aes(x = year, y = IRweighted)) +
+   geom_line() +
+   labs(x = 'Year', y = 'Total IRweighted (Rubella)', title = 'Total Rubella Incidence Rate (per 100000) in the U.S. from 1928 to 2011')
+
+print(USrubella_plot)
+```
+The Rubella data shows a similar decrease from 1970 to 1980 but does not include data before around 1965. This makes it unclear whether the decrease in all three disease incidence rates is due to the MMR vaccine.
+
+## Simple Statistical Models
+I am interested in looking at the MMR incidence rates decrease over time. For this, I can use the total IRweighted aggregate data as the outcome and compare it to the year as the predictor.
+
+I will start with Measels
+```{r}
+Measels_fit <- lm(IRweighted~ year, data = agg_data_measles) ##create a linear model with Measels as outcome and year as predictor and save it to an object called Measels_fit
+summary(Measels_fit) ##generate information about linear regression equation with p-values
+```
+This shows a strong negative correlation (-6.9) of incidence rate and year for measels in the U.S. The p-value is strongly significant as p<0.0001.
+
+I will now use the lm() function to produce a linear model Mumps over year
+```{r}
+Mumps_fit <- lm(IRweighted~ year, data = agg_data_mumps) ##create a linear model with Mumps as outcome and year as predictor and save it to an object called Mumps_fit
+summary(Mumps_fit) ##generate information about linear regression equation with p-values
+```
+
+The negative correlation between mumps and year is -1.8 and it is significant with p<0.0001.
+
+Lastly, I will confirm this relationship with the Rubella aggregate data in the U.S.
+```{r}
+Rubella_fit <- lm(IRweighted~ year, data = agg_data_rubella) ##create a linear model with rubella as outcome and year as predictor and save it to an object called Rubella_fit
+summary(Rubella_fit) ##generate information about linear regression equation with p-values
+```
+There is a significant negative association between rubella and year as well with a -0.83 correlation and a p<0.0001.
+
+Overall, these exploratory analysis, figures, and models displayed a significant decrease in Measels, Mumps, and Rubella incident rates in the U.S. following the introduction of the MMR vaccine in 1971.
