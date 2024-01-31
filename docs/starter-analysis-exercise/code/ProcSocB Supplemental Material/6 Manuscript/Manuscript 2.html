@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.538">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="">
+<meta name="dcterms.date" content="2024-01-25">
+
+<title>Taylor Glass Data Analysis Portfolio - Virulence-mediated infectiousness and activity trade-offs and their impact on transmission potential of influenza patients</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Taylor Glass Data Analysis Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../aboutme.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="../../../../starter-analysis-exercise/products/report/starter-analysis-report.html">
+ <span class="dropdown-text">Starter Analysis Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../coding-exercise/coding-exercise.html">
+ <span class="dropdown-text">R Coding Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../presentation-exercise/presentation-exercise.html">
+ <span class="dropdown-text">Presentation Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../tidytuesday-exercise/tidytuesday-exercise.html">
+ <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/taylorglass16/taylorglass-MADA-portfolio"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Virulence-mediated infectiousness and activity trade-offs and their impact on transmission potential of influenza patients</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 25, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="authors" class="level1">
+<h1>Authors</h1>
+<ul>
+<li>Brian McKay<sup>1</sup>, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+<li>Mark Ebell, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+<li>Ariella Perry Dale, Colorado Department of Public Health and Environment, Denver, CO, USA</li>
+<li>Ye Shen, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+<li>Andreas Handel<sup>1</sup>, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+</ul>
+<p><sup>1</sup> Corresponding Authors: Brian McKay and Andreas Handel</p>
+<p>Address: 101 Buck Rd, Miller Hall, Athens, Georgia 30606</p>
+<p>Email: bmckay52@uga.edu or ahandel@uga.edu</p>
+</section>
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>Communicable diseases are often virulent, i.e., they cause morbidity symptoms in those infected. While some symptoms may be transmission-enhancing, other symptoms are likely to reduce transmission potential. For human diseases, the reduction in transmission opportunities is commonly caused by reduced activity. There is limited data regarding the potential impact of virulence on transmission potential. We performed an exploratory data analysis of 324 influenza patients at a university health center during the 2016/2017 influenza season. We classified symptoms as infectiousness-related or morbidity-related and calculated two scores. The scores were used to explore the relationship between infectiousness, morbidity (virulence), and activity level. We found a decrease in activity level with increasing morbidity scores. There was no consistent pattern between activity level and infectiousness score. We also found a positive correlation between morbidity and infectiousness scores. Overall, we find that increasing virulence leads to increased infectiousness and reduced activity, suggesting a trade-off that can impact overall transmission potential. Our findings indicate that a reduction of systemic symptoms may increase host activity without reducing infectiousness. Therefore, interventions should target both systemic and infectiousness related symptoms to reduce overall transmission potential. Our findings can also inform simulation models that investigate the impact of different interventions on transmission.</p>
+<p><em>Keywords</em>: Infectious diseases; Influenza; Trade-off; Transmission; Virulence</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Many infectious diseases cause symptoms in at least some infected hosts. Often, those symptoms increase the host’s infectiousness and facilitate the transmission of the pathogen <span class="citation" data-cites="Tellier2009 Lipsitch1997">[<a href="#ref-Tellier2009" role="doc-biblioref">1</a>,<a href="#ref-Lipsitch1997" role="doc-biblioref">2</a>]</span>. Coughing and sneezing for respiratory infections are prime examples. However, symptoms that are too severe may reduce host activity or, in extreme cases cause host death, reducing transmission opportunities. The induction of symptoms by a pathogen is often called <em>virulence</em>, and the idea that some virulence is needed for efficient transmission but too much virulence reduces transmission is often called the trade-off hypothesis and has been studied extensively <span class="citation" data-cites="Alizon2009 Cressler2016 Bull2014">[<a href="#ref-Alizon2009" role="doc-biblioref">3</a>–<a href="#ref-Bull2014" role="doc-biblioref">5</a>]</span>. The trade-off hypothesis predicts that an intermediate level of virulence leads to maximum pathogen fitness (usually quantified by the reproductive number). The virulence level which optimizes fitness depends on both population-level and within-host level processes, the implications of which have been theoretically explored previously <span class="citation" data-cites="Anderson1979 Alizon2009 Antia1994 Sofonea2017 Lipsitch1997 Brown2012 Gilchrist2006 Mideo2008 Antolin2008 Brown2006">[<a href="#ref-Lipsitch1997" role="doc-biblioref">2</a>,<a href="#ref-Alizon2009" role="doc-biblioref">3</a>,<a href="#ref-Anderson1979" role="doc-biblioref">6</a>–<a href="#ref-Brown2006" role="doc-biblioref">13</a>]</span>.</p>
+<p>The most studied trade-off is between increasing transmission potential due to increased host infectiousness and decreasing transmission potential due to host mortality <span class="citation" data-cites="Alizon2009">[<a href="#ref-Alizon2009" role="doc-biblioref">3</a>]</span>. For humans, malaria might fall into this category. It has been shown that as malaria parasite density increased within a host (considered a measure of virulence), per-contact transmission potential (quantified by gametocyte density) increased, as did the duration of infection and mortality <span class="citation" data-cites="Mackinnon2004 Mackinnon2008">[<a href="#ref-Mackinnon2004" role="doc-biblioref">14</a>,<a href="#ref-Mackinnon2008" role="doc-biblioref">15</a>]</span>. The former two quantities are assumed to increase transmission potential, while the latter reduces it. It is, however, unclear if the increase in mortality is a strong enough effect to play an important role in the virulence trade-off in malaria. Host death is likely an important determining factor of transmission potential for many animal diseases and some human diseases (e.g., viral hemorrhagic diseases <span class="citation" data-cites="Sofonea2018">[<a href="#ref-Sofonea2018" role="doc-biblioref">16</a>]</span>). However, for many human pathogens mortality is low, and it is more likely that increased virulence leads to reduced host activity and thus reduced transmission potential. Transmission potential, <span class="math inline">\(T\)</span>, is proportional to the product of per-contact transmission potential (i.e., infectiousness), <span class="math inline">\(p\)</span>, the rate at which infected hosts have contact with other hosts, <span class="math inline">\(c\)</span>, and the duration of the infectious period, <span class="math inline">\(d\)</span>. All three quantities can potentially be impacted by virulence, <span class="math inline">\(v\)</span>, leading to <span class="math inline">\(T \sim p(v) \times c(v) \times d(v)\)</span>.</p>
+<p>A previous study for HIV infection in humans showed that <span class="math inline">\(d\)</span> and <span class="math inline">\(p\)</span> are both impacted by virulence, namely increased virulence (quantified by increased pathogen load), was shown to increase per-contact transmission potential, <span class="math inline">\(p\)</span>, and reduce the duration of infectiousness (i.e., time to AIDS/death), <span class="math inline">\(d\)</span>. Maximum transmission potential was found to be at an intermediate level of pathogen load (virulence) <span class="citation" data-cites="Fraser2007 Fraser2014">[<a href="#ref-Fraser2007" role="doc-biblioref">17</a>,<a href="#ref-Fraser2014" role="doc-biblioref">18</a>]</span>. A study of dengue infection showed similar results <span class="citation" data-cites="Ben-Shachar2018">[<a href="#ref-Ben-Shachar2018" role="doc-biblioref">19</a>]</span>. Viral production rate, which was considered as a proxy for virulence, led to both increased peak viral load (which is correlated with increased transmission potential) as well as increased clearance rate, i.e., shorter duration of infection. This led to a similar relationship as found for HIV, namely an intermediate peak viral load resulted in the highest transmission potential.</p>
+<p>While there is some evidence that the virulence trade-off applies to other human diseases <span class="citation" data-cites="Ewald1983 Levin1981 Levin1996 Bull1994">[<a href="#ref-Ewald1983" role="doc-biblioref">20</a>–<a href="#ref-Bull1994" role="doc-biblioref">23</a>]</span>, there are, as far as we are aware, no other studies of human pathogens that directly address this topic. In addition, the studies we just described focused on the duration, <span class="math inline">\(d\)</span>, and per-contact transmission potential, <span class="math inline">\(p\)</span>. None were able to investigate the impact of virulence on contact behavior, <span class="math inline">\(c\)</span>.</p>
+<p>Here, we investigate the trade-off hypothesis using data from influenza infections in humans, focusing on transmission potential (<span class="math inline">\(p\)</span>) and contact-rate (<span class="math inline">\(c\)</span>). Influenza induces symptoms in around 84% of infected individuals <span class="citation" data-cites="Leung2015">[<a href="#ref-Leung2015" role="doc-biblioref">24</a>]</span>. Some of the symptoms, such as coughing and sneezing, likely enhance transmission by increasing the infectiousness of a host (<span class="math inline">\(p\)</span>). A recent study provided estimates for the transmission potential of symptomatic versus asymptomatic individuals and found that individuals with symptomatic infections are about 3-12 times as infectious as persons with asymptomatic infections <span class="citation" data-cites="VanKerckhove2013">[<a href="#ref-VanKerckhove2013" role="doc-biblioref">25</a>]</span>. Other symptoms, such as fever, body aches, and general malaise are more likely to lead to a reduction in transmission by reducing host activity (<span class="math inline">\(c\)</span>). A previous study on influenza in 146 adults and children in the United Kingdom found that individuals without symptoms had a mean of 12.72 contacts per day, while those individuals with symptoms only had 3.58 <span class="citation" data-cites="Eames2010">[<a href="#ref-Eames2010" role="doc-biblioref">26</a>]</span>. The same study showed that the number of contacts decreased as the number of symptoms increased. These studies suggest that there might be a trade-off between infectiousness and activity for influenza, which together are important factors in the overall transmission potential. Here, we investigate this relationship further using individual patient data. While it is quite likely that virulence can impact the duration of infectiousness for influenza, we unfortunately, do not have data for this component and thus focus on the other two quantities. We expect that virulence leads to increasing <span class="math inline">\(p\)</span> while negatively affecting <span class="math inline">\(c\)</span>. The transmission potential due to <span class="math inline">\(p\)</span> and <span class="math inline">\(c\)</span> can be considered as proportional to the product of those quantities, i.e.&nbsp;<span class="math inline">\(T_{pc} \sim p(v) \times c(v)\)</span>. The lines in Figure @ref(fig:HypoFigDATA) illustrate our hypothesized relation for contact rate, per-contact transmission potential and overall transmission potential, <span class="math inline">\(T_{pc}\)</span>, as a function of virulence. Our data (symbols in Figure @ref(fig:HypoFigDATA), discussed in detail next) show overall support for this relation.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="data-collection" class="level2">
+<h2 class="anchored" data-anchor-id="data-collection">Data Collection</h2>
+<p>Students with a primary complaint related to a respiratory infection who made an appointment at the health center of a large research university from December 2016 to February 2017 filled out an electronic questionnaire (see <span class="citation" data-cites="Dale2019">[<a href="#ref-Dale2019" role="doc-biblioref">27</a>]</span> for more details). The questionnaire collected data about their current symptoms and activity level. A response was required for all symptom-related questions when they scheduled their appointments. We included all symptoms collected by the questionnaire in this analysis. The complete questionnaire is available in the supplementary material.</p>
+<p>For the symptoms of cough, weakness, and body aches, the patient graded the severity of the symptom as none, mild, moderate, and severe. The patient recorded all other symptom data as present or absent. The patient also reported any changes in their normal behavior. Patients describe their activity level as a number between 0 and 10, with 10 indicating no change in regular activity and 0 being bedridden.</p>
+<p>The study population includes all patients with a diagnosis of influenza. The data and results presented in the main text includes patients diagnosed with a rapid antigen or rapid PCR test. To address the impact of the influenza diagnosis method, we performed the same analyses for all patients diagnosed with influenza regardless of the method used. These results are shown in the supplementary material.</p>
+<p>The institutional review board approved the study protocol.</p>
+</section>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h2>
+<p>We cleaned the data to format the variables and to check for variables with potential errors or missing entries. During the cleaning process, we removed uninformative variables, which we defined as any symptoms found to occur in less than 5% of patients. The symptoms of blurred vision and hearing loss both had a prevalence of less than 5%, so they were not considered for further analysis. To allow easy comparison of morbidity symptoms, we dichotomized weakness and body aches to “absent” or “present”. Patients reported cough as present or absent as well as severity, but only cough absent or present was considered for the main analysis.</p>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
+<p>We assessed the univariate relationships between activity and each symptom using linear regression treating activity level as a continuous variable. We also performed multiple linear regression. We determined the variables to include in our final model with a sequential forward floating selection, minimizing the root mean square error (RMSE) on test data through a 5-fold cross-validation (20 times repeated) <span class="citation" data-cites="Kohavi1997">[<a href="#ref-Kohavi1997" role="doc-biblioref">28</a>]</span>.</p>
+<p>Next, we constructed two cumulative scores, one for overall infectiousness and one for overall morbidity. To that end, we divided all symptoms into those related to infectiousness and those related to morbidity (SM Table 1). We defined morbidity symptoms as symptoms that influence overall feelings of well-being but are not associated with infectiousness. Infectiousness symptoms are any symptoms that could plausibly contribute to passing the virus from an infected host to a susceptible host <span class="citation" data-cites="Yan2018 Killingley2013">[<a href="#ref-Yan2018" role="doc-biblioref">29</a>,<a href="#ref-Killingley2013" role="doc-biblioref">30</a>]</span>. Importantly, the grouping of variables into either the morbidity or infectiousness symptom categories was based on <em>a priori</em> medical and biologic considerations, independently of any observed correlation with activity level. Doing so prevents any circular reasoning since only including symptoms correlated with activity would, of course, generate a score which would match the impact on activity level. These scores are similar to systemic and respiratory scores used in past studies of influenza infection <span class="citation" data-cites="Carrat2008 Hayden1998 Yan2018">[<a href="#ref-Yan2018" role="doc-biblioref">29</a>,<a href="#ref-Carrat2008" role="doc-biblioref">31</a>,<a href="#ref-Hayden1998" role="doc-biblioref">32</a>]</span>. The scores are computed as a sum of the symptoms that are present. Our data did not allow us to take into account symptom severity, though a comparison of our scores with cough, weakness, and body aches, for which we have severity, shows that there is a good positive correlation between strength and number of symptoms (see SM). To test the robustness of our results, we completed several sensitivity analyses using different approaches to generate the scores. Results from these analyses are shown in the SM.</p>
+<p>Correlations between the infectiousness score, morbidity score, and activity were assessed using Spearman correlation <span class="citation" data-cites="Conover1999">[<a href="#ref-Conover1999" role="doc-biblioref">33</a>]</span> and the generalized Mantel–Haenszel procedure <span class="citation" data-cites="Kuritz1988">[<a href="#ref-Kuritz1988" role="doc-biblioref">34</a>]</span>. Linear regression is used to estimate the average change in activity, and the lines are included in the plots to help visualize the relationships. All analyses were completed using R (version 3.5.3) <span class="citation" data-cites="R-base">[<a href="#ref-R-base" role="doc-biblioref">35</a>]</span>. We used the mlr package for cross-validation <span class="citation" data-cites="Bischl2016">[<a href="#ref-Bischl2016" role="doc-biblioref">36</a>]</span>, vcdExtra to compute Yule’s Q and the CHM trend test <span class="citation" data-cites="Meyer2017">[<a href="#ref-Meyer2017" role="doc-biblioref">37</a>]</span>, DescTools to compute Spearman’s rank correlation coefficient and corresponding confidence intervals <span class="citation" data-cites="Signorell2019">[<a href="#ref-Signorell2019" role="doc-biblioref">38</a>]</span>. All of the code and data required to reproduce the results are available through Dryad.</p>
+</section>
+</section>
+<section id="results" class="level1">
+<h1>RESULTS</h1>
+<section id="study-population" class="level2">
+<h2 class="anchored" data-anchor-id="study-population">Study population</h2>
+<p>During the study period, 2380 patients had a respiratory complaint and filled out the questionnaire. Among those, 324 had a lab-based diagnosis of influenza (PCR or rapid antigen). The following analyses focus on those patients since they are most likely infected with influenza. For analyses of patients who received a flu diagnosis based on lab tests or empirically from a physician, see the SM. Patients with influenza reported activity levels ranging from 0 to 10 with a median of 4 (SM Figure 1). All of the patients reported symptoms, with only 14% reporting 9 or fewer (max possible 25). The most common symptoms were coughing and weakness while the least common was abdominal pain (SM Table 1).</p>
+</section>
+<section id="univariate-and-subset-selection" class="level2">
+<h2 class="anchored" data-anchor-id="univariate-and-subset-selection">Univariate and subset selection</h2>
+<p>We assessed correlations between activity level and each symptom in a univariate linear analysis (SM Table 2). All statistically significant symptoms had a negative correlation with activity level (SM Table 2). Next, we considered a multi-variable regression model and performed variable selection based on cross-validated minimization of RMSE. We found that the best performing model was one that included chills/sweats, subjective fever, headache, weakness, sleeplessness, and vomiting (SM Table 2). While vomiting is not a common symptom of influenza, in those patients who did report vomiting lead to major reductions in their activity.</p>
+</section>
+<section id="computation-of-infectiousness-and-morbidity-scores" class="level2">
+<h2 class="anchored" data-anchor-id="computation-of-infectiousness-and-morbidity-scores">Computation of infectiousness and morbidity scores</h2>
+<p>For the main analysis, we classified 5 symptoms as infectiousness related: coughing, sneezing, runny nose, nasal congestion, and chest congestion. 20 symptoms were classified as morbidity related: subjective fever, having chills and or sweats, body aches, weakness, headache, fatigue, sleeplessness, breathlessness, wheezing, chest pain, sore throat, abdominal pain, diarrhea, nausea, vomiting, ear pain, tooth pain, eye pain, itchy eyes, and swollen lymph nodes. Each symptom present in a patient contributed one point to their respective scores. For those symptoms for which we had severity, we investigated correlations with number of symptoms and found total number of symptoms to be a good proxy (see SM). Analyses using several alternative approaches for computing the score are shown in the SM and summarized below in the <em>Sensitivity Analysis</em> section.</p>
+<p>The infectiousness score had a possible range of 0 to 5, and the morbidity score had a possible range of 0 to 20. The median infectiousness score was 4. Only 2 patients had an infectiousness score of 0, 20% had a score of 2 or less, and 28% of patients had the maximum possible score of 5. The mean morbidity score was 9.574, and no patients had a morbidity score of 0, 1, 19 or 20. The centered distribution is assumed to be the result of how patients were included in the study that is all the patients felt sick enough to seek medical care, but none were sick enough to require urgent care or hospitalization. Results presented in the SM show plots of the score distributions (SM Figure 2 A-B).</p>
+</section>
+<section id="impact-of-infectiousness-score-on-activity" class="level2">
+<h2 class="anchored" data-anchor-id="impact-of-infectiousness-score-on-activity">Impact of infectiousness score on activity</h2>
+<p>Analysis of the association between the infectiousness score and the patient’s self-reported activity level suggests that the value of this score has a small impact on the activity level of a patient, with higher infectiousness correlating with reduced activity. Spearman’s rank correlation indicates a negative relationship (<span class="math inline">\(r=\)</span> -0.15 (95% CI: -0.25, -0.04)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 6.363, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> 0.01) (Figure @ref(fig:LabMIvAFig)A). Note however that the data suggest a non-linear relationship between infectiousness and activity. We cannot think of a biological mechanism that might lead to this pattern. Given that the observed negative trend is small and doesn’t show a monotone decline, it is most reasonable to assume based on this data that there is no meaningful relationship between infectiousness score and activity level. Results presented in the SM show that the overall pattern remains the same if details of the analysis approach are changed (SM Figures 6-8B, 13).</p>
+</section>
+<section id="impact-of-morbidity-score-on-activity" class="level2">
+<h2 class="anchored" data-anchor-id="impact-of-morbidity-score-on-activity">Impact of morbidity score on activity</h2>
+<p>Analysis of the association between the morbidity score and the patient’s self-reported activity level suggests that higher morbidity score is associated with reduced activity levels. Spearman’s rank correlation indicates negative relationship (<span class="math inline">\(r=\)</span> -0.32 (95% CI: -0.42, -0.22)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 38.577, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01) (Figure @ref(fig:LabMIvAFig)B). The observed pattern is consistent and clear, with a mean 4.7-fold reduction in activity level going from the lowest to the highest morbidity score. The strong negative relationship is preserved if details of the analysis approach are changed results are shown in SM (SM Figures 9-10B, 14).</p>
+</section>
+<section id="impact-of-morbidity-score-on-infectiousness-score" class="level2">
+<h2 class="anchored" data-anchor-id="impact-of-morbidity-score-on-infectiousness-score">Impact of morbidity score on infectiousness score</h2>
+<p>Analysis of the relationship between the morbidity and infectiousness scores show a positive correlation. Spearman’s rank correlation indicates positive relationship (<span class="math inline">\(r=\)</span> 0.28 (95% CI: 0.18, 0.38)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 26.093, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01) (Figure @ref(fig:LabMIvAFig)C). Apart from the mean activity levels for very low morbidity score values (with very small sample sizes), the pattern is consistent and clear, with a mean 1.8-fold increase in the infectiousness score going from the lowest to the highest morbidity score. A positive relationship is observed regardless of how the infectiousness or morbidity scores are calculated (SM Figures 6-10C) and in the analysis of empirically-diagnosed patients (SM Figure 15).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/IandMScore_Lab.tiff" class="img-fluid figure-img"></p>
+<figcaption>For all plots the red diamonds indicate the mean and the solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression. (A) Activity level for each level of the infectiousness score. (B) Activity level for each level of the morbidity score. There are no patients with a score of morbidity 0, 1, 19, and 20. (C) Infectiousness score for each level of the morbidity score.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sensitivity-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="sensitivity-analysis">Sensitivity analysis</h2>
+<p>We performed several sensitivity analyses of our results. In one type of analysis, we computed both the morbidity and infectiousness scores in different ways and showed that overall results remain the same. In a different analysis, we considered all patients diagnosed with influenza, not just those that had a positive lab test. Again, overall results remained robust. Details of all these analyses are presented in the SM.</p>
+</section>
+<section id="conceptualizing-our-results" class="level2">
+<h2 class="anchored" data-anchor-id="conceptualizing-our-results">Conceptualizing our results</h2>
+<p>We can place our data into the conceptual framework introduced in the introduction with the morbidity score as a proxy of virulence, <span class="math inline">\(v\)</span>, the infectiousness score as a proxy of per-contact transmission potential, <span class="math inline">\(p\)</span>, and patient-reported activity as a proxy for the contact rate, <span class="math inline">\(c\)</span> (Figure @ref(fig:HypoFigDATA)). Since our data is measured in units with indirect and uncertain mapping to actual per-contact transmission potential and actual contact rate, we standardize the data and manually place it on top of the conceptual lines. This should not be considered a quantitative mapping.</p>
+<p>Our study population consisted of individuals who felt sick enough to seek medical care, but none were ill enough to require emergency care. It is thus a reasonable assumption to expect them to be somewhere in the middle of the virulence spectrum. Based on our data, this range is characterized by infectiousness levels that are increasing as morbidity (virulence) increases (Figure @ref(fig:HypoFigDATA)). Activity is more strongly impacted and decreases as morbidity increases. We speculate that a study population that included asymptomatic and mildly symptomatic infected persons would be on the left side of our data, while severely ill and hospitalized individuals would fall to the right side of our data.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/ConceptFigDATA.tiff" class="img-fluid figure-img"></p>
+<figcaption>Theoretical framework and data for virulence mediated transmission trade-off. Morbidity score is a proxy for virulence, infectiousness score is a proxy for per-contact transmission potential, and activity level is a proxy for contact rate. The values for infectiousness and activity are re-scaled to allow better visualization. Lines are adjusted to pass through data. Thus, this figure does not show a fit but instead a conceptual framework in which our data can be placed and interpreted.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="discussion" class="level1">
+<h1>DISCUSSION</h1>
+<p>We believe this is the first study that investigates a trade-off between contact-rate and per contact transmission potential for influenza in humans. We showed that for our population, activity decreased as both morbidity and infectiousness scores increased, and we found a positive association between morbidity and infectiousness symptoms. This is a secondary analysis of data that was not specifically collected to address our question. As such, results should be considered exploratory instead of confirmatory. All data were self-reported, and most symptoms were only reported as present or absent. Patient reported symptoms can be very subjective <span class="citation" data-cites="McCoul2019">[<a href="#ref-McCoul2019" role="doc-biblioref">39</a>]</span>. Due to limitations in the available data, we had to make certain assumptions. We only used absence or presence of symptoms for our scores. More detailed data would have allowed for a more accurate score taking into account severity/frequency of symptoms. We only collected data on individuals who were experiencing enough symptoms to seek care, but not symptoms so severe that emergency care was required. As a result, we do not have data on individuals with low or high virulence infections. Such data would allow for a complete exploration across the full range of virulence and determine relationships between transmission, morbidity, and infectiousness. Finally, our study population was made up of college students, i.e., generally young and healthy individuals. As such, their symptoms, infectiousness, and activity behavior distributions might not fully apply to a more general population. Our data also does not contain information on the influenza strain with which individuals were infected, which may impact disease outcomes <span class="citation" data-cites="Cowling2010">[<a href="#ref-Cowling2010" role="doc-biblioref">40</a>]</span>.</p>
+<p>The mapping of our infectiousness score on actual transmission potential is unclear. Different symptoms likely contribute to the infectiousness of a patient in different amounts. Coughing and sneezing create both droplets and aerosols that have varying concentrations of virus and environmental persistence and can transmit the disease directly and indirectly <span class="citation" data-cites="Nicas2005 Nicas2006 Gralton2011 Weber2008 Nicas2009 Atkinson2008 Lindsley2010">[<a href="#ref-Nicas2005" role="doc-biblioref">41</a>–<a href="#ref-Lindsley2010" role="doc-biblioref">47</a>]</span>. While a runny nose does not create aerosols or droplets without proper hygiene, it can lead to contaminated objects or self-inoculation of contacts <span class="citation" data-cites="Nicas2006 Brankston2007">[<a href="#ref-Nicas2006" role="doc-biblioref">42</a>,<a href="#ref-Brankston2007" role="doc-biblioref">48</a>]</span>. Our score is limited but similar to scores used in previous studies to quantify infectiousness <span class="citation" data-cites="Carrat2008 Hayden1998 Yan2018">[<a href="#ref-Yan2018" role="doc-biblioref">29</a>,<a href="#ref-Carrat2008" role="doc-biblioref">31</a>,<a href="#ref-Hayden1998" role="doc-biblioref">32</a>]</span>.</p>
+<p>Despite these potential limitations, our study can help inform current and future interventions targeting influenza. For example, if our results hold up, it suggests that any anti-influenza treatment that reduces morbidity related symptoms, without affecting infectiousness related symptoms, could lead to increased transmission. While from the perspective of a patient or clinician, a reduction in any symptom may be viewed as a positive, such an intervention might lead to worse outcomes on the population level <span class="citation" data-cites="Earn2014">[<a href="#ref-Earn2014" role="doc-biblioref">49</a>]</span>. Current FDA approval of anti-influenza drugs relies on showing an impact on the symptoms, with a focus on more severe and systemic (i.e., morbidity) symptoms <span class="citation" data-cites="Ebell2012 Hayden2018 Jefferson2004">[<a href="#ref-Ebell2012" role="doc-biblioref">50</a>–<a href="#ref-Jefferson2004" role="doc-biblioref">52</a>]</span>. From a population perspective, it is essential that such drugs also reduce host infectiousness <span class="citation" data-cites="Jefferson2004 Nishiura2011 Goldstein2010 Handel2015a">[<a href="#ref-Jefferson2004" role="doc-biblioref">52</a>–<a href="#ref-Handel2015a" role="doc-biblioref">55</a>]</span>. Some evidence for this has been found in previous studies <span class="citation" data-cites="Halloran2006 Yang2009 Goldstein2010 Tsang2016">[<a href="#ref-Goldstein2010" role="doc-biblioref">54</a>,<a href="#ref-Halloran2006" role="doc-biblioref">56</a>–<a href="#ref-Tsang2016" role="doc-biblioref">58</a>]</span> as well as being explored in mathematical models <span class="citation" data-cites="Hoze2018 Earn2014 Porco2005">[<a href="#ref-Earn2014" role="doc-biblioref">49</a>,<a href="#ref-Hoze2018" role="doc-biblioref">59</a>,<a href="#ref-Porco2005" role="doc-biblioref">60</a>]</span>.</p>
+<p>Population-level control of infectious diseases makes increasing use of mathematical models <span class="citation" data-cites="Lessler2016">[<a href="#ref-Lessler2016" role="doc-biblioref">61</a>]</span>. The need for these models to be accurate is critical. Researchers have increasingly recognized that capturing human behavior changes during an infectious disease outbreak, both for uninfected and infected individuals, is relevant <span class="citation" data-cites="Funk2015 Carrasco2013">[<a href="#ref-Funk2015" role="doc-biblioref">62</a>,<a href="#ref-Carrasco2013" role="doc-biblioref">63</a>]</span>. As far as we are aware, only a few previous modeling studies for influenza have tried to capture the impact of infection on contact rates <span class="citation" data-cites="Handel2007 Chen2012 Liao2010 Pawelek2015">[<a href="#ref-Handel2007" role="doc-biblioref">64</a>–<a href="#ref-Pawelek2015" role="doc-biblioref">67</a>]</span>. Previous studies have shown that symptoms aid infectiousness and impact the number of contacts <span class="citation" data-cites="Eames2010 VanKerckhove2013">[<a href="#ref-VanKerckhove2013" role="doc-biblioref">25</a>,<a href="#ref-Eames2010" role="doc-biblioref">26</a>]</span>. In our analysis, we found a strong reduction in mean activity as a result of increased morbidity. Using data from our study and past studies <span class="citation" data-cites="Eames2010 VanKerckhove2013">[<a href="#ref-VanKerckhove2013" role="doc-biblioref">25</a>,<a href="#ref-Eames2010" role="doc-biblioref">26</a>]</span> can be a starting point for future models to explore the impacts of infectiousness and contact behavior of infected hosts <span class="citation" data-cites="Handel2015">[<a href="#ref-Handel2015" role="doc-biblioref">68</a>]</span>.</p>
+<section id="data-accessibility" class="level3">
+<h3 class="anchored" data-anchor-id="data-accessibility">Data accessibility</h3>
+<p>All code and data: Dryad, https://doi.org/10.5061/dryad.51c59zw4v</p>
+</section>
+<section id="funding" class="level3">
+<h3 class="anchored" data-anchor-id="funding">Funding</h3>
+<p>AH and BM were partially supported by NIH U19AI117891. This is a secondary analysis of data that had been previously collected with support from Roche diagnostics.</p>
+</section>
+</section>
+<section id="references" class="level1">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-Tellier2009" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Tellier R. 2009 Aerosol transmission of influenza a virus: A review of new studies. <em>Journal of the Royal Society Interface</em> <strong>6</strong>, S783–S790.</div>
+</div>
+<div id="ref-Lipsitch1997" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Lipsitch M, Moxon ER. 1997 Virulence and transmissibility of pathogens: What is the relationship? <em>Trends in Microbiology</em> <strong>5</strong>, 31–37.</div>
+</div>
+<div id="ref-Alizon2009" class="csl-entry" role="listitem">
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Alizon S, Hurford A, Mideo N, Van Baalen M. 2009 Virulence evolution and the trade-off hypothesis: History, current state of affairs and the future. <em>Journal of Evolutionary Biology</em> <strong>22</strong>, 245–259.</div>
+</div>
+<div id="ref-Cressler2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Cressler CE, McLEOD DV, Rozins C, Van Den Hoogen J, Day T. 2016 The adaptive evolution of virulence: A review of theoretical predictions and empirical tests. <em>Parasitology</em> <strong>143</strong>, 915–930.</div>
+</div>
+<div id="ref-Bull2014" class="csl-entry" role="listitem">
+<div class="csl-left-margin">5. </div><div class="csl-right-inline">Bull JJ, Lauring AS. 2014 Theory and empiricism in virulence evolution. <em>PLoS Pathogens</em> <strong>10</strong>, e1004387.</div>
+</div>
+<div id="ref-Anderson1979" class="csl-entry" role="listitem">
+<div class="csl-left-margin">6. </div><div class="csl-right-inline">Anderson RM, May RM. 1979 Population biology of infectious diseases: Part i. <em>Nature</em> <strong>280</strong>, 361.</div>
+</div>
+<div id="ref-Antia1994" class="csl-entry" role="listitem">
+<div class="csl-left-margin">7. </div><div class="csl-right-inline">Antia R, Levin BR, May RM. 1994 Within-host population dynamics and the evolution and maintenance of microparasite virulence. <em>The American Naturalist</em> <strong>144</strong>, 457–472.</div>
+</div>
+<div id="ref-Sofonea2017" class="csl-entry" role="listitem">
+<div class="csl-left-margin">8. </div><div class="csl-right-inline">Sofonea MT, Alizon S, Michalakis Y. 2017 Exposing the diversity of multiple infection patterns. <em>Journal of Theoretical Biology</em> <strong>419</strong>, 278–289.</div>
+</div>
+<div id="ref-Brown2012" class="csl-entry" role="listitem">
+<div class="csl-left-margin">9. </div><div class="csl-right-inline">Brown SP, Cornforth DM, Mideo N. 2012 Evolution of virulence in opportunistic pathogens: Generalism, plasticity, and control. <em>Trends in Microbiology</em> <strong>20</strong>, 336–342.</div>
+</div>
+<div id="ref-Gilchrist2006" class="csl-entry" role="listitem">
+<div class="csl-left-margin">10. </div><div class="csl-right-inline">Gilchrist MA, Coombs D. 2006 Evolution of virulence: Interdependence, constraints, and selection using nested models. <em>Theoretical Population Biology</em> <strong>69</strong>, 145–153.</div>
+</div>
+<div id="ref-Mideo2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">11. </div><div class="csl-right-inline">Mideo N, Alizon S, Day T. 2008 Linking within-and between-host dynamics in the evolutionary epidemiology of infectious diseases. <em>Trends in Ecology &amp; Evolution</em> <strong>23</strong>, 511–517.</div>
+</div>
+<div id="ref-Antolin2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">12. </div><div class="csl-right-inline">Antolin MF. 2008 Unpacking <span class="math inline">\(\beta\)</span>: Within-host dynamics and the evolutionary ecology of pathogen transmission. <em>Annual Review of Ecology, Evolution, and Systematics</em> <strong>39</strong>, 415–437.</div>
+</div>
+<div id="ref-Brown2006" class="csl-entry" role="listitem">
+<div class="csl-left-margin">13. </div><div class="csl-right-inline">Brown NF, Wickham ME, Coombes BK, Finlay BB. 2006 Crossing the line: Selection and evolution of virulence traits. <em>PLoS Pathogens</em> <strong>2</strong>, e42.</div>
+</div>
+<div id="ref-Mackinnon2004" class="csl-entry" role="listitem">
+<div class="csl-left-margin">14. </div><div class="csl-right-inline">Mackinnon MJ, Read AF. 2004 Virulence in malaria: An evolutionary viewpoint. <em>Proceedings of the Royal Society B: Biological Sciences</em> <strong>359</strong>, 965–986.</div>
+</div>
+<div id="ref-Mackinnon2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">15. </div><div class="csl-right-inline">Mackinnon MJ, Gandon S, Read AF. 2008 Virulence evolution in response to vaccination: The case of malaria. <em>Vaccine</em> <strong>26</strong>, C42–C52.</div>
+</div>
+<div id="ref-Sofonea2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">16. </div><div class="csl-right-inline">Sofonea MT, Aldakak L, Boullosa LV, Alizon S. 2018 Can ebola virus evolve to be less virulent in humans? <em>Journal of Evolutionary Biology</em> <strong>31</strong>, 382–392.</div>
+</div>
+<div id="ref-Fraser2007" class="csl-entry" role="listitem">
+<div class="csl-left-margin">17. </div><div class="csl-right-inline">Fraser C, Hollingsworth TD, Chapman R, Wolf F de, Hanage WP. 2007 Variation in HIV-1 set-point viral load: Epidemiological analysis and an evolutionary hypothesis. <em>Proceedings of the National Academy of Sciences</em> <strong>104</strong>, 17441–17446.</div>
+</div>
+<div id="ref-Fraser2014" class="csl-entry" role="listitem">
+<div class="csl-left-margin">18. </div><div class="csl-right-inline">Fraser C, Lythgoe K, Leventhal GE, Shirreff G, Hollingsworth TD, Alizon S, Bonhoeffer S. 2014 Virulence and pathogenesis of HIV-1 infection: An evolutionary perspective. <em>Science</em> <strong>343</strong>, 1243727.</div>
+</div>
+<div id="ref-Ben-Shachar2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">19. </div><div class="csl-right-inline">Ben-Shachar R, Koelle K. 2018 Transmission-clearance trade-offs indicate that dengue virulence evolution depends on epidemiological context. <em>Nature Communications</em> <strong>9</strong>, 2355.</div>
+</div>
+<div id="ref-Ewald1983" class="csl-entry" role="listitem">
+<div class="csl-left-margin">20. </div><div class="csl-right-inline">Ewald PW. 1983 Host-parasite relations, vectors, and the evolution of disease severity. <em>Annual Review of Ecology and Systematics</em> <strong>14</strong>, 465–485.</div>
+</div>
+<div id="ref-Levin1981" class="csl-entry" role="listitem">
+<div class="csl-left-margin">21. </div><div class="csl-right-inline">Levin S, Pimentel D. 1981 Selection of intermediate rates of increase in parasite-host systems. <em>The American Naturalist</em> <strong>117</strong>, 308–315.</div>
+</div>
+<div id="ref-Levin1996" class="csl-entry" role="listitem">
+<div class="csl-left-margin">22. </div><div class="csl-right-inline">Levin BR. 1996 The evolution and maintenance of virulence in microparasites. <em>Emerging Infectious Diseases</em> <strong>2</strong>, 93.</div>
+</div>
+<div id="ref-Bull1994" class="csl-entry" role="listitem">
+<div class="csl-left-margin">23. </div><div class="csl-right-inline">Bull JJ. 1994 Virulence. <em>Evolution</em> <strong>48</strong>, 1423–1437.</div>
+</div>
+<div id="ref-Leung2015" class="csl-entry" role="listitem">
+<div class="csl-left-margin">24. </div><div class="csl-right-inline">Leung NH, Xu C, Ip DK, Cowling BJ. 2015 The fraction of influenza virus infections that are asymptomatic: A systematic review and meta-analysis. <em>Epidemiology (cambridge, Mass.)</em> <strong>26</strong>, 862.</div>
+</div>
+<div id="ref-VanKerckhove2013" class="csl-entry" role="listitem">
+<div class="csl-left-margin">25. </div><div class="csl-right-inline">Van Kerckhove K, Hens N, Edmunds WJ, Eames KT. 2013 The impact of illness on social networks: Implications for transmission and control of influenza. <em>American Journal of Epidemiology</em> <strong>178</strong>, 1655–1662.</div>
+</div>
+<div id="ref-Eames2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">26. </div><div class="csl-right-inline">Eames K, Tilston N, White P, Adams E, Edmunds W. 2010 The impact of illness and the impact of school closure on social contact patterns. <em>Health Technology Assessment</em> <strong>14</strong>, 267–312.</div>
+</div>
+<div id="ref-Dale2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">27. </div><div class="csl-right-inline">Dale AP, Ebell M, McKay B, Handel A, Forehand R, Dobbin K. 2019 Impact of a rapid point of care test for influenza on guideline consistent care and antibiotic use. <em>Journal of the American Board of Family Medicine</em> <strong>32</strong>, 226–233.</div>
+</div>
+<div id="ref-Kohavi1997" class="csl-entry" role="listitem">
+<div class="csl-left-margin">28. </div><div class="csl-right-inline">Kohavi R, John GH. 1997 Wrappers for feature subset selection. <em>Artificial Intelligence</em> <strong>97</strong>, 273–324.</div>
+</div>
+<div id="ref-Yan2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">29. </div><div class="csl-right-inline">Yan J <em>et al.</em> 2018 Infectious virus in exhaled breath of symptomatic seasonal influenza cases from a college community. <em>Proceedings of the National Academy of Sciences</em> <strong>115</strong>, 1081–1086.</div>
+</div>
+<div id="ref-Killingley2013" class="csl-entry" role="listitem">
+<div class="csl-left-margin">30. </div><div class="csl-right-inline">Killingley B, Nguyen-Van-Tam J. 2013 Routes of influenza transmission. <em>Influenza and other Respiratory Viruses</em> <strong>7</strong>, 42–51.</div>
+</div>
+<div id="ref-Carrat2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">31. </div><div class="csl-right-inline">Carrat F, Vergu E, Ferguson NM, Lemaitre M, Cauchemez S, Leach S, Valleron A-J. 2008 Time lines of infection and disease in human influenza: A review of volunteer challenge studies. <em>American Journal of Epidemiology</em> <strong>167</strong>, 775–785.</div>
+</div>
+<div id="ref-Hayden1998" class="csl-entry" role="listitem">
+<div class="csl-left-margin">32. </div><div class="csl-right-inline">Hayden FG, Fritz R, Lobo MC, Alvord W, Strober W, Straus SE. 1998 Local and systemic cytokine responses during experimental human influenza a virus infection. Relation to symptom formation and host defense. <em>The Journal of Clinical Investigation</em> <strong>101</strong>, 643–649.</div>
+</div>
+<div id="ref-Conover1999" class="csl-entry" role="listitem">
+<div class="csl-left-margin">33. </div><div class="csl-right-inline">Conover W. 1999 <em>Practical nonparametric statistics, john wiley &amp; sons</em>. </div>
+</div>
+<div id="ref-Kuritz1988" class="csl-entry" role="listitem">
+<div class="csl-left-margin">34. </div><div class="csl-right-inline">Kuritz SJ, Landis JR, Koch GG. 1988 A general overview of mantel-haenszel methods: Applications and recent developments. <em>Annual Review of Public Health</em> <strong>9</strong>, 123–160.</div>
+</div>
+<div id="ref-R-base" class="csl-entry" role="listitem">
+<div class="csl-left-margin">35. </div><div class="csl-right-inline">R Core Team. 2016 <em>R: A language and environment for statistical computing</em>. Vienna, Austria: R Foundation for Statistical Computing. See <a href="https://www.R-project.org/">https://www.R-project.org/</a>.</div>
+</div>
+<div id="ref-Bischl2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">36. </div><div class="csl-right-inline">Bischl B, Lang M, Kotthoff L, Schiffner J, Richter J, Studerus E, Casalicchio G, Jones ZM. 2016 <a href="http://jmlr.org/papers/v17/15-066.html"><span class="nocase">mlr</span>: Machine learning in r</a>. <em>Journal of Machine Learning Research</em> <strong>17</strong>, 1–5.</div>
+</div>
+<div id="ref-Meyer2017" class="csl-entry" role="listitem">
+<div class="csl-left-margin">37. </div><div class="csl-right-inline">Meyer D, Zeileis A, Hornik K. 2017 <em>Vcd: Visualizing categorical data</em>. </div>
+</div>
+<div id="ref-Signorell2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">38. </div><div class="csl-right-inline">Signorell A. 2019 <em>DescTools: Tools for descriptive statistics</em>. See <a href="https://cran.r-project.org/package=DescTools">https://cran.r-project.org/package=DescTools</a>.</div>
+</div>
+<div id="ref-McCoul2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">39. </div><div class="csl-right-inline">McCoul ED, Mohammed AE, Debbaneh PM, Carratola M, Patel AS. 2019 <span class="nocase">Differences in the Intended Meaning of Congestion Between Patients and Clinicians</span>. <em>JAMA Otolaryngology–Head &amp; Neck Surgery</em> <strong>145</strong>, 634–640. (doi:<a href="https://doi.org/10.1001/jamaoto.2019.1023">10.1001/jamaoto.2019.1023</a>)</div>
+</div>
+<div id="ref-Cowling2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">40. </div><div class="csl-right-inline">Cowling BJ <em>et al.</em> 2010 Comparative epidemiology of pandemic and seasonal influenza a in households. <em>New England Journal of Medicine</em> <strong>362</strong>, 2175–2184.</div>
+</div>
+<div id="ref-Nicas2005" class="csl-entry" role="listitem">
+<div class="csl-left-margin">41. </div><div class="csl-right-inline">Nicas M, Nazaroff WW, Hubbard A. 2005 Toward understanding the risk of secondary airborne infection: Emission of respirable pathogens. <em>Journal of Occupational and Environmental Hygiene</em> <strong>2</strong>, 143–154.</div>
+</div>
+<div id="ref-Nicas2006" class="csl-entry" role="listitem">
+<div class="csl-left-margin">42. </div><div class="csl-right-inline">Nicas M, Sun G. 2006 An integrated model of infection risk in a health-care environment. <em>Risk Analysis</em> <strong>26</strong>, 1085–1096.</div>
+</div>
+<div id="ref-Gralton2011" class="csl-entry" role="listitem">
+<div class="csl-left-margin">43. </div><div class="csl-right-inline">Gralton J, Tovey E, McLaws M-L, Rawlinson WD. 2011 The role of particle size in aerosolised pathogen transmission: A review. <em>Journal of Infection</em> <strong>62</strong>, 1–13.</div>
+</div>
+<div id="ref-Weber2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">44. </div><div class="csl-right-inline">Weber TP, Stilianakis NI. 2008 Inactivation of influenza a viruses in the environment and modes of transmission: A critical review. <em>Journal of Infection</em> <strong>57</strong>, 361–373.</div>
+</div>
+<div id="ref-Nicas2009" class="csl-entry" role="listitem">
+<div class="csl-left-margin">45. </div><div class="csl-right-inline">Nicas M, Jones RM. 2009 Relative contributions of four exposure pathways to influenza infection risk. <em>Risk Analysis: An International Journal</em> <strong>29</strong>, 1292–1303.</div>
+</div>
+<div id="ref-Atkinson2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">46. </div><div class="csl-right-inline">Atkinson MP, Wein LM. 2008 Quantifying the routes of transmission for pandemic influenza. <em>Bulletin of Mathematical Biology</em> <strong>70</strong>, 820–867.</div>
+</div>
+<div id="ref-Lindsley2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">47. </div><div class="csl-right-inline">Lindsley WG <em>et al.</em> 2010 Measurements of airborne influenza virus in aerosol particles from human coughs. <em>PloS One</em> <strong>5</strong>, e15100.</div>
+</div>
+<div id="ref-Brankston2007" class="csl-entry" role="listitem">
+<div class="csl-left-margin">48. </div><div class="csl-right-inline">Brankston G, Gitterman L, Hirji Z, Lemieux C, Gardam M. 2007 Transmission of influenza a in human beings. <em>The Lancet Infectious Diseases</em> <strong>7</strong>, 257–265.</div>
+</div>
+<div id="ref-Earn2014" class="csl-entry" role="listitem">
+<div class="csl-left-margin">49. </div><div class="csl-right-inline">Earn DJ, Andrews PW, Bolker BM. 2014 Population-level effects of suppressing fever. <em>Proceedings of the Royal Society B: Biological Sciences</em> <strong>281</strong>, 20132570.</div>
+</div>
+<div id="ref-Ebell2012" class="csl-entry" role="listitem">
+<div class="csl-left-margin">50. </div><div class="csl-right-inline">Ebell MH, Call M, Shinholser J. 2012 Effectiveness of oseltamivir in adults: A meta-analysis of published and unpublished clinical trials. <em>Family Practice</em> <strong>30</strong>, 125–133.</div>
+</div>
+<div id="ref-Hayden2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">51. </div><div class="csl-right-inline">Hayden FG <em>et al.</em> 2018 Baloxavir marboxil for uncomplicated influenza in adults and adolescents. <em>New England Journal of Medicine</em> <strong>379</strong>, 913–923.</div>
+</div>
+<div id="ref-Jefferson2004" class="csl-entry" role="listitem">
+<div class="csl-left-margin">52. </div><div class="csl-right-inline">Jefferson T, Deeks J, Demicheli V, Rivetti D, Rudin M. 2004 Amantadine and rimantadine for preventing and treating influenza a in adults. <em>Cochrane Database of Systematic Reviews</em> </div>
+</div>
+<div id="ref-Nishiura2011" class="csl-entry" role="listitem">
+<div class="csl-left-margin">53. </div><div class="csl-right-inline">Nishiura H, Oshitani H. 2011 Household transmission of influenza (H1N1-2009) in japan: Age-specificity and reduction of household transmission risk by zanamivir treatment. <em>Journal of International Medical Research</em> <strong>39</strong>, 619–628.</div>
+</div>
+<div id="ref-Goldstein2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">54. </div><div class="csl-right-inline">Goldstein E <em>et al.</em> 2010 Oseltamivir for treatment and prevention of pandemic influenza a/H1N1 virus infection in households, milwaukee, 2009. <em>BMC Infectious Diseases</em> <strong>10</strong>, 211.</div>
+</div>
+<div id="ref-Handel2015a" class="csl-entry" role="listitem">
+<div class="csl-left-margin">55. </div><div class="csl-right-inline">Handel A, Ebell MH. 2015 Neuraminidase inhibitors for influenza: Fully evaluating benefits and harms. <em>The Lancet Respiratory Medicine</em> <strong>3</strong>, e7–e8.</div>
+</div>
+<div id="ref-Halloran2006" class="csl-entry" role="listitem">
+<div class="csl-left-margin">56. </div><div class="csl-right-inline">Halloran ME, Hayden FG, Yang Y, Longini Jr IM, Monto AS. 2006 Antiviral effects on influenza viral transmission and pathogenicity: Observations from household-based trials. <em>American Journal of Epidemiology</em> <strong>165</strong>, 212–221.</div>
+</div>
+<div id="ref-Yang2009" class="csl-entry" role="listitem">
+<div class="csl-left-margin">57. </div><div class="csl-right-inline">Yang Y, Halloran ME, Longini Jr IM. 2009 A bayesian model for evaluating influenza antiviral efficacy in household studies with asymptomatic infections. <em>Biostatistics</em> <strong>10</strong>, 390–403.</div>
+</div>
+<div id="ref-Tsang2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">58. </div><div class="csl-right-inline">Tsang TK, Lau LL, Cauchemez S, Cowling BJ. 2016 Household transmission of influenza virus. <em>Trends in Microbiology</em> <strong>24</strong>, 123–133.</div>
+</div>
+<div id="ref-Hoze2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">59. </div><div class="csl-right-inline">Hozé N, Bonhoeffer S, Regoes R. 2018 Assessing the public health impact of tolerance-based therapies with mathematical models. <em>PLoS Computational Biology</em> <strong>14</strong>, e1006119.</div>
+</div>
+<div id="ref-Porco2005" class="csl-entry" role="listitem">
+<div class="csl-left-margin">60. </div><div class="csl-right-inline">Porco TC, Lloyd-Smith JO, Gross KL, Galvani AP. 2005 The effect of treatment on pathogen virulence. <em>Journal of Theoretical Biology</em> <strong>233</strong>, 91–102.</div>
+</div>
+<div id="ref-Lessler2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">61. </div><div class="csl-right-inline">Lessler J, Cummings DA. 2016 Mechanistic models of infectious disease and their impact on public health. <em>American Journal of Epidemiology</em> <strong>183</strong>, 415–422.</div>
+</div>
+<div id="ref-Funk2015" class="csl-entry" role="listitem">
+<div class="csl-left-margin">62. </div><div class="csl-right-inline">Funk S, Bansal S, Bauch CT, Eames KT, Edmunds WJ, Galvani AP, Klepac P. 2015 Nine challenges in incorporating the dynamics of behaviour in infectious diseases models. <em>Epidemics</em> <strong>10</strong>, 21–25.</div>
+</div>
+<div id="ref-Carrasco2013" class="csl-entry" role="listitem">
+<div class="csl-left-margin">63. </div><div class="csl-right-inline">Carrasco LR, Jit M, Chen MI, Lee VJ, Milne GJ, Cook AR. 2013 Trends in parameterization, economics and host behaviour in influenza pandemic modelling: A review and reporting protocol. <em>Emerging Themes in Epidemiology</em> <strong>10</strong>, 3.</div>
+</div>
+<div id="ref-Handel2007" class="csl-entry" role="listitem">
+<div class="csl-left-margin">64. </div><div class="csl-right-inline">Handel A, Longini Jr IM, Antia R. 2007 Neuraminidase inhibitor resistance in influenza: Assessing the danger of its generation and spread. <em>PLoS Computational Biology</em> <strong>3</strong>, e240.</div>
+</div>
+<div id="ref-Chen2012" class="csl-entry" role="listitem">
+<div class="csl-left-margin">65. </div><div class="csl-right-inline">Chen S-C, You S-H, Ling M-P, Chio C-P, Liao C-M. 2012 Use of seasonal influenza virus titer and respiratory symptom score to estimate effective human contact rates. <em>Journal of epidemiology</em> <strong>22</strong>, 353–363.</div>
+</div>
+<div id="ref-Liao2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">66. </div><div class="csl-right-inline">Liao C-M, Yang S-C, Chio C-P, Chen S-C. 2010 Understanding influenza virus-specific epidemiological properties by analysis of experimental human infections. <em>Epidemiology &amp; Infection</em> <strong>138</strong>, 825–835.</div>
+</div>
+<div id="ref-Pawelek2015" class="csl-entry" role="listitem">
+<div class="csl-left-margin">67. </div><div class="csl-right-inline">Pawelek KA, Salmeron C, Valle SD. 2015 Connecting within and between-hosts dynamics in the influenza infection-staged epidemiological models with behavior change. <em>Journal of coupled systems and multiscale dynamics</em> <strong>3</strong>, 233–243.</div>
+</div>
+<div id="ref-Handel2015" class="csl-entry" role="listitem">
+<div class="csl-left-margin">68. </div><div class="csl-right-inline">Handel A, Rohani P. 2015 Crossing the scale from within-host infection dynamics to between-host transmission fitness: A discussion of current assumptions and knowledge. <em>Proceedings of the Royal Society B: Biological Sciences</em> <strong>370</strong>, 20140302.</div>
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
