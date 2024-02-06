@@ -1,0 +1,185 @@
+---
+title: "cdcdata-exercise"
+editor: visual
+---
+### Exploring CDC Data: Vaccination Coverage Among Pregnant Women
+
+# Description of the data
+I found this data set from the CDC's data log under the pregnancy and vaccination section. The data was provided by the National Center for Immunization and Respiratory Diseases (NCIRD), and the information was collected through the Pregnancy Risk Assessment Monitoring System (PRAMS). Information includes vaccination rates at the state level for influenza and tetanus toxoid, reduced diptheria toxoid, and aceullar pertussis (Tdap) for women who recently gave birth. Variables include vaccine type, geography, survey year/influenza season, dimension (age or race), and estimation of vaccination coverage with 95% confidence interval. It was most recently updated on December 15, 2023 and contains 4,379 observations of 9 variables. 
+Link: https://data.cdc.gov/Pregnancy-Vaccination/Vaccination-Coverage-among-Pregnant-Women/h7pm-wmjc/about_data 
+
+# Read and load the data 
+I loaded two packages for this step: readr and here. I called the data 'pregvacc'. After reading and loading the data, I confirmed that there were 4,379 observations of 9 variables. 
+```{r}
+## load packages
+library(readr)
+library(here)
+
+##read in data and find dimensions
+pregvacc <- read_csv(here("cdcdata-exercise", "Vaccination_Coverage_among_Pregnant_Women_20240205.csv"))
+dim(pregvacc)
+```
+
+# Processing the data 
+Using the naniar package to discover missingness of the data shows that this data set is pretty clean. Sample size is the only variable with missing data, and it has 215 missing observations. Sample size is an important variable for determining the reliability of the vaccination coverage estimation percentages. The 'data quality' section of the CDC page for this data set notes that observations marked with an asterisk are unreliable due to a sample size of less than 30. After exploring the variable, the minimum value is exactly 30, so none of the estimates are less than 30. I feel confident in removing this variable from the data set because all of the vaccination coverage estimates with complete data are reliable based on the sample size variable. 
+```{r}
+## load packages
+library(naniar)
+library(dplyr)
+library(stringr)
+
+## explore missingness of the data 
+gg_miss_var(pregvacc)
+sum(is.na(pregvacc$`Sample Size`))
+summary(pregvacc$`Sample Size`)
+
+## create new dataset without the sample size variable
+pregvacc2 <- pregvacc %>% select(-`Sample Size`)
+
+```
+Using the head() function, I saw "NR" in the estimate of vaccination coverage and confidence interval variables, which also represents missing data. With assistance from AI tools, I wrote a function to rid the data of any "NR" variables or special characters using the dplyr and stringr packages. I found that there are 442 missing observations of the estimate variable and confidence interval variables. Considering that the data set contains 4,379 observations, only 10% of the observations have a missing estimate value for vaccination coverage. I think it is okay to remove the missing observations in this scenario because each state has multiple observations across several years of PRAMS data. Information about vaccination among pregnant women is included for all 50 states based on various ages and races/ethnicities, so I think it is reasonable to remove 10% of the data set for this analysis.
+
+```{r}
+## examine data again 
+head(pregvacc2)
+
+## create a function to clean the data
+clean_data <- function(data) {
+  data[data == 'NR*'] <- NA
+  data <- data %>% mutate_if(is.character, str_replace_all, pattern = "[^a-zA-Z0-9\\s]", replacement = "")
+  return(data)
+}
+
+## use the clean_data function to create the third version of the dataset
+pregvacc3 <- clean_data(pregvacc2)
+
+## explore the new NAs created by the clean_data function 
+gg_miss_var(pregvacc3)
+sum(is.na(pregvacc3$`Estimate (%)`))
+sum(is.na(pregvacc3$`95% CI (%)`))
+missing <- 442/4379*100
+head(pregvacc3)
+```
+
+After dropping the NA values, the data set contains 3,937 observations of 8 variables with no missing values. The head() function revealed that the estimate percentage is a character variable, which is incorrect because it should be a numeric variable. I mutated the variable to be numeric and divided by 100, so it will have the typical percentage format. 
+```{r}
+## create final dataset with no NAs to be used for exploratory analyis 
+pregvacc4 <- na.omit(pregvacc3)
+dim(pregvacc4)
+sum(is.na(pregvacc4))
+
+## check that all variables appear to be complete
+head(pregvacc4)
+tail(pregvacc4)
+
+## clean vaccination estimate variable to follow normal percentage format 
+pregvacc4 <- pregvacc4 %>% 
+                mutate(`Estimate (%)` = as.numeric(`Estimate (%)`)) %>%
+                mutate(`Estimate (%)` = `Estimate (%)` / 100)
+class(pregvacc4$`Estimate (%)`) # check if class mutation worked
+summary(pregvacc4$`Estimate (%)`) # check if format mutation worked 
+
+```
+
+The 95% confidence interval has the same issue of being a character variable instead of numeric variable, and the upper and lower bounds are separated by the word "to", which prevents me from directly converting it to numeric. I separated the variable into upper and lower bounds using the separate() function from the tidyr package, so I could convert the variable to the numeric format. I also had to divide the values by 100 once they were numeric, so it would be in a normal percentage format.
+```{r}
+## load packages 
+library(tidyr)
+
+## separate the confidence interval variable to convert it to numeric in a typical percent format
+pregvacc4 <- pregvacc4 %>% 
+                separate(`95% CI (%)`, into = c("95% CI Lower", "95% CI Upper"), sep = "to", convert = TRUE)
+head(pregvacc4) # check if separation worked
+pregvacc4 <- pregvacc4 %>% 
+                mutate(`95% CI Lower` = as.numeric(`95% CI Lower`) / 100) %>% 
+                mutate(`95% CI Upper` = as.numeric(`95% CI Upper`) / 100)
+head(pregvacc4) # check if mutation worked 
+```
+
+# Exploratory/Descriptive Analysis on the clean data
+After cleaning and processing the data, the final data set has 3,937 observations of 9 variables. The categorical variables include vaccine, geography type, geography, dimension tye, and dimension. The vaccine variable has two categories: influenza and tdap. The influenza vaccine is twice as common as the tdap vaccine considering that it accounts for 66.6% of vaccine observations. I used AI tools to help create a simple table displaying what percent is in each category.
+```{r}
+## find basic facts about final clean dataset
+dim(pregvacc4)
+str(pregvacc4)
+
+## create percentage table with categories of vaccine variable
+vacc_table <- table(pregvacc4$Vaccine)
+percentage_table <- prop.table(vacc_table) * 100
+print(percentage_table)
+```
+Using the code above as a template, I created a summary table for each categorical variable. The geography type variable is 95.9% states, with the other 4.1% of observations being at the national level. The geography categorical variable has 51 options with differentiation between New York City and the rest of New York state and inclusion of Puerto Rico. Wisconsin makes up the highest percentage of the geography variable with 4.06% of observations, and Indiana makes up the lowest percentage at 0.2% of observation. The two dimension types are split almost evenly with 55.65% of observations belonging to age and 44.35% of observations belonging to race and ethnicity. There are 4 categories for age: 18 years, 18-24 years, 25-34 years, and 35 years. Each of these age categories account for about 14% of dimension observations. There are 4 categories for race/ethnicity: Black Non-Hispanic, Hispanic, Other or Multiple Racecs Non-Hispanic, and White Non-Hispanic .White Non-Hispanic is the largest of the race and ethnicity categories with 13.86% of observations for the dimension variable.
+```{r}
+## create percentage table with categories of geography type variable
+geotype_table <- table(pregvacc4$`Geography Type`)
+percentage_table2 <- prop.table(geotype_table) * 100
+print(percentage_table2)
+
+## create percentage table with categories of geography variable
+geo_table <- table(pregvacc4$Geography)
+percentage_table3 <- prop.table(geo_table) * 100
+print(percentage_table3)
+
+## create percentage table with categories of dimension type variable
+dimtype_table <- table(pregvacc4$`Dimension Type`)
+percentage_table3 <- prop.table(dimtype_table) * 100
+print(percentage_table3)
+
+## create percentage table with categories of dimension variable
+dim_table <- table(pregvacc4$Dimension)
+percentage_table4 <- prop.table(dim_table) * 100
+print(percentage_table4)
+```
+To explore the continuous variables, I will make plots to see if they are approximately normal. The mean of the vaccination estimate among pregnant women is 6.23%, and the standard deviation is 1.497. I had to convert the estimate variable to a factor to create a bar graph that displayed each of the unique discrete observations. The distribution looks approximately normal, but it is slightly skewed to the left. 
+```{r}
+## load packages 
+library(ggplot2)
+
+## find summary values while variable is numeric 
+mean(pregvacc4$`Estimate (%)`)
+sd(pregvacc4$`Estimate (%)`)
+
+## convert variable to factor to be visualized
+pregvacc4 <- pregvacc4 %>% 
+                mutate(`Estimate (%)` = as.factor(`Estimate (%)`))
+class(pregvacc4$`Estimate (%)`) ## check if mutation worked 
+
+## create visualization of the distribution of estimate (%) variable
+ggplot(pregvacc4, aes(x=`Estimate (%)`)) + 
+    geom_bar(position = "dodge") + 
+    labs(x = "Estimate of Vaccination Percentage",
+         y= "Frequency") 
+```
+
+I would expect the lower and upper bound of the 95% confidence interval (CI) to have the same distribution as the estimate variable because the estimate variable is used to calculate the CI. Before converting the variables to a factor type to create the bar graph, I found the mean and standard deviation for each one while the variable was still numeric. The mean for the lower bound of the 95% CI 5.56%, and the standard deviation was 1.53. The mean for the upper bound of the 95% CI is 6.86%, and the standard deviation is 1.46. After creating two more bar graphs using the variables as factors, my expectations were met, and each distribution for the bounds of the confidence interval are approximately normal with a slight skew to the left. 
+```{r}
+## find summary values while variable is numeric 
+mean(pregvacc4$`95% CI Lower`)
+sd(pregvacc4$`95% CI Lower`)
+
+## find summary values while variable is numeric
+mean(pregvacc4$`95% CI Upper`)
+sd(pregvacc4$`95% CI Upper`)
+
+## convert variable to factor to be visualized 
+pregvacc4 <- pregvacc4 %>% 
+                mutate(`95% CI Lower` = as.factor(`95% CI Lower`))
+class(pregvacc4$`95% CI Lower`) ## check if conversion worked
+
+##create visualization of the distribution of 95% CI Lower variable
+ggplot(pregvacc4, aes(x=`95% CI Lower`)) + 
+    geom_bar(position = "dodge") + 
+    labs(x = "Lower Bound of 95% Confidence Interval for Estimate",
+         y= "Frequency") 
+
+## convert variable to factor to be visualized 
+pregvacc4 <- pregvacc4 %>% 
+                mutate(`95% CI Upper` = as.factor(`95% CI Upper`))
+class(pregvacc4$`95% CI Upper`) ## check if conversion worked
+
+##create visualization of the distribution of 95% CI Upper variable
+ggplot(pregvacc4, aes(x=`95% CI Upper`)) + 
+    geom_bar(position = "dodge") + 
+    labs(x = "Upper Bound of 95% Confidence Interval for Estimate",
+         y= "Frequency") 
+```
