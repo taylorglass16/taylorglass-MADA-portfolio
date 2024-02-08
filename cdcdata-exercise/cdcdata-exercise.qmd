@@ -2,14 +2,17 @@
 title: "cdcdata-exercise"
 editor: visual
 ---
+
 ### Exploring CDC Data: Vaccination Coverage Among Pregnant Women
 
 # Description of the data
-I found this data set from the CDC's data log under the pregnancy and vaccination section. The data was provided by the National Center for Immunization and Respiratory Diseases (NCIRD), and the information was collected through the Pregnancy Risk Assessment Monitoring System (PRAMS). Information includes vaccination rates at the state level for influenza and tetanus toxoid, reduced diptheria toxoid, and aceullar pertussis (Tdap) for women who recently gave birth. Variables include vaccine type, geography, survey year/influenza season, dimension (age or race), and estimation of vaccination coverage with 95% confidence interval. It was most recently updated on December 15, 2023 and contains 4,379 observations of 9 variables. 
-Link: https://data.cdc.gov/Pregnancy-Vaccination/Vaccination-Coverage-among-Pregnant-Women/h7pm-wmjc/about_data 
 
-# Read and load the data 
-I loaded two packages for this step: readr and here. I called the data 'pregvacc'. After reading and loading the data, I confirmed that there were 4,379 observations of 9 variables. 
+I found this data set from the CDC's data log under the pregnancy and vaccination section. The data was provided by the National Center for Immunization and Respiratory Diseases (NCIRD), and the information was collected through the Pregnancy Risk Assessment Monitoring System (PRAMS). Information includes vaccination rates at the state level for influenza and tetanus toxoid, reduced diptheria toxoid, and aceullar pertussis (Tdap) for women who recently gave birth. Variables include vaccine type, geography, survey year/influenza season, dimension (age or race), and estimation of vaccination coverage with 95% confidence interval. It was most recently updated on December 15, 2023 and contains 4,379 observations of 9 variables. Link: https://data.cdc.gov/Pregnancy-Vaccination/Vaccination-Coverage-among-Pregnant-Women/h7pm-wmjc/about_data
+
+# Read and load the data
+
+I loaded two packages for this step: readr and here. I called the data 'pregvacc'. After reading and loading the data, I confirmed that there were 4,379 observations of 9 variables.
+
 ```{r}
 ## load packages
 library(readr)
@@ -20,8 +23,10 @@ pregvacc <- read_csv(here("cdcdata-exercise", "Vaccination_Coverage_among_Pregna
 dim(pregvacc)
 ```
 
-# Processing the data 
-Using the naniar package to discover missingness of the data shows that this data set is pretty clean. Sample size is the only variable with missing data, and it has 215 missing observations. Sample size is an important variable for determining the reliability of the vaccination coverage estimation percentages. The 'data quality' section of the CDC page for this data set notes that observations marked with an asterisk are unreliable due to a sample size of less than 30. After exploring the variable, the minimum value is exactly 30, so none of the estimates are less than 30. I feel confident in removing this variable from the data set because all of the vaccination coverage estimates with complete data are reliable based on the sample size variable. 
+# Processing the data
+
+Using the naniar package to discover missingness of the data shows that this data set is pretty clean. Sample size is the only variable with missing data, and it has 215 missing observations. Sample size is an important variable for determining the reliability of the vaccination coverage estimation percentages. The 'data quality' section of the CDC page for this data set notes that observations marked with an asterisk are unreliable due to a sample size of less than 30. After exploring the variable, the minimum value is exactly 30, so none of the estimates are less than 30. I feel confident in removing this variable from the data set because all of the vaccination coverage estimates with complete data are reliable based on the sample size variable.
+
 ```{r}
 ## load packages
 library(naniar)
@@ -37,6 +42,7 @@ summary(pregvacc$`Sample Size`)
 pregvacc2 <- pregvacc %>% select(-`Sample Size`)
 
 ```
+
 Using the head() function, I saw "NR" in the estimate of vaccination coverage and confidence interval variables, which also represents missing data. With assistance from AI tools, I wrote a function to rid the data of any "NR" variables or special characters using the dplyr and stringr packages. I found that there are 442 missing observations of the estimate variable and confidence interval variables. Considering that the data set contains 4,379 observations, only 10% of the observations have a missing estimate value for vaccination coverage. I think it is okay to remove the missing observations in this scenario because each state has multiple observations across several years of PRAMS data. Information about vaccination among pregnant women is included for all 50 states based on various ages and races/ethnicities, so I think it is reasonable to remove 10% of the data set for this analysis.
 
 ```{r}
@@ -61,7 +67,8 @@ missing <- 442/4379*100
 head(pregvacc3)
 ```
 
-After dropping the NA values, the data set contains 3,937 observations of 8 variables with no missing values. The head() function revealed that the estimate percentage is a character variable, which is incorrect because it should be a numeric variable. I mutated the variable to be numeric and divided by 100, so it will have the typical percentage format. 
+After dropping the NA values, the data set contains 3,937 observations of 8 variables with no missing values. The head() function revealed that the estimate percentage is a character variable, which is incorrect because it should be a numeric variable. I mutated the variable to be numeric and divided by 100, so it will have the typical percentage format.
+
 ```{r}
 ## create final dataset with no NAs to be used for exploratory analyis 
 pregvacc4 <- na.omit(pregvacc3)
@@ -82,6 +89,7 @@ summary(pregvacc4$`Estimate (%)`) # check if format mutation worked
 ```
 
 The 95% confidence interval has the same issue of being a character variable instead of numeric variable, and the upper and lower bounds are separated by the word "to", which prevents me from directly converting it to numeric. I separated the variable into upper and lower bounds using the separate() function from the tidyr package, so I could convert the variable to the numeric format. I also had to divide the values by 100 once they were numeric, so it would be in a normal percentage format.
+
 ```{r}
 ## load packages 
 library(tidyr)
@@ -97,7 +105,9 @@ head(pregvacc4) # check if mutation worked
 ```
 
 # Exploratory/Descriptive Analysis on the clean data
-After cleaning and processing the data, the final data set has 3,937 observations of 9 variables. The categorical variables include vaccine, geography type, geography, dimension tye, and dimension. The vaccine variable has two categories: influenza and tdap. The influenza vaccine is twice as common as the tdap vaccine considering that it accounts for 66.6% of vaccine observations. I used AI tools to help create a simple table displaying what percent is in each category.
+
+After cleaning and processing the data, the final data set has 3,937 observations of 9 variables. The categorical variables include vaccine, geography type, geography, dimension type, and dimension. The vaccine variable has two categories: influenza and tdap. The influenza vaccine is twice as common as the tdap vaccine considering that it accounts for 66.6% of vaccine observations. I used AI tools to help create a simple table displaying what percent is in each category.
+
 ```{r}
 ## find basic facts about final clean dataset
 dim(pregvacc4)
@@ -108,7 +118,9 @@ vacc_table <- table(pregvacc4$Vaccine)
 percentage_table <- prop.table(vacc_table) * 100
 print(percentage_table)
 ```
-Using the code above as a template, I created a summary table for each categorical variable. The geography type variable is 95.9% states, with the other 4.1% of observations being at the national level. The geography categorical variable has 51 options with differentiation between New York City and the rest of New York state and inclusion of Puerto Rico. Wisconsin makes up the highest percentage of the geography variable with 4.06% of observations, and Indiana makes up the lowest percentage at 0.2% of observation. The two dimension types are split almost evenly with 55.65% of observations belonging to age and 44.35% of observations belonging to race and ethnicity. There are 4 categories for age: 18 years, 18-24 years, 25-34 years, and 35 years. Each of these age categories account for about 14% of dimension observations. There are 4 categories for race/ethnicity: Black Non-Hispanic, Hispanic, Other or Multiple Racecs Non-Hispanic, and White Non-Hispanic .White Non-Hispanic is the largest of the race and ethnicity categories with 13.86% of observations for the dimension variable.
+
+Using the code above as a template, I created a summary table for each categorical variable. The geography type variable is 95.9% states, with the other 4.1% of observations being at the national level. The geography categorical variable has 51 options with differentiation between New York City and the rest of New York state and inclusion of Puerto Rico. Wisconsin makes up the highest percentage of the geography variable with 4.06% of observations, and Indiana makes up the lowest percentage at 0.2% of observation. The two dimension types are split almost evenly with 55.65% of observations belonging to age and 44.35% of observations belonging to race and ethnicity. There are 4 categories for age: 18 years, 18-24 years, 25-34 years, and 35 years. Each of these age categories account for about 14% of dimension observations. There are 4 categories for race/ethnicity: Black Non-Hispanic, Hispanic, Other or Multiple Races Non-Hispanic, and White Non-Hispanic. White Non-Hispanic is the largest of the race and ethnicity categories with 13.86% of observations for the dimension variable.
+
 ```{r}
 ## create percentage table with categories of geography type variable
 geotype_table <- table(pregvacc4$`Geography Type`)
@@ -130,7 +142,9 @@ dim_table <- table(pregvacc4$Dimension)
 percentage_table4 <- prop.table(dim_table) * 100
 print(percentage_table4)
 ```
-To explore the continuous variables, I will make plots to see if they are approximately normal. The mean of the vaccination estimate among pregnant women is 6.23%, and the standard deviation is 1.497. I had to convert the estimate variable to a factor to create a bar graph that displayed each of the unique discrete observations. The distribution looks approximately normal, but it is slightly skewed to the left. 
+
+To explore the continuous variables, I will make plots to see if they are approximately normal. The mean of the vaccination estimate among pregnant women is 6.23%, and the standard deviation is 1.497. I had to convert the estimate variable to a factor to create a bar graph that displayed each of the unique discrete observations. The distribution looks approximately normal, but it is slightly skewed to the left.
+
 ```{r}
 ## load packages 
 library(ggplot2)
@@ -151,7 +165,8 @@ ggplot(pregvacc4, aes(x=`Estimate (%)`)) +
          y= "Frequency") 
 ```
 
-I would expect the lower and upper bound of the 95% confidence interval (CI) to have the same distribution as the estimate variable because the estimate variable is used to calculate the CI. Before converting the variables to a factor type to create the bar graph, I found the mean and standard deviation for each one while the variable was still numeric. The mean for the lower bound of the 95% CI 5.56%, and the standard deviation was 1.53. The mean for the upper bound of the 95% CI is 6.86%, and the standard deviation is 1.46. After creating two more bar graphs using the variables as factors, my expectations were met, and each distribution for the bounds of the confidence interval are approximately normal with a slight skew to the left. 
+I would expect the lower and upper bound of the 95% confidence interval (CI) to have the same distribution as the estimate variable because the estimate variable is used to calculate the CI. Before converting the variables to a factor type to create the bar graph, I found the mean and standard deviation for each one while the variable was still numeric. The mean for the lower bound of the 95% CI 5.56%, and the standard deviation was 1.53. The mean for the upper bound of the 95% CI is 6.86%, and the standard deviation is 1.46. After creating two more bar graphs using the variables as factors, my expectations were met, and each distribution for the bounds of the confidence interval are approximately normal with a slight skew to the left.
+
 ```{r}
 ## find summary values while variable is numeric 
 mean(pregvacc4$`95% CI Lower`)
@@ -182,4 +197,171 @@ ggplot(pregvacc4, aes(x=`95% CI Upper`)) +
     geom_bar(position = "dodge") + 
     labs(x = "Upper Bound of 95% Confidence Interval for Estimate",
          y= "Frequency") 
+```
+
+# Cassia Roth created this section.
+
+First, lets make sure we have all necessary packages loaded.
+
+```{r}
+#Load required packages
+library(tidyverse)
+library(skimr)
+library(gtsummary)
+```
+
+Next, I asked ChatGPT the following prompt: Can you write R code that generates a dataset of 3937 observations of vaccination status for women who recently gave birth. Women are between 18 and 35 years. The dataset should include seven variables (vaccine, state, year, age, race/ethnicity, estimate of vaccine coverage in percentage, 95% CI lower, 95% CI upper). 66% of the vaccination observations should be influenza vaccines and 33 percent should be Tdap vaccines. Then, given Table 4 Tessa created above, I put that into ChatGPT, so it should know the percentage of observations for each state. Then, I asked it to add code so that 50% of observations were in the age groups 18-24 and 50% were in the age groups 25-34; and that 21% of observations were Black-non Hispanic, 25% were Hispanic, 31% were White non-Hispanic, and 23% were Other. Last, I asked it to make sure the years for the data were between 2012 and 2021. I also asked it to make sure that the mean vaccination coverage was 6.23% with a standard deviation of 1.497. I finally asked it to calculate the 95% confidence interval for the mean vaccination coverage and display it. Calculating the confidence intervals took quite a bit of back and forth with ChatGPT.
+
+Note: I removed the variable geography type (state), since that wasn't really necessary to duplicate the data. I also combined the age categories 18 and 18-24 and 25-34 and 35 for ease of use.
+
+This is the fully workable code it produced.
+
+```{r}
+#Set seed for reproducibility
+set.seed(123)
+
+#Define number of observations to generate
+n_observations <- 3937 #based on the observations of 9 variables stated above
+
+# Define the percentage of observations for each vaccine type
+percent_influenza <- 0.66
+percent_tdap <- 0.33
+
+# Generate vaccine types based on the specified percentages
+vaccine_types <- sample(c("Influenza", "Tdap"), size = n_observations, 
+                        replace = TRUE, prob = c(percent_influenza, percent_tdap))
+
+# Define the states and their corresponding percentages of observations
+states <- c("Alabama", "Alaska", "Arizona", "Arkansas", "Colorado", "Connecticut",
+            "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Illinois",
+            "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
+            "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana",
+            "Nebraska", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina",
+            "North Dakota", "NYCity of New York", "NYRest of state", "Ohio", "Oklahoma", "Oregon",
+            "Pennsylvania", "Puerto Rico", "Rhode Island", "South Dakota", "Tennessee", "Texas",
+            "United States", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+            "Wisconsin", "Wyoming")
+
+percentages <- c(1.2446025, 1.5494031, 0.1778004, 1.9558039, 3.0988062, 1.6256033,
+                 4.0132080, 0.7112014, 0.3556007, 1.2192024, 2.1082042, 2.8194056,
+                 0.2032004, 2.3114046, 0.8890018, 0.6096012, 2.2606045, 1.2954026,
+                 1.8288037, 3.2512065, 2.9464059, 1.8288037, 1.2192024, 3.4798070,
+                 1.6256033, 2.8448057, 1.6510033, 2.0320041, 1.9558039, 3.2004064,
+                 0.6096012, 0.8128016, 3.4544069, 2.7178054, 0.5588011, 3.0226060,
+                 1.4224028, 3.8608077, 0.6350013, 2.0320041, 1.0160020, 1.1176022,
+                 0.8128016, 4.0640081, 2.7686055, 2.4384049, 2.6416053, 3.2512065,
+                 1.1430023, 4.0640081, 1.2446025)
+
+# Normalize percentages to sum to 1
+percentages <- percentages / sum(percentages)
+
+# Generate state observations based on the specified percentages
+state_obs <- sample(states, size = n_observations, replace = TRUE, prob = percentages)
+
+# Generate random years between 2012 and 2021
+years <- sample(2012:2021, size = n_observations, replace = TRUE)
+
+# Generate random ages between 18 and 35
+age_groups <- sample(c("18-24", "25-34"), size = n_observations, replace = TRUE, prob = c(0.5, 0.5))
+
+# Generate random race/ethnicity
+race_ethnicity <- sample(c("Black-non Hispanic", "Hispanic", "White non-Hispanic", "Other"), 
+                         size = n_observations, replace = TRUE, prob = c(0.21, 0.25, 0.31, 0.23))
+
+# Generate random estimates of vaccine coverage in percentage
+vaccine_coverage <- rnorm(n_observations, mean = 6.23, sd = 1.497)
+
+# Calculate the mean and standard deviation of the generated vaccine coverage data
+mean_coverage <- mean(vaccine_coverage)
+sd_coverage <- sd(vaccine_coverage)
+
+# Calculate the standard error (SE) of the mean
+se_mean <- sd_coverage / sqrt(n_observations)
+
+# Calculate the margin of error (ME) for a 95% confidence level (assuming normal distribution)
+# For a 95% confidence interval, the critical z-value is approximately 1.96
+z_value <- qnorm(0.975)  # Two-tailed
+
+# Initialize variables to store lower and upper bounds of the confidence intervals
+lower_ci <- numeric(n_observations)
+upper_ci <- numeric(n_observations)
+
+#Setting fixed CIs for each observation to avoid bootstrapping
+lower_ci <- vaccine_coverage - z_value * se_mean
+upper_ci <- vaccine_coverage + z_value * se_mean
+
+# Combine all variables into a data frame
+vaccination_data <- data.frame(vaccine = vaccine_types,
+                               state = state_obs,
+                               year = years,
+                               age_group = age_groups,
+                               race_ethnicity = race_ethnicity,
+                               estimate_coverage_percentage = vaccine_coverage,
+                               lower_ci = lower_ci,
+                               upper_ci = upper_ci)
+
+# Display the first few rows of the dataset and get summary
+head(vaccination_data)
+skim(vaccination_data)
+```
+
+Then, I plotted the mean and standard distribution of the vaccine coverage variable. Although my tables are in a different format than Tessa's above, they have a similar distribution.
+
+```{r}
+
+#Find summary values
+mean(vaccination_data$estimate_coverage_percentage)
+sd(vaccination_data$estimate_coverage_percentage)
+
+mean(vaccination_data$lower_ci)
+sd(vaccination_data$lower_ci)
+
+mean(vaccination_data$upper_ci)
+sd(vaccination_data$upper_ci)
+
+# Plotting the distribution of vaccine coverage percentage
+ggplot(vaccination_data, aes(x = estimate_coverage_percentage)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
+  labs(title = "Distribution of Vaccine Coverage Percentage",
+       x = "Vaccine Coverage Percentage",
+       y = "Frequency") +
+  theme_minimal()
+
+# Plotting the distribution of mean and standard deviation of vaccine coverage percentage
+ggplot(vaccination_data, aes(x = estimate_coverage_percentage)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
+  geom_vline(aes(xintercept = mean(estimate_coverage_percentage, na.rm = TRUE)), 
+             color = "red", linetype = "dashed", size = 1) +
+  geom_vline(aes(xintercept = mean(estimate_coverage_percentage, na.rm = TRUE) + 
+                   sd(estimate_coverage_percentage, na.rm = TRUE)), 
+             color = "green", linetype = "dashed", size = 1) +
+  geom_vline(aes(xintercept = mean(estimate_coverage_percentage, na.rm = TRUE) - 
+                   sd(estimate_coverage_percentage, na.rm = TRUE)), 
+             color = "green", linetype = "dashed", size = 1) +
+  labs(title = "Distribution of Vaccine Coverage Percentage with Mean and Standard Deviation",
+       x = "Vaccine Coverage Percentage",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+Finally, I will plot the distribution of both the lower and upper bounds of the 95% CI. As you can see from the output, neither distribution appears to be normally distributed, even though the mean and standard deviation are above, which makes me think I did something wrong, although I'm not sure what!
+
+Each observation has specific confidence intervals. If the observation
+
+```{r}
+# Plotting the distribution of lower 95% CI
+ggplot(vaccination_data, aes(x = lower_ci)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black", alpha = 0.5) +
+  labs(title = "Distribution of Lower 95% Confidence Interval",
+       x = "Lower 95% CI",
+       y = "Frequency") +
+  theme_minimal()
+
+# Plotting the distribution of upper 95% CI
+ggplot(vaccination_data, aes(x = upper_ci)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black", alpha = 0.5) +
+  labs(title = "Distribution of Upper 95% Confidence Interval",
+       x = "Upper 95% CI",
+       y = "Frequency") +
+  theme_minimal()
 ```

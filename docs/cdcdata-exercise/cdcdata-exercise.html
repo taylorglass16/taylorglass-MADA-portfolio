@@ -213,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>here() starts at /Users/taylorglass/Documents/MADA /taylorglass-MADA-portfolio</code></pre>
+<pre><code>here() starts at /Users/cassiaroth/Documents/GitHub/MADARoth/taylorglass-MADA-portfolio</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">##read in data and find dimensions</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pregvacc <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"cdcdata-exercise"</span>, <span class="st">"Vaccination_Coverage_among_Pregnant_Women_20240205.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -439,7 +439,7 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="exploratorydescriptive-analysis-on-the-clean-data" class="level1">
 <h1>Exploratory/Descriptive Analysis on the clean data</h1>
-<p>After cleaning and processing the data, the final data set has 3,937 observations of 9 variables. The categorical variables include vaccine, geography type, geography, dimension tye, and dimension. The vaccine variable has two categories: influenza and tdap. The influenza vaccine is twice as common as the tdap vaccine considering that it accounts for 66.6% of vaccine observations. I used AI tools to help create a simple table displaying what percent is in each category.</p>
+<p>After cleaning and processing the data, the final data set has 3,937 observations of 9 variables. The categorical variables include vaccine, geography type, geography, dimension type, and dimension. The vaccine variable has two categories: influenza and tdap. The influenza vaccine is twice as common as the tdap vaccine considering that it accounts for 66.6% of vaccine observations. I used AI tools to help create a simple table displaying what percent is in each category.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">## find basic facts about final clean dataset</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pregvacc4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -469,7 +469,7 @@ Influenza      Tdap
  66.67513  33.32487 </code></pre>
 </div>
 </div>
-<p>Using the code above as a template, I created a summary table for each categorical variable. The geography type variable is 95.9% states, with the other 4.1% of observations being at the national level. The geography categorical variable has 51 options with differentiation between New York City and the rest of New York state and inclusion of Puerto Rico. Wisconsin makes up the highest percentage of the geography variable with 4.06% of observations, and Indiana makes up the lowest percentage at 0.2% of observation. The two dimension types are split almost evenly with 55.65% of observations belonging to age and 44.35% of observations belonging to race and ethnicity. There are 4 categories for age: 18 years, 18-24 years, 25-34 years, and 35 years. Each of these age categories account for about 14% of dimension observations. There are 4 categories for race/ethnicity: Black Non-Hispanic, Hispanic, Other or Multiple Racecs Non-Hispanic, and White Non-Hispanic .White Non-Hispanic is the largest of the race and ethnicity categories with 13.86% of observations for the dimension variable.</p>
+<p>Using the code above as a template, I created a summary table for each categorical variable. The geography type variable is 95.9% states, with the other 4.1% of observations being at the national level. The geography categorical variable has 51 options with differentiation between New York City and the rest of New York state and inclusion of Puerto Rico. Wisconsin makes up the highest percentage of the geography variable with 4.06% of observations, and Indiana makes up the lowest percentage at 0.2% of observation. The two dimension types are split almost evenly with 55.65% of observations belonging to age and 44.35% of observations belonging to race and ethnicity. There are 4 categories for age: 18 years, 18-24 years, 25-34 years, and 35 years. Each of these age categories account for about 14% of dimension observations. There are 4 categories for race/ethnicity: Black Non-Hispanic, Hispanic, Other or Multiple Races Non-Hispanic, and White Non-Hispanic. White Non-Hispanic is the largest of the race and ethnicity categories with 13.86% of observations for the dimension variable.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="do">## create percentage table with categories of geography type variable</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>geotype_table <span class="ot">&lt;-</span> <span class="fu">table</span>(pregvacc4<span class="sc">$</span><span class="st">`</span><span class="at">Geography Type</span><span class="st">`</span>)</span>
@@ -635,6 +635,438 @@ Other or Multiple Races NonHispanic                   White NonHispanic
 <div>
 <figure class="figure">
 <p><img src="cdcdata-exercise_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cassia-roth-created-this-section." class="level1">
+<h1>Cassia Roth created this section.</h1>
+<p>First, lets make sure we have all necessary packages loaded.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load required packages</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.0     ✔ purrr     1.0.2
+✔ lubridate 1.9.3     ✔ tibble    3.2.1
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'skimr'
+
+The following object is masked from 'package:naniar':
+
+    n_complete</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#BlackLivesMatter</code></pre>
+</div>
+</div>
+<p>Next, I asked ChatGPT the following prompt: Can you write R code that generates a dataset of 3937 observations of vaccination status for women who recently gave birth. Women are between 18 and 35 years. The dataset should include seven variables (vaccine, state, year, age, race/ethnicity, estimate of vaccine coverage in percentage, 95% CI lower, 95% CI upper). 66% of the vaccination observations should be influenza vaccines and 33 percent should be Tdap vaccines. Then, given Table 4 Tessa created above, I put that into ChatGPT, so it should know the percentage of observations for each state. Then, I asked it to add code so that 50% of observations were in the age groups 18-24 and 50% were in the age groups 25-34; and that 21% of observations were Black-non Hispanic, 25% were Hispanic, 31% were White non-Hispanic, and 23% were Other. Last, I asked it to make sure the years for the data were between 2012 and 2021. I also asked it to make sure that the mean vaccination coverage was 6.23% with a standard deviation of 1.497. I finally asked it to calculate the 95% confidence interval for the mean vaccination coverage and display it. Calculating the confidence intervals took quite a bit of back and forth with ChatGPT.</p>
+<p>Note: I removed the variable geography type (state), since that wasn’t really necessary to duplicate the data. I also combined the age categories 18 and 18-24 and 25-34 and 35 for ease of use.</p>
+<p>This is the fully workable code it produced.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set seed for reproducibility</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Define number of observations to generate</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>n_observations <span class="ot">&lt;-</span> <span class="dv">3937</span> <span class="co">#based on the observations of 9 variables stated above</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the percentage of observations for each vaccine type</span></span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>percent_influenza <span class="ot">&lt;-</span> <span class="fl">0.66</span></span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>percent_tdap <span class="ot">&lt;-</span> <span class="fl">0.33</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate vaccine types based on the specified percentages</span></span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>vaccine_types <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Influenza"</span>, <span class="st">"Tdap"</span>), <span class="at">size =</span> n_observations, </span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(percent_influenza, percent_tdap))</span>
+<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-15"><a href="#cb84-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the states and their corresponding percentages of observations</span></span>
+<span id="cb84-16"><a href="#cb84-16" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Alabama"</span>, <span class="st">"Alaska"</span>, <span class="st">"Arizona"</span>, <span class="st">"Arkansas"</span>, <span class="st">"Colorado"</span>, <span class="st">"Connecticut"</span>,</span>
+<span id="cb84-17"><a href="#cb84-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Delaware"</span>, <span class="st">"District of Columbia"</span>, <span class="st">"Florida"</span>, <span class="st">"Georgia"</span>, <span class="st">"Hawaii"</span>, <span class="st">"Illinois"</span>,</span>
+<span id="cb84-18"><a href="#cb84-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Indiana"</span>, <span class="st">"Iowa"</span>, <span class="st">"Kansas"</span>, <span class="st">"Kentucky"</span>, <span class="st">"Louisiana"</span>, <span class="st">"Maine"</span>, <span class="st">"Maryland"</span>,</span>
+<span id="cb84-19"><a href="#cb84-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Massachusetts"</span>, <span class="st">"Michigan"</span>, <span class="st">"Minnesota"</span>, <span class="st">"Mississippi"</span>, <span class="st">"Missouri"</span>, <span class="st">"Montana"</span>,</span>
+<span id="cb84-20"><a href="#cb84-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Nebraska"</span>, <span class="st">"New Hampshire"</span>, <span class="st">"New Jersey"</span>, <span class="st">"New Mexico"</span>, <span class="st">"New York"</span>, <span class="st">"North Carolina"</span>,</span>
+<span id="cb84-21"><a href="#cb84-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"North Dakota"</span>, <span class="st">"NYCity of New York"</span>, <span class="st">"NYRest of state"</span>, <span class="st">"Ohio"</span>, <span class="st">"Oklahoma"</span>, <span class="st">"Oregon"</span>,</span>
+<span id="cb84-22"><a href="#cb84-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Pennsylvania"</span>, <span class="st">"Puerto Rico"</span>, <span class="st">"Rhode Island"</span>, <span class="st">"South Dakota"</span>, <span class="st">"Tennessee"</span>, <span class="st">"Texas"</span>,</span>
+<span id="cb84-23"><a href="#cb84-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">"United States"</span>, <span class="st">"Utah"</span>, <span class="st">"Vermont"</span>, <span class="st">"Virginia"</span>, <span class="st">"Washington"</span>, <span class="st">"West Virginia"</span>,</span>
+<span id="cb84-24"><a href="#cb84-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Wisconsin"</span>, <span class="st">"Wyoming"</span>)</span>
+<span id="cb84-25"><a href="#cb84-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-26"><a href="#cb84-26" aria-hidden="true" tabindex="-1"></a>percentages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.2446025</span>, <span class="fl">1.5494031</span>, <span class="fl">0.1778004</span>, <span class="fl">1.9558039</span>, <span class="fl">3.0988062</span>, <span class="fl">1.6256033</span>,</span>
+<span id="cb84-27"><a href="#cb84-27" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">4.0132080</span>, <span class="fl">0.7112014</span>, <span class="fl">0.3556007</span>, <span class="fl">1.2192024</span>, <span class="fl">2.1082042</span>, <span class="fl">2.8194056</span>,</span>
+<span id="cb84-28"><a href="#cb84-28" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">0.2032004</span>, <span class="fl">2.3114046</span>, <span class="fl">0.8890018</span>, <span class="fl">0.6096012</span>, <span class="fl">2.2606045</span>, <span class="fl">1.2954026</span>,</span>
+<span id="cb84-29"><a href="#cb84-29" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">1.8288037</span>, <span class="fl">3.2512065</span>, <span class="fl">2.9464059</span>, <span class="fl">1.8288037</span>, <span class="fl">1.2192024</span>, <span class="fl">3.4798070</span>,</span>
+<span id="cb84-30"><a href="#cb84-30" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">1.6256033</span>, <span class="fl">2.8448057</span>, <span class="fl">1.6510033</span>, <span class="fl">2.0320041</span>, <span class="fl">1.9558039</span>, <span class="fl">3.2004064</span>,</span>
+<span id="cb84-31"><a href="#cb84-31" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">0.6096012</span>, <span class="fl">0.8128016</span>, <span class="fl">3.4544069</span>, <span class="fl">2.7178054</span>, <span class="fl">0.5588011</span>, <span class="fl">3.0226060</span>,</span>
+<span id="cb84-32"><a href="#cb84-32" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">1.4224028</span>, <span class="fl">3.8608077</span>, <span class="fl">0.6350013</span>, <span class="fl">2.0320041</span>, <span class="fl">1.0160020</span>, <span class="fl">1.1176022</span>,</span>
+<span id="cb84-33"><a href="#cb84-33" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">0.8128016</span>, <span class="fl">4.0640081</span>, <span class="fl">2.7686055</span>, <span class="fl">2.4384049</span>, <span class="fl">2.6416053</span>, <span class="fl">3.2512065</span>,</span>
+<span id="cb84-34"><a href="#cb84-34" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">1.1430023</span>, <span class="fl">4.0640081</span>, <span class="fl">1.2446025</span>)</span>
+<span id="cb84-35"><a href="#cb84-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-36"><a href="#cb84-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalize percentages to sum to 1</span></span>
+<span id="cb84-37"><a href="#cb84-37" aria-hidden="true" tabindex="-1"></a>percentages <span class="ot">&lt;-</span> percentages <span class="sc">/</span> <span class="fu">sum</span>(percentages)</span>
+<span id="cb84-38"><a href="#cb84-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-39"><a href="#cb84-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate state observations based on the specified percentages</span></span>
+<span id="cb84-40"><a href="#cb84-40" aria-hidden="true" tabindex="-1"></a>state_obs <span class="ot">&lt;-</span> <span class="fu">sample</span>(states, <span class="at">size =</span> n_observations, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> percentages)</span>
+<span id="cb84-41"><a href="#cb84-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-42"><a href="#cb84-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random years between 2012 and 2021</span></span>
+<span id="cb84-43"><a href="#cb84-43" aria-hidden="true" tabindex="-1"></a>years <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>, <span class="at">size =</span> n_observations, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb84-44"><a href="#cb84-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-45"><a href="#cb84-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random ages between 18 and 35</span></span>
+<span id="cb84-46"><a href="#cb84-46" aria-hidden="true" tabindex="-1"></a>age_groups <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"18-24"</span>, <span class="st">"25-34"</span>), <span class="at">size =</span> n_observations, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>))</span>
+<span id="cb84-47"><a href="#cb84-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-48"><a href="#cb84-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random race/ethnicity</span></span>
+<span id="cb84-49"><a href="#cb84-49" aria-hidden="true" tabindex="-1"></a>race_ethnicity <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Black-non Hispanic"</span>, <span class="st">"Hispanic"</span>, <span class="st">"White non-Hispanic"</span>, <span class="st">"Other"</span>), </span>
+<span id="cb84-50"><a href="#cb84-50" aria-hidden="true" tabindex="-1"></a>                         <span class="at">size =</span> n_observations, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.21</span>, <span class="fl">0.25</span>, <span class="fl">0.31</span>, <span class="fl">0.23</span>))</span>
+<span id="cb84-51"><a href="#cb84-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-52"><a href="#cb84-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate random estimates of vaccine coverage in percentage</span></span>
+<span id="cb84-53"><a href="#cb84-53" aria-hidden="true" tabindex="-1"></a>vaccine_coverage <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_observations, <span class="at">mean =</span> <span class="fl">6.23</span>, <span class="at">sd =</span> <span class="fl">1.497</span>)</span>
+<span id="cb84-54"><a href="#cb84-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-55"><a href="#cb84-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean and standard deviation of the generated vaccine coverage data</span></span>
+<span id="cb84-56"><a href="#cb84-56" aria-hidden="true" tabindex="-1"></a>mean_coverage <span class="ot">&lt;-</span> <span class="fu">mean</span>(vaccine_coverage)</span>
+<span id="cb84-57"><a href="#cb84-57" aria-hidden="true" tabindex="-1"></a>sd_coverage <span class="ot">&lt;-</span> <span class="fu">sd</span>(vaccine_coverage)</span>
+<span id="cb84-58"><a href="#cb84-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-59"><a href="#cb84-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the standard error (SE) of the mean</span></span>
+<span id="cb84-60"><a href="#cb84-60" aria-hidden="true" tabindex="-1"></a>se_mean <span class="ot">&lt;-</span> sd_coverage <span class="sc">/</span> <span class="fu">sqrt</span>(n_observations)</span>
+<span id="cb84-61"><a href="#cb84-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-62"><a href="#cb84-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the margin of error (ME) for a 95% confidence level (assuming normal distribution)</span></span>
+<span id="cb84-63"><a href="#cb84-63" aria-hidden="true" tabindex="-1"></a><span class="co"># For a 95% confidence interval, the critical z-value is approximately 1.96</span></span>
+<span id="cb84-64"><a href="#cb84-64" aria-hidden="true" tabindex="-1"></a>z_value <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)  <span class="co"># Two-tailed</span></span>
+<span id="cb84-65"><a href="#cb84-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-66"><a href="#cb84-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize variables to store lower and upper bounds of the confidence intervals</span></span>
+<span id="cb84-67"><a href="#cb84-67" aria-hidden="true" tabindex="-1"></a>lower_ci <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_observations)</span>
+<span id="cb84-68"><a href="#cb84-68" aria-hidden="true" tabindex="-1"></a>upper_ci <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_observations)</span>
+<span id="cb84-69"><a href="#cb84-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-70"><a href="#cb84-70" aria-hidden="true" tabindex="-1"></a><span class="co">#Setting fixed CIs for each observation to avoid bootstrapping</span></span>
+<span id="cb84-71"><a href="#cb84-71" aria-hidden="true" tabindex="-1"></a>lower_ci <span class="ot">&lt;-</span> vaccine_coverage <span class="sc">-</span> z_value <span class="sc">*</span> se_mean</span>
+<span id="cb84-72"><a href="#cb84-72" aria-hidden="true" tabindex="-1"></a>upper_ci <span class="ot">&lt;-</span> vaccine_coverage <span class="sc">+</span> z_value <span class="sc">*</span> se_mean</span>
+<span id="cb84-73"><a href="#cb84-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-74"><a href="#cb84-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all variables into a data frame</span></span>
+<span id="cb84-75"><a href="#cb84-75" aria-hidden="true" tabindex="-1"></a>vaccination_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">vaccine =</span> vaccine_types,</span>
+<span id="cb84-76"><a href="#cb84-76" aria-hidden="true" tabindex="-1"></a>                               <span class="at">state =</span> state_obs,</span>
+<span id="cb84-77"><a href="#cb84-77" aria-hidden="true" tabindex="-1"></a>                               <span class="at">year =</span> years,</span>
+<span id="cb84-78"><a href="#cb84-78" aria-hidden="true" tabindex="-1"></a>                               <span class="at">age_group =</span> age_groups,</span>
+<span id="cb84-79"><a href="#cb84-79" aria-hidden="true" tabindex="-1"></a>                               <span class="at">race_ethnicity =</span> race_ethnicity,</span>
+<span id="cb84-80"><a href="#cb84-80" aria-hidden="true" tabindex="-1"></a>                               <span class="at">estimate_coverage_percentage =</span> vaccine_coverage,</span>
+<span id="cb84-81"><a href="#cb84-81" aria-hidden="true" tabindex="-1"></a>                               <span class="at">lower_ci =</span> lower_ci,</span>
+<span id="cb84-82"><a href="#cb84-82" aria-hidden="true" tabindex="-1"></a>                               <span class="at">upper_ci =</span> upper_ci)</span>
+<span id="cb84-83"><a href="#cb84-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-84"><a href="#cb84-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows of the dataset and get summary</span></span>
+<span id="cb84-85"><a href="#cb84-85" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vaccination_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    vaccine              state year age_group     race_ethnicity
+1 Influenza          Wisconsin 2018     25-34              Other
+2      Tdap            Vermont 2012     18-24           Hispanic
+3 Influenza           Maryland 2019     25-34              Other
+4      Tdap            Alabama 2021     25-34 White non-Hispanic
+5      Tdap      United States 2021     18-24           Hispanic
+6 Influenza NYCity of New York 2020     25-34 Black-non Hispanic
+  estimate_coverage_percentage  lower_ci  upper_ci
+1                     8.470043  8.423233  8.516853
+2                     5.660458  5.613648  5.707267
+3                    10.149212 10.102402 10.196022
+4                     6.185569  6.138759  6.232379
+5                     4.994664  4.947854  5.041473
+6                     5.991605  5.944795  6.038414</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(vaccination_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">vaccination_data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">3937</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">vaccine</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">state</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">age_group</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">race_ethnicity</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 9%">
+<col style="width: 12%">
+<col style="width: 7%">
+<col style="width: 3%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2016.48</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">2012.00</td>
+<td style="text-align: right;">2014.00</td>
+<td style="text-align: right;">2016.00</td>
+<td style="text-align: right;">2019.00</td>
+<td style="text-align: right;">2021.00</td>
+<td style="text-align: left;">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">estimate_coverage_percentage</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.23</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">1.22</td>
+<td style="text-align: right;">5.24</td>
+<td style="text-align: right;">6.25</td>
+<td style="text-align: right;">7.27</td>
+<td style="text-align: right;">10.87</td>
+<td style="text-align: left;">▁▃▇▅▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lower_ci</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.19</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">1.17</td>
+<td style="text-align: right;">5.20</td>
+<td style="text-align: right;">6.20</td>
+<td style="text-align: right;">7.22</td>
+<td style="text-align: right;">10.83</td>
+<td style="text-align: left;">▁▃▇▅▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">upper_ci</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.28</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">1.27</td>
+<td style="text-align: right;">5.29</td>
+<td style="text-align: right;">6.29</td>
+<td style="text-align: right;">7.32</td>
+<td style="text-align: right;">10.92</td>
+<td style="text-align: left;">▁▃▇▅▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Then, I plotted the mean and standard distribution of the vaccine coverage variable. Although my tables are in a different format than Tessa’s above, they have a similar distribution.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Find summary values</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(vaccination_data<span class="sc">$</span>estimate_coverage_percentage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.233056</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(vaccination_data<span class="sc">$</span>estimate_coverage_percentage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.498551</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(vaccination_data<span class="sc">$</span>lower_ci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.186246</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(vaccination_data<span class="sc">$</span>lower_ci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.498551</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(vaccination_data<span class="sc">$</span>upper_ci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.279866</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(vaccination_data<span class="sc">$</span>upper_ci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.498551</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the distribution of vaccine coverage percentage</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vaccination_data, <span class="fu">aes</span>(<span class="at">x =</span> estimate_coverage_percentage)) <span class="sc">+</span></span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Vaccine Coverage Percentage"</span>,</span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Vaccine Coverage Percentage"</span>,</span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="cdcdata-exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the distribution of mean and standard deviation of vaccine coverage percentage</span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vaccination_data, <span class="fu">aes</span>(<span class="at">x =</span> estimate_coverage_percentage)) <span class="sc">+</span></span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(estimate_coverage_percentage, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb100-6"><a href="#cb100-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(estimate_coverage_percentage, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
+<span id="cb100-7"><a href="#cb100-7" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">sd</span>(estimate_coverage_percentage, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb100-8"><a href="#cb100-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"green"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb100-9"><a href="#cb100-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(estimate_coverage_percentage, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> </span>
+<span id="cb100-10"><a href="#cb100-10" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">sd</span>(estimate_coverage_percentage, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb100-11"><a href="#cb100-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"green"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb100-12"><a href="#cb100-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Vaccine Coverage Percentage with Mean and Standard Deviation"</span>,</span>
+<span id="cb100-13"><a href="#cb100-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Vaccine Coverage Percentage"</span>,</span>
+<span id="cb100-14"><a href="#cb100-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb100-15"><a href="#cb100-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="cdcdata-exercise_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, I will plot the distribution of both the lower and upper bounds of the 95% CI. As you can see from the output, neither distribution appears to be normally distributed, even though the mean and standard deviation are above, which makes me think I did something wrong, although I’m not sure what!</p>
+<p>Each observation has specific confidence intervals. If the observation</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the distribution of lower 95% CI</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vaccination_data, <span class="fu">aes</span>(<span class="at">x =</span> lower_ci)) <span class="sc">+</span></span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Lower 95% Confidence Interval"</span>,</span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Lower 95% CI"</span>,</span>
+<span id="cb102-6"><a href="#cb102-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb102-7"><a href="#cb102-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="cdcdata-exercise_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the distribution of upper 95% CI</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vaccination_data, <span class="fu">aes</span>(<span class="at">x =</span> upper_ci)) <span class="sc">+</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.5</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Upper 95% Confidence Interval"</span>,</span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Upper 95% CI"</span>,</span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="cdcdata-exercise_files/figure-html/unnamed-chunk-13-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
