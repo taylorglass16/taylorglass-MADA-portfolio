@@ -344,9 +344,7 @@ ggplot(vaccination_data, aes(x = estimate_coverage_percentage)) +
   theme_minimal()
 ```
 
-Finally, I will plot the distribution of both the lower and upper bounds of the 95% CI. As you can see from the output, neither distribution appears to be normally distributed, even though the mean and standard deviation are above, which makes me think I did something wrong, although I'm not sure what!
-
-Each observation has specific confidence intervals. If the observation
+Finally, I will plot the distribution of both the lower and upper bounds of the 95% CI. As you can see from the output, the distributions match those of the mean and standard deviation of the vaccine coverage variable.
 
 ```{r}
 # Plotting the distribution of lower 95% CI
