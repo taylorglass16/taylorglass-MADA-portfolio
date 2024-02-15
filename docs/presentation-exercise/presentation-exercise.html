@@ -264,7 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a> <span class="co"># select(starts_with("estimate"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is the second prompt I asked ChatGPT: R code to produce a line graph with percentages of four different categories “very”, “somewhat”, “not very”, and “not at all” on the y-axis and time on the x-axis using the covid_concern_polls.csv file from this github repository https://github.com/fivethirtyeight/covid-19-polls</p>
-<p>I asked for a line graph specifically, and I know that I need to create variables with the percentages of each response category. I filtered for the subject of interest: “concern-infected” to limit the data to information about concern over Coronavrius infection. The graph models how concerned Americans are that they, someone in their family or someone else they know will be infected with Coronavirus, so I filtered for responses to all of the questions asking about “concern” over Coronavirus infections, which yielded 77 observations.</p>
+<p>I asked for a line graph specifically, and I know that I need to create variables with the percentages of each response category. I filtered for the subject of interest: “concern-infected” to limit the data to information about concern over Coronavrius infection. The graph models how concerned Americans are that they, someone in their family or someone else they know will be infected with Coronavirus, so I filtered for responses to all of the questions asking about concern over Coronavirus infections, which yielded 77 observations.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter for all responses about Coronavirus concern</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>concern_data <span class="ot">&lt;-</span> pollsdata <span class="sc">%&gt;%</span> </span>
@@ -388,29 +388,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a> <span class="do">## graph4 &lt;- graph3 + </span></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a> <span class="do">##  geom_label(data = labels_data, aes(x = modeldate, y=Percentage, label = label_text))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>After receiving input from a classmate, Erick Mollinedo, I added several geom_vline() and geom_text() functions to add the missing labels. The geom_vline() functions created dashed lines on each of the important dates, which I think solved the previous issue because it provided a location for the new layer to be added to in ggplot(). The geom_text() functions allow the actual descriptions to be added. The labels were a little too large for my graph originally, so I changed the size of each one to make them fit better. This addition brought me much closer to replicating the original graph although my lines appear to be significantly more jagged than the original.</p>
+<p>After receiving input from a classmate, Erick Mollinedo, I added several geom_vline() and geom_text() functions to add the missing labels. The geom_vline() functions created dashed lines on each of the important dates, which I think solved the previous issue because it provided a location for the new layer to be added to in ggplot(). The geom_text() functions allow the actual descriptions to be added. The labels were a little too large for my graph originally, so I changed the size of each one to make them fit better. This addition brought me much closer to replicating the original graph although my lines appear to be significantly more jagged than the original. I also received a suggestion to use the <code>ggthemes</code> package to make the final replication appear closer to the original by adding the theme_538() function. I received multiple errors about not being able to find this function, so ChatGPT suggested creating my own function to mimic the 538 theme. This change removed the gridlines in the background and adjusted the sizing of the x-axis labels to match the original graph more closely.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>graph4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(concern_data_long, <span class="fu">aes</span>(<span class="at">x =</span> end_date, <span class="at">y =</span> Percentage, <span class="at">color =</span> <span class="st">`</span><span class="at">Concern Level</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#800080"</span>,<span class="st">"#BA55D3"</span>,<span class="st">"#FFDAB9"</span>,<span class="st">"#FF0000"</span>)) <span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"How worried are Americans about infection?"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"How concerned Americans say they are that they, someone in their family or someone else they know will"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"become infected with the coronavirus"</span>)) <span class="sc">+</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">10</span>), </span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">8</span>)) <span class="sc">+</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> breaks, <span class="at">labels =</span> custom_labels) <span class="sc">+</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="cn">NULL</span>) <span class="sc">+</span> </span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-02-29"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-05-28"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-10-02"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-11-07"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2021-01-20"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-02-29"</span>), <span class="at">y =</span> <span class="dv">55</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"First U.S."</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"death reported"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-05-28"</span>), <span class="at">y =</span> <span class="dv">55</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"U.S. deaths"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"surpass 100,000"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-10-02"</span>), <span class="at">y =</span> <span class="dv">48</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Trump diagnosed"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"with COVID-19"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-11-07"</span>), <span class="at">y =</span> <span class="dv">57</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Biden declared"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"election winner"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2021-01-20"</span>), <span class="at">y =</span> <span class="dv">55</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Biden sworn"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"into office"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>)</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>graph4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a function to mimic the 538 style</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>theme_538 <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># apply the 538 style function and add labels to dates of interest</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>graph4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(concern_data_long, <span class="fu">aes</span>(<span class="at">x =</span> end_date, <span class="at">y =</span> Percentage, <span class="at">color =</span> <span class="st">`</span><span class="at">Concern Level</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_538</span>() <span class="sc">+</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#800080"</span>,<span class="st">"#BA55D3"</span>,<span class="st">"#FFDAB9"</span>,<span class="st">"#FF0000"</span>)) <span class="sc">+</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"How worried are Americans about infection?"</span>,</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"How concerned Americans say they are that they, someone in their family or someone else they know will"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"become infected with the coronavirus"</span>)) <span class="sc">+</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">10</span>), </span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">8</span>)) <span class="sc">+</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> breaks, <span class="at">labels =</span> custom_labels) <span class="sc">+</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="cn">NULL</span>) <span class="sc">+</span> </span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-02-29"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-05-28"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-10-02"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2020-11-07"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">"2021-01-20"</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-02-29"</span>), <span class="at">y =</span> <span class="dv">55</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"First U.S."</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"death reported"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-05-28"</span>), <span class="at">y =</span> <span class="dv">55</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"U.S. deaths"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"surpass 100,000"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-10-02"</span>), <span class="at">y =</span> <span class="dv">48</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Trump diagnosed"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"with COVID-19"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2020-11-07"</span>), <span class="at">y =</span> <span class="dv">57</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Biden declared"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"election winner"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.Date</span>(<span class="st">"2021-01-20"</span>), <span class="at">y =</span> <span class="dv">55</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Biden sworn"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"into office"</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">angle =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"italic"</span>, <span class="at">color =</span> <span class="st">"black"</span>)</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>graph4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -426,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># generate publication quality table</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># generate first attempt at publication quality table</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> concern_data2 <span class="sc">%&gt;%</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
@@ -438,23 +456,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>table1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="kdomwjxpmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kdomwjxpmy table {
+<div id="mlsfldmikv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mlsfldmikv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kdomwjxpmy thead, #kdomwjxpmy tbody, #kdomwjxpmy tfoot, #kdomwjxpmy tr, #kdomwjxpmy td, #kdomwjxpmy th {
+#mlsfldmikv thead, #mlsfldmikv tbody, #mlsfldmikv tfoot, #mlsfldmikv tr, #mlsfldmikv td, #mlsfldmikv th {
   border-style: none;
 }
 
-#kdomwjxpmy p {
+#mlsfldmikv p {
   margin: 0;
   padding: 0;
 }
 
-#kdomwjxpmy .gt_table {
+#mlsfldmikv .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -480,12 +498,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_caption {
+#mlsfldmikv .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kdomwjxpmy .gt_title {
+#mlsfldmikv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -497,7 +515,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#kdomwjxpmy .gt_subtitle {
+#mlsfldmikv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -509,7 +527,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#kdomwjxpmy .gt_heading {
+#mlsfldmikv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -521,13 +539,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_bottom_border {
+#mlsfldmikv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_col_headings {
+#mlsfldmikv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -542,7 +560,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_col_heading {
+#mlsfldmikv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -562,7 +580,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#kdomwjxpmy .gt_column_spanner_outer {
+#mlsfldmikv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -574,15 +592,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#kdomwjxpmy .gt_column_spanner_outer:first-child {
+#mlsfldmikv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kdomwjxpmy .gt_column_spanner_outer:last-child {
+#mlsfldmikv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kdomwjxpmy .gt_column_spanner {
+#mlsfldmikv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -594,11 +612,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#kdomwjxpmy .gt_spanner_row {
+#mlsfldmikv .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kdomwjxpmy .gt_group_heading {
+#mlsfldmikv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -624,7 +642,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#kdomwjxpmy .gt_empty_group_heading {
+#mlsfldmikv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -639,15 +657,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#kdomwjxpmy .gt_from_md > :first-child {
+#mlsfldmikv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kdomwjxpmy .gt_from_md > :last-child {
+#mlsfldmikv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kdomwjxpmy .gt_row {
+#mlsfldmikv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -666,7 +684,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#kdomwjxpmy .gt_stub {
+#mlsfldmikv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -679,7 +697,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kdomwjxpmy .gt_stub_row_group {
+#mlsfldmikv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -693,15 +711,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#kdomwjxpmy .gt_row_group_first td {
+#mlsfldmikv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kdomwjxpmy .gt_row_group_first th {
+#mlsfldmikv .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kdomwjxpmy .gt_summary_row {
+#mlsfldmikv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -711,16 +729,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kdomwjxpmy .gt_first_summary_row {
+#mlsfldmikv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_first_summary_row.thick {
+#mlsfldmikv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kdomwjxpmy .gt_last_summary_row {
+#mlsfldmikv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -730,7 +748,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_grand_summary_row {
+#mlsfldmikv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -740,7 +758,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kdomwjxpmy .gt_first_grand_summary_row {
+#mlsfldmikv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -750,7 +768,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_last_grand_summary_row_top {
+#mlsfldmikv .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -760,11 +778,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_striped {
+#mlsfldmikv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kdomwjxpmy .gt_table_body {
+#mlsfldmikv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -773,7 +791,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_footnotes {
+#mlsfldmikv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -787,7 +805,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_footnote {
+#mlsfldmikv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -796,7 +814,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kdomwjxpmy .gt_sourcenotes {
+#mlsfldmikv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -810,7 +828,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#kdomwjxpmy .gt_sourcenote {
+#mlsfldmikv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -818,63 +836,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#kdomwjxpmy .gt_left {
+#mlsfldmikv .gt_left {
   text-align: left;
 }
 
-#kdomwjxpmy .gt_center {
+#mlsfldmikv .gt_center {
   text-align: center;
 }
 
-#kdomwjxpmy .gt_right {
+#mlsfldmikv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kdomwjxpmy .gt_font_normal {
+#mlsfldmikv .gt_font_normal {
   font-weight: normal;
 }
 
-#kdomwjxpmy .gt_font_bold {
+#mlsfldmikv .gt_font_bold {
   font-weight: bold;
 }
 
-#kdomwjxpmy .gt_font_italic {
+#mlsfldmikv .gt_font_italic {
   font-style: italic;
 }
 
-#kdomwjxpmy .gt_super {
+#mlsfldmikv .gt_super {
   font-size: 65%;
 }
 
-#kdomwjxpmy .gt_footnote_marks {
+#mlsfldmikv .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kdomwjxpmy .gt_asterisk {
+#mlsfldmikv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kdomwjxpmy .gt_indent_1 {
+#mlsfldmikv .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kdomwjxpmy .gt_indent_2 {
+#mlsfldmikv .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kdomwjxpmy .gt_indent_3 {
+#mlsfldmikv .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kdomwjxpmy .gt_indent_4 {
+#mlsfldmikv .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kdomwjxpmy .gt_indent_5 {
+#mlsfldmikv .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2484,39 +2502,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>The first table looks decent, but I want to clean up a few things. I added a more descriptive title and renamed the columns, so the table would not contain variable names. I felt like it was unnecessary to have 5 decimal points for each percentage, so I limited the decimals to 1 place using the fmt_number() function. The result is a clean and publication-quality table.</p>
+<p>The first table looks decent, but I want to clean up a few things stylistically. I added a more descriptive title and renamed the columns, so the table would not contain variable names. Following my classmate Erick’s suggestion, I created a new variable, <code>month</code> to summarize the data in the original table to make it more useful. I felt like it was unnecessary to have 5 decimal points for each percentage, so I limited the decimals to 1 place when I created the new average percentages by month. The result is a clean and publication-quality table that is much easier to digest than the original.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>table2 <span class="ot">&lt;-</span> concern_data2 <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Date"</span> <span class="ot">=</span> end_date,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Very"</span> <span class="ot">=</span> very_percent,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Somewhat"</span> <span class="ot">=</span> somewhat_percent,</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Not Very"</span> <span class="ot">=</span> not_very_percent,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Not at all"</span> <span class="ot">=</span> not_at_all_percent) <span class="sc">%&gt;%</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Percentage"</span>,</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Very"</span>, <span class="st">"Somewhat"</span>, <span class="st">"Not Very"</span>, <span class="st">"Not at all"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Levels of concern about COVID-19 infections among Americans"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Very"</span>, <span class="st">"Somewhat"</span>, <span class="st">"Not Very"</span>, <span class="st">"Not at all"</span>),</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">decimals =</span> <span class="dv">1</span>)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages required to manipulate dates</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create new month variable to summarize the table and rename columns</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>covid_summary <span class="ot">&lt;-</span> concern_data2 <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">floor_date</span>(<span class="fu">as.Date</span>(end_date, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>), <span class="st">"month"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span> <span class="co">#Group by month of the year</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_very_percent =</span> <span class="fu">round</span>(<span class="fu">mean</span>(very_percent, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_somewhat_percent =</span> <span class="fu">round</span>(<span class="fu">mean</span>(somewhat_percent, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_not_very_percent =</span> <span class="fu">round</span>(<span class="fu">mean</span>(not_very_percent, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>),</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_not_at_all_percent =</span> <span class="fu">round</span>(<span class="fu">mean</span>(not_at_all_percent, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"avg_"</span>), <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">format</span>(., <span class="at">nsmall =</span> <span class="dv">2</span>)))) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Month =</span> <span class="st">"month"</span>, <span class="co">#Rename the variables to be more legible</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">Very =</span> <span class="st">"avg_very_percent"</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">Somewhat =</span> <span class="st">"avg_somewhat_percent"</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Not very</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"avg_not_very_percent"</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Not at all</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"avg_not_at_all_percent"</span>)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="do">## generate table with proper labels</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>table2 <span class="ot">&lt;-</span> covid_summary <span class="sc">%&gt;%</span> </span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Percentage"</span>,</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Very"</span>, <span class="st">"Somewhat"</span>, <span class="st">"Not very"</span>, <span class="st">"Not at all"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Levels of concern about COVID-19 infections among Americans"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Very"</span>, <span class="st">"Somewhat"</span>, <span class="st">"Not very"</span>, <span class="st">"Not at all"</span>),</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">decimals =</span> <span class="dv">1</span>)</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="nyzyytoleg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#nyzyytoleg table {
+<div id="phpickykbt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#phpickykbt table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#nyzyytoleg thead, #nyzyytoleg tbody, #nyzyytoleg tfoot, #nyzyytoleg tr, #nyzyytoleg td, #nyzyytoleg th {
+#phpickykbt thead, #phpickykbt tbody, #phpickykbt tfoot, #phpickykbt tr, #phpickykbt td, #phpickykbt th {
   border-style: none;
 }
 
-#nyzyytoleg p {
+#phpickykbt p {
   margin: 0;
   padding: 0;
 }
 
-#nyzyytoleg .gt_table {
+#phpickykbt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2542,12 +2574,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_caption {
+#phpickykbt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#nyzyytoleg .gt_title {
+#phpickykbt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2559,7 +2591,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#nyzyytoleg .gt_subtitle {
+#phpickykbt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2571,7 +2603,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#nyzyytoleg .gt_heading {
+#phpickykbt .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2583,13 +2615,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_bottom_border {
+#phpickykbt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_col_headings {
+#phpickykbt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2604,7 +2636,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_col_heading {
+#phpickykbt .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2624,7 +2656,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#nyzyytoleg .gt_column_spanner_outer {
+#phpickykbt .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2636,15 +2668,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#nyzyytoleg .gt_column_spanner_outer:first-child {
+#phpickykbt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nyzyytoleg .gt_column_spanner_outer:last-child {
+#phpickykbt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nyzyytoleg .gt_column_spanner {
+#phpickykbt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2656,11 +2688,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#nyzyytoleg .gt_spanner_row {
+#phpickykbt .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#nyzyytoleg .gt_group_heading {
+#phpickykbt .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2686,7 +2718,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#nyzyytoleg .gt_empty_group_heading {
+#phpickykbt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2701,15 +2733,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#nyzyytoleg .gt_from_md > :first-child {
+#phpickykbt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nyzyytoleg .gt_from_md > :last-child {
+#phpickykbt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nyzyytoleg .gt_row {
+#phpickykbt .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2728,7 +2760,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#nyzyytoleg .gt_stub {
+#phpickykbt .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2741,7 +2773,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#nyzyytoleg .gt_stub_row_group {
+#phpickykbt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2755,15 +2787,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#nyzyytoleg .gt_row_group_first td {
+#phpickykbt .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#nyzyytoleg .gt_row_group_first th {
+#phpickykbt .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#nyzyytoleg .gt_summary_row {
+#phpickykbt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2773,16 +2805,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#nyzyytoleg .gt_first_summary_row {
+#phpickykbt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_first_summary_row.thick {
+#phpickykbt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#nyzyytoleg .gt_last_summary_row {
+#phpickykbt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2792,7 +2824,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_grand_summary_row {
+#phpickykbt .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2802,7 +2834,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#nyzyytoleg .gt_first_grand_summary_row {
+#phpickykbt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2812,7 +2844,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_last_grand_summary_row_top {
+#phpickykbt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2822,11 +2854,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_striped {
+#phpickykbt .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nyzyytoleg .gt_table_body {
+#phpickykbt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2835,7 +2867,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_footnotes {
+#phpickykbt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2849,7 +2881,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_footnote {
+#phpickykbt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2858,7 +2890,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#nyzyytoleg .gt_sourcenotes {
+#phpickykbt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2872,7 +2904,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#nyzyytoleg .gt_sourcenote {
+#phpickykbt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2880,63 +2912,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#nyzyytoleg .gt_left {
+#phpickykbt .gt_left {
   text-align: left;
 }
 
-#nyzyytoleg .gt_center {
+#phpickykbt .gt_center {
   text-align: center;
 }
 
-#nyzyytoleg .gt_right {
+#phpickykbt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nyzyytoleg .gt_font_normal {
+#phpickykbt .gt_font_normal {
   font-weight: normal;
 }
 
-#nyzyytoleg .gt_font_bold {
+#phpickykbt .gt_font_bold {
   font-weight: bold;
 }
 
-#nyzyytoleg .gt_font_italic {
+#phpickykbt .gt_font_italic {
   font-style: italic;
 }
 
-#nyzyytoleg .gt_super {
+#phpickykbt .gt_super {
   font-size: 65%;
 }
 
-#nyzyytoleg .gt_footnote_marks {
+#phpickykbt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#nyzyytoleg .gt_asterisk {
+#phpickykbt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#nyzyytoleg .gt_indent_1 {
+#phpickykbt .gt_indent_1 {
   text-indent: 5px;
 }
 
-#nyzyytoleg .gt_indent_2 {
+#phpickykbt .gt_indent_2 {
   text-indent: 10px;
 }
 
-#nyzyytoleg .gt_indent_3 {
+#phpickykbt .gt_indent_3 {
   text-indent: 15px;
 }
 
-#nyzyytoleg .gt_indent_4 {
+#phpickykbt .gt_indent_4 {
   text-indent: 20px;
 }
 
-#nyzyytoleg .gt_indent_5 {
+#phpickykbt .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2947,1598 +2979,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">Levels of concern about COVID-19 infections among Americans</th>
 </tr>
 <tr class="odd gt_col_headings gt_spanner_row">
-<th rowspan="2" id="Date" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Date</th>
+<th rowspan="2" id="Month" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Month</th>
 <th colspan="4" id="Percentage" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Percentage</span></th>
 </tr>
 <tr class="header gt_col_headings">
 <th id="Very" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Very</th>
 <th id="Somewhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Somewhat</th>
-<th id="Not Very" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Not Very</th>
+<th id="Not very" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Not very</th>
 <th id="Not at all" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Not at all</th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-02-04</td>
-<td class="gt_row gt_right" headers="Very">13.0</td>
-<td class="gt_row gt_right" headers="Somewhat">26.0</td>
-<td class="gt_row gt_right" headers="Not Very">43.0</td>
-<td class="gt_row gt_right" headers="Not at all">18.0</td>
+<td class="gt_row gt_right" headers="Month">2020-02-01</td>
+<td class="gt_row gt_right" headers="Very">14.1</td>
+<td class="gt_row gt_right" headers="Somewhat">26.6</td>
+<td class="gt_row gt_right" headers="Not very">36.6</td>
+<td class="gt_row gt_right" headers="Not at all">19.4</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-02-09</td>
-<td class="gt_row gt_right" headers="Very">11.0</td>
-<td class="gt_row gt_right" headers="Somewhat">24.0</td>
-<td class="gt_row gt_right" headers="Not Very">33.0</td>
-<td class="gt_row gt_right" headers="Not at all">20.0</td>
+<td class="gt_row gt_right" headers="Month">2020-03-01</td>
+<td class="gt_row gt_right" headers="Very">28.7</td>
+<td class="gt_row gt_right" headers="Somewhat">35.2</td>
+<td class="gt_row gt_right" headers="Not very">24.3</td>
+<td class="gt_row gt_right" headers="Not at all">10.9</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-02-11</td>
-<td class="gt_row gt_right" headers="Very">11.0</td>
-<td class="gt_row gt_right" headers="Somewhat">28.0</td>
-<td class="gt_row gt_right" headers="Not Very">39.0</td>
-<td class="gt_row gt_right" headers="Not at all">22.0</td>
+<td class="gt_row gt_right" headers="Month">2020-04-01</td>
+<td class="gt_row gt_right" headers="Very">35.8</td>
+<td class="gt_row gt_right" headers="Somewhat">37.0</td>
+<td class="gt_row gt_right" headers="Not very">19.2</td>
+<td class="gt_row gt_right" headers="Not at all">7.4</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-02-16</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">23.0</td>
-<td class="gt_row gt_right" headers="Not Very">37.0</td>
-<td class="gt_row gt_right" headers="Not at all">19.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-02-18</td>
-<td class="gt_row gt_right" headers="Very">16.0</td>
-<td class="gt_row gt_right" headers="Somewhat">24.5</td>
-<td class="gt_row gt_right" headers="Not Very">37.5</td>
-<td class="gt_row gt_right" headers="Not at all">21.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-02-25</td>
-<td class="gt_row gt_right" headers="Very">10.0</td>
-<td class="gt_row gt_right" headers="Somewhat">30.0</td>
-<td class="gt_row gt_right" headers="Not Very">40.0</td>
-<td class="gt_row gt_right" headers="Not at all">20.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-02-28</td>
-<td class="gt_row gt_right" headers="Very">16.0</td>
-<td class="gt_row gt_right" headers="Somewhat">31.0</td>
-<td class="gt_row gt_right" headers="Not Very">27.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-03</td>
-<td class="gt_row gt_right" headers="Very">19.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">32.5</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-08</td>
-<td class="gt_row gt_right" headers="Very">23.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.5</td>
-<td class="gt_row gt_right" headers="Not Very">27.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-09</td>
-<td class="gt_row gt_right" headers="Very">30.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-10</td>
-<td class="gt_row gt_right" headers="Very">14.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">35.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-11</td>
-<td class="gt_row gt_right" headers="Very">24.0</td>
-<td class="gt_row gt_right" headers="Somewhat">26.0</td>
-<td class="gt_row gt_right" headers="Not Very">39.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-12</td>
-<td class="gt_row gt_right" headers="Very">22.3</td>
-<td class="gt_row gt_right" headers="Somewhat">36.3</td>
-<td class="gt_row gt_right" headers="Not Very">26.3</td>
-<td class="gt_row gt_right" headers="Not at all">11.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-13</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.7</td>
-<td class="gt_row gt_right" headers="Not Very">23.3</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-15</td>
-<td class="gt_row gt_right" headers="Very">33.7</td>
-<td class="gt_row gt_right" headers="Somewhat">31.3</td>
-<td class="gt_row gt_right" headers="Not Very">22.3</td>
-<td class="gt_row gt_right" headers="Not at all">10.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-16</td>
-<td class="gt_row gt_right" headers="Very">23.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.7</td>
-<td class="gt_row gt_right" headers="Not Very">28.7</td>
-<td class="gt_row gt_right" headers="Not at all">13.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-17</td>
-<td class="gt_row gt_right" headers="Very">15.0</td>
-<td class="gt_row gt_right" headers="Somewhat">41.0</td>
-<td class="gt_row gt_right" headers="Not Very">33.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-19</td>
-<td class="gt_row gt_right" headers="Very">26.9</td>
-<td class="gt_row gt_right" headers="Somewhat">41.8</td>
-<td class="gt_row gt_right" headers="Not Very">22.1</td>
-<td class="gt_row gt_right" headers="Not at all">8.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-22</td>
-<td class="gt_row gt_right" headers="Very">39.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-23</td>
-<td class="gt_row gt_right" headers="Very">33.3</td>
-<td class="gt_row gt_right" headers="Somewhat">37.3</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-24</td>
-<td class="gt_row gt_right" headers="Very">35.4</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.4</td>
-<td class="gt_row gt_right" headers="Not at all">8.4</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-25</td>
-<td class="gt_row gt_right" headers="Very">33.2</td>
-<td class="gt_row gt_right" headers="Somewhat">38.2</td>
-<td class="gt_row gt_right" headers="Not Very">19.6</td>
-<td class="gt_row gt_right" headers="Not at all">8.4</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-26</td>
-<td class="gt_row gt_right" headers="Very">36.5</td>
-<td class="gt_row gt_right" headers="Somewhat">34.5</td>
-<td class="gt_row gt_right" headers="Not Very">20.5</td>
-<td class="gt_row gt_right" headers="Not at all">8.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-27</td>
-<td class="gt_row gt_right" headers="Very">37.5</td>
-<td class="gt_row gt_right" headers="Somewhat">35.5</td>
-<td class="gt_row gt_right" headers="Not Very">18.5</td>
-<td class="gt_row gt_right" headers="Not at all">8.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-28</td>
+<td class="gt_row gt_right" headers="Month">2020-05-01</td>
 <td class="gt_row gt_right" headers="Very">31.7</td>
-<td class="gt_row gt_right" headers="Somewhat">41.1</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">7.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-29</td>
-<td class="gt_row gt_right" headers="Very">35.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.7</td>
-<td class="gt_row gt_right" headers="Not Very">17.7</td>
-<td class="gt_row gt_right" headers="Not at all">8.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-03-30</td>
-<td class="gt_row gt_right" headers="Very">30.6</td>
-<td class="gt_row gt_right" headers="Somewhat">34.6</td>
-<td class="gt_row gt_right" headers="Not Very">20.8</td>
-<td class="gt_row gt_right" headers="Not at all">12.4</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-03-31</td>
-<td class="gt_row gt_right" headers="Very">34.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.5</td>
-<td class="gt_row gt_right" headers="Not Very">20.5</td>
-<td class="gt_row gt_right" headers="Not at all">8.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-01</td>
-<td class="gt_row gt_right" headers="Very">37.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.7</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-02</td>
-<td class="gt_row gt_right" headers="Very">44.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.3</td>
-<td class="gt_row gt_right" headers="Not Very">15.0</td>
-<td class="gt_row gt_right" headers="Not at all">5.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-03</td>
-<td class="gt_row gt_right" headers="Very">40.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">16.5</td>
-<td class="gt_row gt_right" headers="Not at all">6.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-04</td>
-<td class="gt_row gt_right" headers="Very">39.1</td>
-<td class="gt_row gt_right" headers="Somewhat">38.5</td>
-<td class="gt_row gt_right" headers="Not Very">14.9</td>
-<td class="gt_row gt_right" headers="Not at all">5.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-05</td>
-<td class="gt_row gt_right" headers="Very">35.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">16.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-06</td>
-<td class="gt_row gt_right" headers="Very">43.3</td>
-<td class="gt_row gt_right" headers="Somewhat">35.3</td>
-<td class="gt_row gt_right" headers="Not Very">15.3</td>
-<td class="gt_row gt_right" headers="Not at all">5.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-07</td>
-<td class="gt_row gt_right" headers="Very">40.2</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">16.2</td>
-<td class="gt_row gt_right" headers="Not at all">7.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-08</td>
-<td class="gt_row gt_right" headers="Very">41.5</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">6.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-09</td>
-<td class="gt_row gt_right" headers="Very">40.2</td>
-<td class="gt_row gt_right" headers="Somewhat">39.0</td>
-<td class="gt_row gt_right" headers="Not Very">15.0</td>
-<td class="gt_row gt_right" headers="Not at all">6.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-10</td>
-<td class="gt_row gt_right" headers="Very">34.9</td>
-<td class="gt_row gt_right" headers="Somewhat">36.4</td>
-<td class="gt_row gt_right" headers="Not Very">17.7</td>
-<td class="gt_row gt_right" headers="Not at all">8.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-11</td>
-<td class="gt_row gt_right" headers="Very">34.0</td>
-<td class="gt_row gt_right" headers="Somewhat">40.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">6.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-12</td>
-<td class="gt_row gt_right" headers="Very">23.8</td>
-<td class="gt_row gt_right" headers="Somewhat">41.6</td>
-<td class="gt_row gt_right" headers="Not Very">23.2</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-13</td>
-<td class="gt_row gt_right" headers="Very">35.3</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.7</td>
-<td class="gt_row gt_right" headers="Not at all">8.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-14</td>
-<td class="gt_row gt_right" headers="Very">31.6</td>
-<td class="gt_row gt_right" headers="Somewhat">37.8</td>
-<td class="gt_row gt_right" headers="Not Very">21.6</td>
-<td class="gt_row gt_right" headers="Not at all">8.8</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-15</td>
-<td class="gt_row gt_right" headers="Very">37.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.7</td>
-<td class="gt_row gt_right" headers="Not at all">7.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-16</td>
-<td class="gt_row gt_right" headers="Very">37.3</td>
-<td class="gt_row gt_right" headers="Somewhat">35.7</td>
-<td class="gt_row gt_right" headers="Not Very">20.3</td>
-<td class="gt_row gt_right" headers="Not at all">6.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-17</td>
-<td class="gt_row gt_right" headers="Very">34.5</td>
-<td class="gt_row gt_right" headers="Somewhat">35.5</td>
-<td class="gt_row gt_right" headers="Not Very">22.5</td>
-<td class="gt_row gt_right" headers="Not at all">7.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-18</td>
-<td class="gt_row gt_right" headers="Very">32.4</td>
-<td class="gt_row gt_right" headers="Somewhat">37.8</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-19</td>
-<td class="gt_row gt_right" headers="Very">25.4</td>
-<td class="gt_row gt_right" headers="Somewhat">37.8</td>
-<td class="gt_row gt_right" headers="Not Very">22.6</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-20</td>
-<td class="gt_row gt_right" headers="Very">37.3</td>
-<td class="gt_row gt_right" headers="Somewhat">34.3</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">7.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-21</td>
-<td class="gt_row gt_right" headers="Very">36.8</td>
-<td class="gt_row gt_right" headers="Somewhat">36.7</td>
-<td class="gt_row gt_right" headers="Not Very">19.3</td>
-<td class="gt_row gt_right" headers="Not at all">7.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-22</td>
-<td class="gt_row gt_right" headers="Very">36.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.3</td>
-<td class="gt_row gt_right" headers="Not at all">7.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-23</td>
-<td class="gt_row gt_right" headers="Very">38.3</td>
-<td class="gt_row gt_right" headers="Somewhat">38.3</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">5.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-24</td>
-<td class="gt_row gt_right" headers="Very">36.5</td>
-<td class="gt_row gt_right" headers="Somewhat">36.5</td>
-<td class="gt_row gt_right" headers="Not Very">22.5</td>
-<td class="gt_row gt_right" headers="Not at all">5.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-25</td>
-<td class="gt_row gt_right" headers="Very">27.8</td>
-<td class="gt_row gt_right" headers="Somewhat">43.1</td>
-<td class="gt_row gt_right" headers="Not Very">19.2</td>
-<td class="gt_row gt_right" headers="Not at all">9.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-26</td>
-<td class="gt_row gt_right" headers="Very">30.3</td>
-<td class="gt_row gt_right" headers="Somewhat">35.9</td>
-<td class="gt_row gt_right" headers="Not Very">20.4</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-27</td>
-<td class="gt_row gt_right" headers="Very">36.5</td>
-<td class="gt_row gt_right" headers="Somewhat">34.5</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">5.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-28</td>
-<td class="gt_row gt_right" headers="Very">32.6</td>
-<td class="gt_row gt_right" headers="Somewhat">38.1</td>
-<td class="gt_row gt_right" headers="Not Very">21.7</td>
-<td class="gt_row gt_right" headers="Not at all">7.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-04-29</td>
-<td class="gt_row gt_right" headers="Very">38.5</td>
-<td class="gt_row gt_right" headers="Somewhat">35.5</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">6.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-04-30</td>
-<td class="gt_row gt_right" headers="Very">37.7</td>
-<td class="gt_row gt_right" headers="Somewhat">37.3</td>
-<td class="gt_row gt_right" headers="Not Very">18.3</td>
-<td class="gt_row gt_right" headers="Not at all">5.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-01</td>
-<td class="gt_row gt_right" headers="Very">33.7</td>
-<td class="gt_row gt_right" headers="Somewhat">37.3</td>
-<td class="gt_row gt_right" headers="Not Very">19.3</td>
-<td class="gt_row gt_right" headers="Not at all">9.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-02</td>
-<td class="gt_row gt_right" headers="Very">29.7</td>
-<td class="gt_row gt_right" headers="Somewhat">38.2</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-03</td>
-<td class="gt_row gt_right" headers="Very">28.3</td>
-<td class="gt_row gt_right" headers="Somewhat">35.3</td>
-<td class="gt_row gt_right" headers="Not Very">22.3</td>
-<td class="gt_row gt_right" headers="Not at all">12.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-04</td>
-<td class="gt_row gt_right" headers="Very">39.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.2</td>
-<td class="gt_row gt_right" headers="Not Very">18.6</td>
-<td class="gt_row gt_right" headers="Not at all">9.8</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-05</td>
-<td class="gt_row gt_right" headers="Very">30.3</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.2</td>
+<td class="gt_row gt_right" headers="Somewhat">36.3</td>
+<td class="gt_row gt_right" headers="Not very">21.2</td>
 <td class="gt_row gt_right" headers="Not at all">10.1</td>
 </tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-06</td>
-<td class="gt_row gt_right" headers="Very">38.5</td>
-<td class="gt_row gt_right" headers="Somewhat">32.5</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.5</td>
-</tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-07</td>
-<td class="gt_row gt_right" headers="Very">36.3</td>
+<td class="gt_row gt_right" headers="Month">2020-06-01</td>
+<td class="gt_row gt_right" headers="Very">26.4</td>
 <td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.3</td>
-<td class="gt_row gt_right" headers="Not at all">6.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-08</td>
-<td class="gt_row gt_right" headers="Very">37.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.5</td>
-<td class="gt_row gt_right" headers="Not at all">7.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-09</td>
-<td class="gt_row gt_right" headers="Very">31.6</td>
-<td class="gt_row gt_right" headers="Somewhat">39.9</td>
-<td class="gt_row gt_right" headers="Not Very">18.8</td>
-<td class="gt_row gt_right" headers="Not at all">8.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-10</td>
-<td class="gt_row gt_right" headers="Very">24.2</td>
-<td class="gt_row gt_right" headers="Somewhat">37.8</td>
-<td class="gt_row gt_right" headers="Not Very">22.8</td>
-<td class="gt_row gt_right" headers="Not at all">13.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-11</td>
-<td class="gt_row gt_right" headers="Very">36.5</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.5</td>
-<td class="gt_row gt_right" headers="Not at all">8.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-12</td>
-<td class="gt_row gt_right" headers="Very">31.7</td>
-<td class="gt_row gt_right" headers="Somewhat">37.2</td>
-<td class="gt_row gt_right" headers="Not Very">21.1</td>
-<td class="gt_row gt_right" headers="Not at all">9.8</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-13</td>
-<td class="gt_row gt_right" headers="Very">35.7</td>
-<td class="gt_row gt_right" headers="Somewhat">36.3</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-14</td>
-<td class="gt_row gt_right" headers="Very">33.5</td>
-<td class="gt_row gt_right" headers="Somewhat">37.2</td>
-<td class="gt_row gt_right" headers="Not Very">19.8</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-15</td>
-<td class="gt_row gt_right" headers="Very">40.5</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-16</td>
-<td class="gt_row gt_right" headers="Very">28.6</td>
-<td class="gt_row gt_right" headers="Somewhat">37.6</td>
-<td class="gt_row gt_right" headers="Not Very">20.9</td>
-<td class="gt_row gt_right" headers="Not at all">12.4</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-17</td>
-<td class="gt_row gt_right" headers="Very">29.6</td>
-<td class="gt_row gt_right" headers="Somewhat">34.6</td>
-<td class="gt_row gt_right" headers="Not Very">21.6</td>
-<td class="gt_row gt_right" headers="Not at all">11.8</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-18</td>
-<td class="gt_row gt_right" headers="Very">39.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.2</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-19</td>
-<td class="gt_row gt_right" headers="Very">26.5</td>
-<td class="gt_row gt_right" headers="Somewhat">39.3</td>
-<td class="gt_row gt_right" headers="Not Very">22.5</td>
-<td class="gt_row gt_right" headers="Not at all">11.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-20</td>
-<td class="gt_row gt_right" headers="Very">40.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.5</td>
-<td class="gt_row gt_right" headers="Not at all">6.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-21</td>
-<td class="gt_row gt_right" headers="Very">36.0</td>
-<td class="gt_row gt_right" headers="Somewhat">42.0</td>
-<td class="gt_row gt_right" headers="Not Very">15.0</td>
-<td class="gt_row gt_right" headers="Not at all">7.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-23</td>
-<td class="gt_row gt_right" headers="Very">27.6</td>
-<td class="gt_row gt_right" headers="Somewhat">37.4</td>
-<td class="gt_row gt_right" headers="Not Very">24.8</td>
-<td class="gt_row gt_right" headers="Not at all">9.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-24</td>
-<td class="gt_row gt_right" headers="Very">20.5</td>
-<td class="gt_row gt_right" headers="Somewhat">38.5</td>
-<td class="gt_row gt_right" headers="Not Very">27.5</td>
-<td class="gt_row gt_right" headers="Not at all">11.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-25</td>
-<td class="gt_row gt_right" headers="Very">32.8</td>
-<td class="gt_row gt_right" headers="Somewhat">36.2</td>
-<td class="gt_row gt_right" headers="Not Very">18.5</td>
-<td class="gt_row gt_right" headers="Not at all">11.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-26</td>
-<td class="gt_row gt_right" headers="Very">28.4</td>
-<td class="gt_row gt_right" headers="Somewhat">37.7</td>
-<td class="gt_row gt_right" headers="Not Very">23.2</td>
-<td class="gt_row gt_right" headers="Not at all">10.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-27</td>
-<td class="gt_row gt_right" headers="Very">26.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
-<td class="gt_row gt_right" headers="Not at all">13.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-28</td>
-<td class="gt_row gt_right" headers="Very">30.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
+<td class="gt_row gt_right" headers="Not very">22.5</td>
 <td class="gt_row gt_right" headers="Not at all">13.0</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-05-30</td>
-<td class="gt_row gt_right" headers="Very">24.6</td>
-<td class="gt_row gt_right" headers="Somewhat">36.3</td>
-<td class="gt_row gt_right" headers="Not Very">27.4</td>
-<td class="gt_row gt_right" headers="Not at all">10.7</td>
+<td class="gt_row gt_right" headers="Month">2020-07-01</td>
+<td class="gt_row gt_right" headers="Very">33.0</td>
+<td class="gt_row gt_right" headers="Somewhat">35.7</td>
+<td class="gt_row gt_right" headers="Not very">19.4</td>
+<td class="gt_row gt_right" headers="Not at all">10.4</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-05-31</td>
-<td class="gt_row gt_right" headers="Very">22.2</td>
-<td class="gt_row gt_right" headers="Somewhat">35.8</td>
-<td class="gt_row gt_right" headers="Not Very">24.2</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-01</td>
-<td class="gt_row gt_right" headers="Very">33.2</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.5</td>
-<td class="gt_row gt_right" headers="Not at all">11.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-02</td>
-<td class="gt_row gt_right" headers="Very">22.6</td>
-<td class="gt_row gt_right" headers="Somewhat">38.4</td>
-<td class="gt_row gt_right" headers="Not Very">25.6</td>
-<td class="gt_row gt_right" headers="Not at all">12.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-03</td>
-<td class="gt_row gt_right" headers="Very">14.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">29.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-05</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">28.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-06</td>
-<td class="gt_row gt_right" headers="Very">23.7</td>
-<td class="gt_row gt_right" headers="Somewhat">37.6</td>
-<td class="gt_row gt_right" headers="Not Very">23.9</td>
-<td class="gt_row gt_right" headers="Not at all">14.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-07</td>
-<td class="gt_row gt_right" headers="Very">20.2</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.8</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-08</td>
-<td class="gt_row gt_right" headers="Very">31.5</td>
-<td class="gt_row gt_right" headers="Somewhat">33.5</td>
-<td class="gt_row gt_right" headers="Not Very">22.5</td>
-<td class="gt_row gt_right" headers="Not at all">13.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-09</td>
-<td class="gt_row gt_right" headers="Very">23.8</td>
-<td class="gt_row gt_right" headers="Somewhat">37.1</td>
-<td class="gt_row gt_right" headers="Not Very">24.8</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-11</td>
-<td class="gt_row gt_right" headers="Very">28.0</td>
-<td class="gt_row gt_right" headers="Somewhat">41.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-13</td>
-<td class="gt_row gt_right" headers="Very">26.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.8</td>
-<td class="gt_row gt_right" headers="Not Very">22.4</td>
-<td class="gt_row gt_right" headers="Not at all">12.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-14</td>
-<td class="gt_row gt_right" headers="Very">21.3</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-15</td>
-<td class="gt_row gt_right" headers="Very">34.2</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.2</td>
-<td class="gt_row gt_right" headers="Not at all">12.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-16</td>
+<td class="gt_row gt_right" headers="Month">2020-08-01</td>
 <td class="gt_row gt_right" headers="Very">30.3</td>
-<td class="gt_row gt_right" headers="Somewhat">33.6</td>
-<td class="gt_row gt_right" headers="Not Very">26.2</td>
-<td class="gt_row gt_right" headers="Not at all">8.8</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-21</td>
-<td class="gt_row gt_right" headers="Very">16.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">28.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.5</td>
+<td class="gt_row gt_right" headers="Somewhat">36.2</td>
+<td class="gt_row gt_right" headers="Not very">20.4</td>
+<td class="gt_row gt_right" headers="Not at all">11.5</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-22</td>
-<td class="gt_row gt_right" headers="Very">32.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.3</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.3</td>
+<td class="gt_row gt_right" headers="Month">2020-09-01</td>
+<td class="gt_row gt_right" headers="Very">29.0</td>
+<td class="gt_row gt_right" headers="Somewhat">35.4</td>
+<td class="gt_row gt_right" headers="Not very">21.5</td>
+<td class="gt_row gt_right" headers="Not at all">12.8</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-23</td>
-<td class="gt_row gt_right" headers="Very">25.4</td>
-<td class="gt_row gt_right" headers="Somewhat">38.6</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
+<td class="gt_row gt_right" headers="Month">2020-10-01</td>
+<td class="gt_row gt_right" headers="Very">29.7</td>
+<td class="gt_row gt_right" headers="Somewhat">36.3</td>
+<td class="gt_row gt_right" headers="Not very">20.0</td>
 <td class="gt_row gt_right" headers="Not at all">12.9</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-25</td>
-<td class="gt_row gt_right" headers="Very">34.0</td>
-<td class="gt_row gt_right" headers="Somewhat">43.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">5.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-26</td>
-<td class="gt_row gt_right" headers="Very">34.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-27</td>
-<td class="gt_row gt_right" headers="Very">23.1</td>
-<td class="gt_row gt_right" headers="Somewhat">39.3</td>
-<td class="gt_row gt_right" headers="Not Very">21.8</td>
-<td class="gt_row gt_right" headers="Not at all">13.8</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-28</td>
-<td class="gt_row gt_right" headers="Very">19.0</td>
-<td class="gt_row gt_right" headers="Somewhat">39.5</td>
-<td class="gt_row gt_right" headers="Not Very">25.5</td>
-<td class="gt_row gt_right" headers="Not at all">15.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-06-29</td>
-<td class="gt_row gt_right" headers="Very">33.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-06-30</td>
-<td class="gt_row gt_right" headers="Very">34.2</td>
-<td class="gt_row gt_right" headers="Somewhat">33.2</td>
-<td class="gt_row gt_right" headers="Not Very">15.2</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-05</td>
-<td class="gt_row gt_right" headers="Very">18.0</td>
-<td class="gt_row gt_right" headers="Somewhat">39.0</td>
-<td class="gt_row gt_right" headers="Not Very">25.5</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-06</td>
-<td class="gt_row gt_right" headers="Very">35.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">15.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-07</td>
-<td class="gt_row gt_right" headers="Very">28.8</td>
-<td class="gt_row gt_right" headers="Somewhat">37.6</td>
-<td class="gt_row gt_right" headers="Not Very">20.8</td>
-<td class="gt_row gt_right" headers="Not at all">12.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-12</td>
-<td class="gt_row gt_right" headers="Very">26.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.7</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-13</td>
-<td class="gt_row gt_right" headers="Very">47.0</td>
-<td class="gt_row gt_right" headers="Somewhat">30.5</td>
-<td class="gt_row gt_right" headers="Not Very">13.5</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-14</td>
-<td class="gt_row gt_right" headers="Very">24.0</td>
-<td class="gt_row gt_right" headers="Somewhat">40.0</td>
-<td class="gt_row gt_right" headers="Not Very">26.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-15</td>
-<td class="gt_row gt_right" headers="Very">33.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-19</td>
-<td class="gt_row gt_right" headers="Very">26.7</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.7</td>
-<td class="gt_row gt_right" headers="Not at all">13.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-20</td>
-<td class="gt_row gt_right" headers="Very">48.0</td>
-<td class="gt_row gt_right" headers="Somewhat">31.5</td>
-<td class="gt_row gt_right" headers="Not Very">13.0</td>
-<td class="gt_row gt_right" headers="Not at all">7.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-21</td>
-<td class="gt_row gt_right" headers="Very">29.4</td>
-<td class="gt_row gt_right" headers="Somewhat">36.4</td>
-<td class="gt_row gt_right" headers="Not Very">22.7</td>
-<td class="gt_row gt_right" headers="Not at all">10.6</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-22</td>
-<td class="gt_row gt_right" headers="Very">51.0</td>
-<td class="gt_row gt_right" headers="Somewhat">28.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">1.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-23</td>
-<td class="gt_row gt_right" headers="Very">37.0</td>
-<td class="gt_row gt_right" headers="Somewhat">40.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">6.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-24</td>
-<td class="gt_row gt_right" headers="Very">35.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-26</td>
-<td class="gt_row gt_right" headers="Very">22.5</td>
-<td class="gt_row gt_right" headers="Somewhat">39.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.5</td>
+<td class="gt_row gt_right" headers="Month">2020-11-01</td>
+<td class="gt_row gt_right" headers="Very">29.9</td>
+<td class="gt_row gt_right" headers="Somewhat">34.5</td>
+<td class="gt_row gt_right" headers="Not very">19.8</td>
 <td class="gt_row gt_right" headers="Not at all">14.5</td>
 </tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-07-27</td>
-<td class="gt_row gt_right" headers="Very">38.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-07-28</td>
-<td class="gt_row gt_right" headers="Very">29.1</td>
-<td class="gt_row gt_right" headers="Somewhat">36.5</td>
-<td class="gt_row gt_right" headers="Not Very">22.3</td>
-<td class="gt_row gt_right" headers="Not at all">10.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-02</td>
-<td class="gt_row gt_right" headers="Very">24.5</td>
-<td class="gt_row gt_right" headers="Somewhat">44.5</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-03</td>
-<td class="gt_row gt_right" headers="Very">40.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.5</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-04</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">40.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-09</td>
-<td class="gt_row gt_right" headers="Very">11.0</td>
-<td class="gt_row gt_right" headers="Somewhat">44.0</td>
-<td class="gt_row gt_right" headers="Not Very">30.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-10</td>
-<td class="gt_row gt_right" headers="Very">39.5</td>
-<td class="gt_row gt_right" headers="Somewhat">31.5</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-11</td>
-<td class="gt_row gt_right" headers="Very">31.4</td>
-<td class="gt_row gt_right" headers="Somewhat">36.6</td>
-<td class="gt_row gt_right" headers="Not Very">19.1</td>
-<td class="gt_row gt_right" headers="Not at all">12.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-15</td>
-<td class="gt_row gt_right" headers="Very">31.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">15.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-16</td>
-<td class="gt_row gt_right" headers="Very">21.5</td>
-<td class="gt_row gt_right" headers="Somewhat">40.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.5</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-17</td>
-<td class="gt_row gt_right" headers="Very">36.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">7.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-18</td>
-<td class="gt_row gt_right" headers="Very">37.5</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.5</td>
-<td class="gt_row gt_right" headers="Not at all">8.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-19</td>
-<td class="gt_row gt_right" headers="Very">42.0</td>
-<td class="gt_row gt_right" headers="Somewhat">31.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-21</td>
-<td class="gt_row gt_right" headers="Very">32.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-22</td>
-<td class="gt_row gt_right" headers="Very">37.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-23</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-25</td>
-<td class="gt_row gt_right" headers="Very">21.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">28.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-28</td>
-<td class="gt_row gt_right" headers="Very">37.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-29</td>
-<td class="gt_row gt_right" headers="Very">31.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-08-30</td>
-<td class="gt_row gt_right" headers="Very">19.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">25.5</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-08-31</td>
-<td class="gt_row gt_right" headers="Very">33.8</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.5</td>
-<td class="gt_row gt_right" headers="Not at all">10.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-01</td>
-<td class="gt_row gt_right" headers="Very">25.3</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.1</td>
-<td class="gt_row gt_right" headers="Not at all">13.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-04</td>
-<td class="gt_row gt_right" headers="Very">30.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-06</td>
-<td class="gt_row gt_right" headers="Very">27.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-08</td>
-<td class="gt_row gt_right" headers="Very">34.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.5</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-13</td>
-<td class="gt_row gt_right" headers="Very">27.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-14</td>
-<td class="gt_row gt_right" headers="Very">35.8</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.8</td>
-<td class="gt_row gt_right" headers="Not at all">9.2</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-15</td>
-<td class="gt_row gt_right" headers="Very">27.3</td>
-<td class="gt_row gt_right" headers="Somewhat">36.4</td>
-<td class="gt_row gt_right" headers="Not Very">24.1</td>
-<td class="gt_row gt_right" headers="Not at all">12.2</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-19</td>
-<td class="gt_row gt_right" headers="Very">29.0</td>
-<td class="gt_row gt_right" headers="Somewhat">43.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-20</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-21</td>
-<td class="gt_row gt_right" headers="Very">36.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.5</td>
-<td class="gt_row gt_right" headers="Not Very">20.5</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-22</td>
-<td class="gt_row gt_right" headers="Very">24.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">26.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-23</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">42.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
-<td class="gt_row gt_right" headers="Not at all">13.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-24</td>
-<td class="gt_row gt_right" headers="Very">29.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-25</td>
-<td class="gt_row gt_right" headers="Very">49.0</td>
-<td class="gt_row gt_right" headers="Somewhat">26.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.0</td>
-<td class="gt_row gt_right" headers="Not at all">1.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-09-27</td>
-<td class="gt_row gt_right" headers="Very">26.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-09-30</td>
-<td class="gt_row gt_right" headers="Very">20.0</td>
-<td class="gt_row gt_right" headers="Somewhat">41.0</td>
-<td class="gt_row gt_right" headers="Not Very">25.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-10-02</td>
-<td class="gt_row gt_right" headers="Very">20.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.5</td>
-<td class="gt_row gt_right" headers="Not Very">27.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-10-03</td>
-<td class="gt_row gt_right" headers="Very">27.7</td>
-<td class="gt_row gt_right" headers="Somewhat">40.3</td>
-<td class="gt_row gt_right" headers="Not Very">21.3</td>
-<td class="gt_row gt_right" headers="Not at all">10.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-10-04</td>
-<td class="gt_row gt_right" headers="Very">24.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-10-06</td>
-<td class="gt_row gt_right" headers="Very">39.5</td>
-<td class="gt_row gt_right" headers="Somewhat">32.6</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.7</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-10-09</td>
-<td class="gt_row gt_right" headers="Very">29.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">15.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-10-11</td>
-<td class="gt_row gt_right" headers="Very">23.0</td>
-<td class="gt_row gt_right" headers="Somewhat">39.7</td>
-<td class="gt_row gt_right" headers="Not Very">19.3</td>
-<td class="gt_row gt_right" headers="Not at all">15.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-10-12</td>
-<td class="gt_row gt_right" headers="Very">38.5</td>
-<td class="gt_row gt_right" headers="Somewhat">31.5</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">10.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-10-13</td>
-<td class="gt_row gt_right" headers="Very">21.0</td>
-<td class="gt_row gt_right" headers="Somewhat">42.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-10-18</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-10-20</td>
-<td class="gt_row gt_right" headers="Very">27.5</td>
-<td class="gt_row gt_right" headers="Somewhat">37.8</td>
-<td class="gt_row gt_right" headers="Not Very">19.9</td>
-<td class="gt_row gt_right" headers="Not at all">14.6</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-10-22</td>
-<td class="gt_row gt_right" headers="Very">49.0</td>
-<td class="gt_row gt_right" headers="Somewhat">27.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">NA</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-10-24</td>
-<td class="gt_row gt_right" headers="Very">36.0</td>
-<td class="gt_row gt_right" headers="Somewhat">41.0</td>
-<td class="gt_row gt_right" headers="Not Very">15.0</td>
-<td class="gt_row gt_right" headers="Not at all">7.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-10-25</td>
-<td class="gt_row gt_right" headers="Very">28.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-10-27</td>
-<td class="gt_row gt_right" headers="Very">28.3</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
-<td class="gt_row gt_right" headers="Not at all">13.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-11-01</td>
-<td class="gt_row gt_right" headers="Very">30.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.5</td>
-<td class="gt_row gt_right" headers="Not Very">19.5</td>
-<td class="gt_row gt_right" headers="Not at all">14.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-11-02</td>
-<td class="gt_row gt_right" headers="Very">24.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-11-08</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-11-10</td>
-<td class="gt_row gt_right" headers="Very">23.0</td>
-<td class="gt_row gt_right" headers="Somewhat">36.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">18.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-11-15</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">16.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-11-16</td>
-<td class="gt_row gt_right" headers="Very">38.0</td>
-<td class="gt_row gt_right" headers="Somewhat">31.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-11-20</td>
-<td class="gt_row gt_right" headers="Very">47.0</td>
-<td class="gt_row gt_right" headers="Somewhat">28.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">NA</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-11-22</td>
-<td class="gt_row gt_right" headers="Very">36.0</td>
-<td class="gt_row gt_right" headers="Somewhat">39.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-11-24</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-11-29</td>
-<td class="gt_row gt_right" headers="Very">26.0</td>
-<td class="gt_row gt_right" headers="Somewhat">31.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-12-07</td>
-<td class="gt_row gt_right" headers="Very">44.5</td>
-<td class="gt_row gt_right" headers="Somewhat">32.5</td>
-<td class="gt_row gt_right" headers="Not Very">14.5</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-12-08</td>
-<td class="gt_row gt_right" headers="Very">27.5</td>
-<td class="gt_row gt_right" headers="Somewhat">37.5</td>
-<td class="gt_row gt_right" headers="Not Very">20.5</td>
-<td class="gt_row gt_right" headers="Not at all">13.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-12-13</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">18.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-12-15</td>
-<td class="gt_row gt_right" headers="Very">30.8</td>
-<td class="gt_row gt_right" headers="Somewhat">36.2</td>
-<td class="gt_row gt_right" headers="Not Very">20.6</td>
+<td class="gt_row gt_right" headers="Month">2020-12-01</td>
+<td class="gt_row gt_right" headers="Very">35.1</td>
+<td class="gt_row gt_right" headers="Somewhat">33.7</td>
+<td class="gt_row gt_right" headers="Not very">19.5</td>
 <td class="gt_row gt_right" headers="Not at all">11.8</td>
 </tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-12-17</td>
-<td class="gt_row gt_right" headers="Very">45.0</td>
-<td class="gt_row gt_right" headers="Somewhat">28.0</td>
-<td class="gt_row gt_right" headers="Not Very">26.0</td>
-<td class="gt_row gt_right" headers="Not at all">NA</td>
-</tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Date">2020-12-21</td>
-<td class="gt_row gt_right" headers="Very">47.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">13.0</td>
-<td class="gt_row gt_right" headers="Not at all">5.0</td>
+<td class="gt_row gt_right" headers="Month">2021-01-01</td>
+<td class="gt_row gt_right" headers="Very">31.6</td>
+<td class="gt_row gt_right" headers="Somewhat">33.2</td>
+<td class="gt_row gt_right" headers="Not very">18.2</td>
+<td class="gt_row gt_right" headers="Not at all">13.4</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2020-12-22</td>
-<td class="gt_row gt_right" headers="Very">26.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">25.0</td>
-<td class="gt_row gt_right" headers="Not at all">14.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-01-03</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-01-12</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">40.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-01-13</td>
-<td class="gt_row gt_right" headers="Very">31.5</td>
-<td class="gt_row gt_right" headers="Somewhat">33.8</td>
-<td class="gt_row gt_right" headers="Not Very">14.5</td>
+<td class="gt_row gt_right" headers="Month">2021-02-01</td>
+<td class="gt_row gt_right" headers="Very">29.6</td>
+<td class="gt_row gt_right" headers="Somewhat">33.6</td>
+<td class="gt_row gt_right" headers="Not very">20.0</td>
 <td class="gt_row gt_right" headers="Not at all">14.4</td>
 </tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-01-15</td>
-<td class="gt_row gt_right" headers="Very">34.0</td>
+<tr class="even">
+<td class="gt_row gt_right" headers="Month">2021-03-01</td>
+<td class="gt_row gt_right" headers="Very">27.2</td>
 <td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-01-17</td>
-<td class="gt_row gt_right" headers="Very">28.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">16.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
+<td class="gt_row gt_right" headers="Not very">25.0</td>
+<td class="gt_row gt_right" headers="Not at all">14.2</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-01-19</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">40.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-01-24</td>
-<td class="gt_row gt_right" headers="Very">60.0</td>
-<td class="gt_row gt_right" headers="Somewhat">19.0</td>
-<td class="gt_row gt_right" headers="Not Very">12.0</td>
-<td class="gt_row gt_right" headers="Not at all">7.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-01-25</td>
+<td class="gt_row gt_right" headers="Month">2021-04-01</td>
 <td class="gt_row gt_right" headers="Very">19.0</td>
-<td class="gt_row gt_right" headers="Somewhat">41.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">9.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-01-26</td>
-<td class="gt_row gt_right" headers="Very">52.0</td>
-<td class="gt_row gt_right" headers="Somewhat">25.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">NA</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-01-31</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">18.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-02-02</td>
-<td class="gt_row gt_right" headers="Very">29.4</td>
-<td class="gt_row gt_right" headers="Somewhat">34.4</td>
-<td class="gt_row gt_right" headers="Not Very">21.6</td>
-<td class="gt_row gt_right" headers="Not at all">12.5</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-02-07</td>
-<td class="gt_row gt_right" headers="Very">32.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-02-09</td>
-<td class="gt_row gt_right" headers="Very">26.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">23.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-02-14</td>
-<td class="gt_row gt_right" headers="Very">25.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.0</td>
-<td class="gt_row gt_right" headers="Not Very">16.0</td>
-<td class="gt_row gt_right" headers="Not at all">15.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-02-15</td>
-<td class="gt_row gt_right" headers="Very">35.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">14.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-02-16</td>
-<td class="gt_row gt_right" headers="Very">24.0</td>
-<td class="gt_row gt_right" headers="Somewhat">37.0</td>
-<td class="gt_row gt_right" headers="Not Very">24.0</td>
-<td class="gt_row gt_right" headers="Not at all">16.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-02-18</td>
-<td class="gt_row gt_right" headers="Very">50.0</td>
-<td class="gt_row gt_right" headers="Somewhat">29.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">NA</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-02-22</td>
-<td class="gt_row gt_right" headers="Very">23.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">25.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-02-28</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
 <td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">17.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-03-01</td>
-<td class="gt_row gt_right" headers="Very">35.5</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">19.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.5</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-03-02</td>
-<td class="gt_row gt_right" headers="Very">27.1</td>
-<td class="gt_row gt_right" headers="Somewhat">34.2</td>
-<td class="gt_row gt_right" headers="Not Very">23.2</td>
-<td class="gt_row gt_right" headers="Not at all">14.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-03-06</td>
-<td class="gt_row gt_right" headers="Very">27.0</td>
-<td class="gt_row gt_right" headers="Somewhat">45.0</td>
-<td class="gt_row gt_right" headers="Not Very">20.0</td>
-<td class="gt_row gt_right" headers="Not at all">8.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-03-09</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">35.0</td>
-<td class="gt_row gt_right" headers="Not Very">25.0</td>
-<td class="gt_row gt_right" headers="Not at all">18.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-03-13</td>
-<td class="gt_row gt_right" headers="Very">29.0</td>
-<td class="gt_row gt_right" headers="Somewhat">39.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">11.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-03-14</td>
-<td class="gt_row gt_right" headers="Very">41.0</td>
-<td class="gt_row gt_right" headers="Somewhat">NA</td>
-<td class="gt_row gt_right" headers="Not Very">28.5</td>
-<td class="gt_row gt_right" headers="Not at all">NA</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-03-18</td>
-<td class="gt_row gt_right" headers="Very">22.0</td>
-<td class="gt_row gt_right" headers="Somewhat">38.0</td>
-<td class="gt_row gt_right" headers="Not Very">28.0</td>
-<td class="gt_row gt_right" headers="Not at all">12.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-03-21</td>
-<td class="gt_row gt_right" headers="Very">35.0</td>
-<td class="gt_row gt_right" headers="Somewhat">28.0</td>
-<td class="gt_row gt_right" headers="Not Very">32.0</td>
-<td class="gt_row gt_right" headers="Not at all">NA</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-03-23</td>
-<td class="gt_row gt_right" headers="Very">18.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">30.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-03-28</td>
-<td class="gt_row gt_right" headers="Very">20.0</td>
-<td class="gt_row gt_right" headers="Somewhat">32.0</td>
-<td class="gt_row gt_right" headers="Not Very">21.0</td>
-<td class="gt_row gt_right" headers="Not at all">19.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-03-29</td>
-<td class="gt_row gt_right" headers="Very">29.0</td>
-<td class="gt_row gt_right" headers="Somewhat">33.3</td>
-<td class="gt_row gt_right" headers="Not Very">24.7</td>
-<td class="gt_row gt_right" headers="Not at all">13.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-03-30</td>
-<td class="gt_row gt_right" headers="Very">21.3</td>
-<td class="gt_row gt_right" headers="Somewhat">34.7</td>
-<td class="gt_row gt_right" headers="Not Very">27.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-04-06</td>
-<td class="gt_row gt_right" headers="Very">20.2</td>
-<td class="gt_row gt_right" headers="Somewhat">33.1</td>
-<td class="gt_row gt_right" headers="Not Very">26.8</td>
-<td class="gt_row gt_right" headers="Not at all">18.1</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-04-11</td>
-<td class="gt_row gt_right" headers="Very">20.0</td>
-<td class="gt_row gt_right" headers="Somewhat">30.0</td>
-<td class="gt_row gt_right" headers="Not Very">22.0</td>
-<td class="gt_row gt_right" headers="Not at all">20.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Date">2021-04-13</td>
-<td class="gt_row gt_right" headers="Very">16.0</td>
-<td class="gt_row gt_right" headers="Somewhat">34.0</td>
-<td class="gt_row gt_right" headers="Not Very">29.0</td>
-<td class="gt_row gt_right" headers="Not at all">20.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Date">2021-04-20</td>
-<td class="gt_row gt_right" headers="Very">20.0</td>
-<td class="gt_row gt_right" headers="Somewhat">31.0</td>
-<td class="gt_row gt_right" headers="Not Very">31.0</td>
-<td class="gt_row gt_right" headers="Not at all">17.0</td>
+<td class="gt_row gt_right" headers="Not very">27.2</td>
+<td class="gt_row gt_right" headers="Not at all">18.8</td>
 </tr>
 </tbody>
 </table>

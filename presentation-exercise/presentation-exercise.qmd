@@ -149,12 +149,30 @@ labels_data <- data.frame(
 
 ```
 
-After receiving input from a classmate, Erick Mollinedo, I added several geom_vline() and geom_text() functions to add the missing labels. The geom_vline() functions created dashed lines on each of the important dates, which I think solved the previous issue because it provided a location for the new layer to be added to in ggplot(). The geom_text() functions allow the actual descriptions to be added. The labels were a little too large for my graph originally, so I changed the size of each one to make them fit better. This addition brought me much closer to replicating the original graph although my lines appear to be significantly more jagged than the original.
+After receiving input from a classmate, Erick Mollinedo, I added several geom_vline() and geom_text() functions to add the missing labels. The geom_vline() functions created dashed lines on each of the important dates, which I think solved the previous issue because it provided a location for the new layer to be added to in ggplot(). The geom_text() functions allow the actual descriptions to be added. The labels were a little too large for my graph originally, so I changed the size of each one to make them fit better. This addition brought me much closer to replicating the original graph although my lines appear to be significantly more jagged than the original. I also received a suggestion to use the `ggthemes` package to make the final replication appear closer to the original by adding the theme_538() function. I received multiple errors about not being able to find this function, so ChatGPT suggested creating my own function to mimic the 538 theme. This change removed the gridlines in the background and adjusted the sizing of the x-axis labels to match the original graph more closely.
 
 ```{r}
 #| message: false
+# create a function to mimic the 538 style
+theme_538 <- function() {
+  theme_minimal() +
+    theme(
+      axis.title = element_text(size = 12),
+      axis.text = element_text(size = 10),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      panel.background = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks = element_line(color = "black"),
+      plot.title = element_text(size = 14, hjust = 0.5)
+    )
+}
+
+# apply the 538 style function and add labels to dates of interest
 graph4 <- ggplot(concern_data_long, aes(x = end_date, y = Percentage, color = `Concern Level`)) +
     geom_line() +
+    theme_538() +
     scale_color_manual(values = c("#800080","#BA55D3","#FFDAB9","#FF0000")) +
     labs(title = "How worried are Americans about infection?",
          subtitle = paste("How concerned Americans say they are that they, someone in their family or someone else they know will", "\n", "become infected with the coronavirus")) +
@@ -187,7 +205,7 @@ The original code provided by ChatGPT had outdated syntax in the column argument
 # load packages
 library(gt)
 
-# generate publication quality table
+# generate first attempt at publication quality table
 table1 <- concern_data2 %>%
   gt() %>%
   tab_spanner(
@@ -200,21 +218,35 @@ table1 <- concern_data2 %>%
 table1
 ```
 
-The first table looks decent, but I want to clean up a few things. I added a more descriptive title and renamed the columns, so the table would not contain variable names. I felt like it was unnecessary to have 5 decimal points for each percentage, so I limited the decimals to 1 place using the fmt_number() function. The result is a clean and publication-quality table.
+The first table looks decent, but I want to clean up a few things stylistically.  I added a more descriptive title and renamed the columns, so the table would not contain variable names. Following my classmate Erick's suggestion, I created a new variable, `month` to summarize the data in the original table to make it more useful. I felt like it was unnecessary to have 5 decimal points for each percentage, so I limited the decimals to 1 place when I created the new average percentages by month. The result is a clean and publication-quality table that is much easier to digest than the original. 
 
 ```{r}
 #| message: false
-table2 <- concern_data2 %>%
-  rename("Date" = end_date,
-        "Very" = very_percent,
-        "Somewhat" = somewhat_percent,
-        "Not Very" = not_very_percent,
-        "Not at all" = not_at_all_percent) %>%
+# load packages required to manipulate dates
+library(lubridate)
+
+# create new month variable to summarize the table and rename columns
+covid_summary <- concern_data2 %>%
+  mutate(month = floor_date(as.Date(end_date, format = "%Y-%m-%d"), "month")) %>% 
+  group_by(month) %>% #Group by month of the year
+  summarise(avg_very_percent = round(mean(very_percent, na.rm = TRUE), 1),
+            avg_somewhat_percent = round(mean(somewhat_percent, na.rm = TRUE), 1),
+            avg_not_very_percent = round(mean(not_very_percent, na.rm = TRUE), 1),
+            avg_not_at_all_percent = round(mean(not_at_all_percent, na.rm = TRUE), 1)) %>%
+  mutate(across(starts_with("avg_"), ~ as.numeric(format(., nsmall = 2)))) %>% 
+  rename(Month = "month", 
+         Very = "avg_very_percent",
+         Somewhat = "avg_somewhat_percent",
+         `Not very` = "avg_not_very_percent",
+         `Not at all` = "avg_not_at_all_percent")
+
+## generate table with proper labels
+table2 <- covid_summary %>% 
   gt() %>%
   tab_spanner(label = "Percentage",
-              columns = c("Very", "Somewhat", "Not Very", "Not at all")) %>%
+              columns = c("Very", "Somewhat", "Not very", "Not at all")) %>%
   tab_header(title = "Levels of concern about COVID-19 infections among Americans") %>% 
-  fmt_number(columns = c("Very", "Somewhat", "Not Very", "Not at all"),
+  fmt_number(columns = c("Very", "Somewhat", "Not very", "Not at all"),
              decimals = 1)
 table2
 ```
