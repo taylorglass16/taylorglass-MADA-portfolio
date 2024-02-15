@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.537">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="">
+<meta name="dcterms.date" content="2024-01-31">
+
+<title>Taylor Glass Data Analysis Portfolio - Supplemental Material: The Impact of Symptom and Activity Trade-offs on Transmission Potential of Patients Infected with Influenza</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Taylor Glass Data Analysis Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../aboutme.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="../../../../starter-analysis-exercise/products/report/starter-analysis-report.html">
+ <span class="dropdown-text">Starter Analysis Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../coding-exercise/coding-exercise.html">
+ <span class="dropdown-text">R Coding Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../presentation-exercise/presentation-exercise.html">
+ <span class="dropdown-text">Presentation Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../tidytuesday-exercise/tidytuesday-exercise.html">
+ <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../data-exercise/data-exercise.html">
+ <span class="dropdown-text">Data Exercise</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/taylorglass16/taylorglass-MADA-portfolio"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Supplemental Material: The Impact of Symptom and Activity Trade-offs on Transmission Potential of Patients Infected with Influenza</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 31, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="authors" class="level1">
+<h1>Authors</h1>
+<ul>
+<li>Brian McKay<sup>1</sup>, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+<li>Mark Ebell, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+<li>Ariella Perry, Colorado Department of Public Health and Environment, Denver, CO, USA</li>
+<li>Ye Shen, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+<li>Andreas Handel<sup>1</sup>, Department of Epidemiology and Biostatistics, The University of Georgia, Athens, GA, USA</li>
+</ul>
+<p><sup>1</sup> Corresponding Authors: Brian McKay and Andreas Handel</p>
+<p>Address: 101 Buck Rd, Miller Hall, Athens, Georgia 30606</p>
+<p>Email: bmckay52@uga.edu or ahandel@uga.edu</p>
+<p>PROCEEDINGS OF THE ROYAL SOCIETY B<br>
+DOI: 10.1098/rspb.2020.0496</p>
+</section>
+<section id="documentation-for-additional-sm-files" class="level1">
+<h1>Documentation for additional SM files</h1>
+<section id="getting-the-files" class="level2">
+<h2 class="anchored" data-anchor-id="getting-the-files">Getting the files</h2>
+<p>The files described below are available from Dryad https://doi.org/10.5061/dryad.51c59zw4v.</p>
+<ul>
+<li><p>“<strong>Virulence_Trade-off.Rproj</strong>” This file lets R know the relative file paths for loading and saving files.</p></li>
+<li><p>“<strong>SymptomActivity.bib</strong>” This file has all of the citation saved as a bibTex.</p></li>
+<li><p>“<strong>Symptom Questionnaire_Redacted.pdf</strong>”: This is a copy of the electronic questionnaire patients with an upper respiratory symptoms were required to fill out. All identifying information has been redacted.</p></li>
+<li><p>“<strong>DataDictionary_VirulenceTradeOff.xlsx</strong>”: This document provides a description of all the variables included in the analysis.</p></li>
+<li><p>“<strong>1 Anonymized Data</strong>” folder contains the de-identified data for the analyses</p>
+<ul>
+<li>An R script that merges all of the individual data sets and creates and saves “Data.Rda” and “Data.csv” in the “1 Anonymized Data” Folder. This script is not included since the raw data sets are not included to protect patient privacy.</li>
+</ul></li>
+<li><p>“<strong>2 Data Cleaning Script</strong>” folder contains one R script that cleans the data for the analyses</p>
+<ul>
+<li>“<strong>Data Merging Script.R</strong>”: R script that merges all of the individual data sets and creates and saves “Data.Rda” in the “1 Anonymized Data” Folder. This script is not included since the raw data sets are not included to protect patient privacy.</li>
+<li>“<strong>Data Cleaning.R</strong>”: This R script does all of the data preparation, creating all the required variables for the analysis. This script also produces the data sets used for the analyses and saves them in the “3 Clean Data” folder.</li>
+</ul></li>
+<li><p>“<strong>4 Analysis Scripts</strong>” folder has 4 R scripts that analyze the clean data and produce the results presented in the main text and supplement.</p>
+<ul>
+<li>“<strong>Flu Symptoms Activity Models.R</strong>” This script creates the univariate/multivariate linear regression table, the Spearman rank correlation, and the CMH trend tests. Results are saved in “5 Results”</li>
+<li>“<strong>Flu Symptoms Activity Plots.R</strong>” This script creates all of the plots. Results are saved in “5 Results”</li>
+<li>“<strong>Flu Symptoms Activity Tables.R</strong>” This script creates all of the tables. Results are saved in “5 Results”</li>
+<li>“<strong>Multivariate Subset Selection.R</strong>” This script does the variable selection for the multivariate model. Results are saved in “5 Results”</li>
+</ul></li>
+<li><p>“<strong>6 Manuscript</strong>” folder has 2 files in it used to create the manuscript.</p>
+<ul>
+<li>“<strong>Manuscript.Rmd</strong>” This Rmd file creates the basic manuscript word document (formatting will not be identical)</li>
+<li>“<strong>proceedings-of-the-royal-society-b.csl</strong>” is a style file to format the citations in the manuscript</li>
+</ul></li>
+<li><p>“<strong>7 Supplemental Material</strong>” folder has 2 files used to create this document</p>
+<ul>
+<li>“<strong>Supplemental Material.Rmd</strong>” This Rmd file creates the basic supplemental material word document (formatting will not be identical)</li>
+<li>“<strong>proceedings-of-the-royal-society-b.csl</strong>” is a style file to format the citations in the supplement</li>
+</ul></li>
+</ul>
+</section>
+<section id="reproducing-results" class="level2">
+<h2 class="anchored" data-anchor-id="reproducing-results">Reproducing results</h2>
+<p>The files required to reproduce the results are 2 R Markdown files, 4 R script, and one anonymized data file. These files allow the reproduction of all results shown in the main text and SM. To reproduce the results follow these steps.</p>
+<p>First, install R, Rstudio, and Pandoc (when you install Rstudio Pandoc should automatically install). Microsoft Word or Open Office Word is also required.</p>
+<p>Second, save the zip file from Dryad on your local computer. Open the folder and double click “Virulence_Trade-off”. This should open Rstudio (if prompted, select Rstudio as the app to open this file type). Then open and run the files below in the specified order.</p>
+<ol type="1">
+<li>R script “Data Cleaning.R” in the “2 Data Cleaning Script” folder uses “Data.Rda” and produces two clean data sets used for all further analyses. The data sets are all saved in the “3 Clean Data” folder and include:
+<ol type="i">
+<li>“SympAct_Any_Pos.Rda” Contains data for all influenza patients regardless of diagnosis method.</li>
+<li>“SympAct_Lab_Pos.Rda” Contains data for influenza patients diagnosed based on a PCR or rapid antigen test.</li>
+</ol></li>
+</ol>
+<p><strong>It is important to note that “SympAct_Lab_Pos.Rda” is a subset of “SympAct_Any_Pos.Rda” based on the method of diagnosis.</strong></p>
+<ol start="2" type="1">
+<li><p>Four R scripts in the “4 Analysis Scripts” folder (“Flu Symptoms Activity Univariate Model.R”, “Flu Symptoms Activity Univariate Plots.R”, and “Flu Symptoms Activity Univariate Tables.R”, “Multivariate Subset Selection.R”). The order you run these scripts does not matter. Results of each script are automatically saved in the “5 Results” folder.</p></li>
+<li><p>R Markdown “Manuscript.Rmd” is in the “6 Manuscript” folder. This combines all the relevant results and creates the main text as a Word document (some reformatting is required).</p></li>
+<li><p>R Markdown “Supplemental Material.Rmd” in the “7 Supplemental Material” folder generates the supplementary material as Word document.</p></li>
+</ol>
+</section>
+</section>
+<section id="supplementary-results" class="level1">
+<h1>Supplementary Results</h1>
+<section id="histogram-of-reported-activity-levels" class="level2">
+<h2 class="anchored" data-anchor-id="histogram-of-reported-activity-levels">Histogram of reported activity levels</h2>
+<p>Reported activity levels ranging from 0 to 10 with a median of 4 for those patients with a lab diagnosis of influenza (SM Figure @ref(fig:ActivityLabBarChart))</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/ActivityLabBarChart.tiff" class="img-fluid figure-img"></p>
+<figcaption>Histogram of reported activity levels for patients with a lab diagnosis of influenza.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="table-of-symptoms" class="level2">
+<h2 class="anchored" data-anchor-id="table-of-symptoms">Table of symptoms</h2>
+<p>SM Table @ref(tab:SympLabTable) shows the symptoms among patients with a lab-based diagnosis.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption><strong>Symptoms of the 324 patients with laboratory based flu diagnosis. The table shows the number of patients who reported having the following symptoms and the corresponding percentage.</strong></caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Overall</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">324</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Abdominal Pain = Yes (%)</td>
+<td style="text-align: left;">38 (11.7)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Breathlessness = Yes (%)</td>
+<td style="text-align: left;">128 (39.5)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Chest Congestion = Yes (%)</td>
+<td style="text-align: left;">194 (59.9)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chest Pain = Yes (%)</td>
+<td style="text-align: left;">110 (34.0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Chills/Sweats = Yes (%)</td>
+<td style="text-align: left;">287 (88.6)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cough = Yes (%)</td>
+<td style="text-align: left;">306 (94.4)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Diarrhea = Yes (%)</td>
+<td style="text-align: left;">40 (12.3)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ear Pain = Yes (%)</td>
+<td style="text-align: left;">59 (18.2)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Eye Pain = Yes (%)</td>
+<td style="text-align: left;">48 (14.8)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fatigue = Yes (%)</td>
+<td style="text-align: left;">304 (93.8)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Headache = Yes (%)</td>
+<td style="text-align: left;">273 (84.3)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Itchy Eyes = Yes (%)</td>
+<td style="text-align: left;">75 (23.1)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myalgia = Yes (%)</td>
+<td style="text-align: left;">290 (89.5)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nasal Congestion = Yes (%)</td>
+<td style="text-align: left;">255 (78.7)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nausea = Yes (%)</td>
+<td style="text-align: left;">119 (36.7)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Runny Nose = Yes (%)</td>
+<td style="text-align: left;">234 (72.2)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sleeplessness = Yes (%)</td>
+<td style="text-align: left;">183 (56.5)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sneeze = Yes (%)</td>
+<td style="text-align: left;">177 (54.6)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sore Throat = Yes (%)</td>
+<td style="text-align: left;">265 (81.8)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Subjective Fever = Yes (%)</td>
+<td style="text-align: left;">242 (74.7)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Swollen Lymph Nodes = Yes (%)</td>
+<td style="text-align: left;">127 (39.2)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tooth Pain = Yes (%)</td>
+<td style="text-align: left;">60 (18.5)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Vomiting = Yes (%)</td>
+<td style="text-align: left;">43 (13.3)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Weakness = Yes (%)</td>
+<td style="text-align: left;">306 (94.4)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wheezing = Yes (%)</td>
+<td style="text-align: left;">105 (32.4)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="univariate-and-subset-selection" class="level2">
+<h2 class="anchored" data-anchor-id="univariate-and-subset-selection">Univariate and subset selection</h2>
+<p>Correlations between activity level and each symptom from the univariate linear analysis and the multivariate regression model selected using cross-validation (SM Table @ref(tab:LmActvSympLab)).</p>
+<table class="table">
+<caption><strong>Results of the univariate and multivariate linear regression of symptoms and activity. The coefficients are the estimated effect on activity when the symptom is present. The multivariate model was selected with a sequential forward floating selection, minimizing the RMSE on test data through a 5-fold cross validation (20 times repeated). 95%CI = The 95% confidence interval for the coefficient.</strong></caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 3%">
+<col style="width: 9%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dependent: Activity Level</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Mean (sd)</th>
+<th style="text-align: left;">Coefficient (univariable)</th>
+<th style="text-align: left;">Coefficient (multivariable)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Abdominal Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.4 (2.7)</td>
+<td style="text-align: left;">-1.01 (-1.90 to -0.12, p=0.026)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Breathlessness</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.3 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.1 (2.5)</td>
+<td style="text-align: left;">-0.21 (-0.81 to 0.38, p=0.477)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chest Congestion</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.7 (2.9)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.4)</td>
+<td style="text-align: left;">-0.65 (-1.24 to -0.07, p=0.029)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chest Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.6)</td>
+<td style="text-align: left;">-0.38 (-0.99 to 0.23, p=0.217)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chills/Sweats</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.8 (2.8)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.1 (2.6)</td>
+<td style="text-align: left;">-1.75 (-2.64 to -0.86, p&lt;0.001)</td>
+<td style="text-align: left;">-0.90 (-1.79 to -0.02, p=0.046)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cough</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.2 (3.2)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.3 (2.6)</td>
+<td style="text-align: left;">0.10 (-1.16 to 1.36, p=0.875)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Diarrhea</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.6 (2.6)</td>
+<td style="text-align: left;">-0.73 (-1.60 to 0.15, p=0.103)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ear Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.7 (2.7)</td>
+<td style="text-align: left;">-0.69 (-1.44 to 0.05, p=0.068)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Eye Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.2 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.4 (2.9)</td>
+<td style="text-align: left;">0.21 (-0.61 to 1.02, p=0.619)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fatigue</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.7 (2.5)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.6)</td>
+<td style="text-align: left;">-1.53 (-2.72 to -0.34, p=0.012)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Headache</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.6 (2.8)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.6)</td>
+<td style="text-align: left;">-1.57 (-2.35 to -0.80, p&lt;0.001)</td>
+<td style="text-align: left;">-1.23 (-1.97 to -0.49, p=0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sleeplessness</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.9 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.8 (2.5)</td>
+<td style="text-align: left;">-1.14 (-1.71 to -0.57, p&lt;0.001)</td>
+<td style="text-align: left;">-0.91 (-1.44 to -0.37, p=0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Itchy Eyes</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.7 (2.5)</td>
+<td style="text-align: left;">-0.72 (-1.40 to -0.04, p=0.038)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Myalgia</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.4 (2.9)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.1 (2.6)</td>
+<td style="text-align: left;">-1.32 (-2.25 to -0.38, p=0.006)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nasal Congestion</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.6)</td>
+<td style="text-align: left;">-0.22 (-0.93 to 0.49, p=0.542)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nausea</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.7 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.6 (2.4)</td>
+<td style="text-align: left;">-1.08 (-1.67 to -0.49, p&lt;0.001)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sore Throat</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.7)</td>
+<td style="text-align: left;">-0.20 (-0.95 to 0.55, p=0.605)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Runny Nose</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.1 (2.7)</td>
+<td style="text-align: left;">-0.50 (-1.14 to 0.15, p=0.129)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sneeze</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.6)</td>
+<td style="text-align: left;">-0.67 (-1.24 to -0.09, p=0.024)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Subjective Fever</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.2 (2.5)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.9 (2.6)</td>
+<td style="text-align: left;">-1.25 (-1.90 to -0.60, p&lt;0.001)</td>
+<td style="text-align: left;">-0.67 (-1.32 to -0.01, p=0.047)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Swollen Lymph Nodes</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.5)</td>
+<td style="text-align: left;">-0.46 (-1.05 to 0.13, p=0.128)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tooth Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.3 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.1 (2.7)</td>
+<td style="text-align: left;">-0.24 (-0.98 to 0.50, p=0.526)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Vomiting</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.5 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">2.8 (2.2)</td>
+<td style="text-align: left;">-1.64 (-2.48 to -0.81, p&lt;0.001)</td>
+<td style="text-align: left;">-1.39 (-2.18 to -0.60, p=0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Weakness</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">6.6 (2.4)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.1 (2.6)</td>
+<td style="text-align: left;">-2.49 (-3.72 to -1.25, p&lt;0.001)</td>
+<td style="text-align: left;">-1.50 (-2.69 to -0.31, p=0.014)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Wheezing</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.4 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.5)</td>
+<td style="text-align: left;">-0.46 (-1.07 to 0.16, p=0.144)</td>
+<td style="text-align: left;">-</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="distribution-of-scores" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-of-scores">Distribution of scores</h2>
+<p>The infectiousness score is skewed left with more than half of the patients having a score of 4 or 5 (SM Figure @ref(fig:IandMLabBarChart)A). The morbidity score is more centered with no patient having a score of 0,1,19 or 20 (SM Figure @ref(fig:IandMLabBarChart)B).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/IandMScoresLabBarChart.tiff" class="img-fluid figure-img"></p>
+<figcaption>(A) Histogram of infectiousness score for patients with a lab diagnosis of influenza. (B) Histogram of morbidity score for patients with a lab diagnosis of influenza.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="correlation-between-number-and-severity-of-symptoms" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-between-number-and-severity-of-symptoms">Correlation between number and severity of symptoms</h2>
+<p>The data we have available reports most of the symptoms as absence or presence. If more symptoms correlate positively with stronger symptoms, using absence/presence data only is a valid, albeit less powerful approach. More problematically is a situation in which the number and strength of symptoms correlate negatively. For example, a person having fewer symptoms might “make up” for the lower number of symptoms by having a more severe form. Such a relation would invalidate our approach of adding presence/absence symptoms to arrive at a given score. While we cannot thoroughly test potential correlations between the quantity and strength of symptoms on all our data, we do have severity information on the cough, weakness, and body aches symptoms. This allows us to evaluate the relation between the number of symptoms and the severity of those symptoms.</p>
+<p>We find that as the number of infectiousness-related symptoms (i.e., our infectiousness scores) increases, there is an increase in cough intensity (SM Figure @ref(fig:Infect1CoughFig)). The same relationship is found between the number of morbidity-related symptoms (i.e., our morbidity scores) and the severity of weakness and body aches (SM Figures @ref(fig:Morbidity1WeaknessFig) and @ref(fig:Morbidity1BodyAchesFig)). While not conclusive, this evidence suggests that our assumption that symptom absence/presence also captures symptom severity seems to be defensible.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/TransScorevsCoughIntensity_Lab_Score1.tiff" class="img-fluid figure-img"></p>
+<figcaption>Relationship between cough intensity and the infectiousness score from main text using all Y/N variables plausibly related to infectiousness.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/ImpactScorevsWeakness_Lab_Score1.tiff" class="img-fluid figure-img"></p>
+<figcaption>Relationship between weakness intensity and the morbidity score from main text using all Y/N variables related to morbidity.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/ImpactScorevsMyalgia_Lab_Score1.tiff" class="img-fluid figure-img"></p>
+<figcaption>Relationship between body ache intensity and the morbidity score from main text using all Y/N variables related to morbidity.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="alternative-approaches-to-calculate-the-infectiousness-score" class="level2">
+<h2 class="anchored" data-anchor-id="alternative-approaches-to-calculate-the-infectiousness-score">Alternative approaches to calculate the infectiousness score</h2>
+<p>In the main text, we use all of the available yes/no symptoms that can feasibly be related to infectiousness. Since there is no consensus about which symptoms or routes of transmission are the most important, we also consider how robust the results are using several different versions of infectiousness scores.</p>
+<p>While chest congestion might be a proxy for pathogen load, i.e., more congestion could indicate higher levels of a pathogen, in which case it could impact infectiousness. However, it is true that chest congestion alone without coughing or sneezing might not lead to increased infectiousness (though some recent studies suggest that breathing alone accounts for a large fraction of expelled influenza virions <span class="citation" data-cites="Yan2018">[<a href="#ref-Yan2018" role="doc-biblioref">1</a>]</span>). To explore if inclusion or exclusion of chest congestion in the infectiousness scores made a difference, we created a score excluding it to see if the overall conclusions would change. The new score values ranged from 0 to 4 (SM Figure @ref(fig:InfectScore2Fig)A).</p>
+<p>The same overall relationship is observed between the new infectiousness score and activity. There is still a curve. Spearman’s rank correlation indicates a negative relationship with (<span class="math inline">\(r=\)</span> -0.11 (95% CI: -0.22, -0.00)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 3.772, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> 0.05) (SM Figure @ref(fig:InfectScore2Fig)B).</p>
+<p>When compared to the morbidity score, the same overall trends from the primary analysis were observed. Spearman’s rank correlation (<span class="math inline">\(r=\)</span> 0.17 (95% CI: 0.06, 0.27)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 11.323, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01). We find a mean 1.5 fold increase in the new infectiousness score going from the lowest to the highest morbidity score (SM Figure @ref(fig:InfectScore2Fig)C).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/SM_TransScore2_Lab.tiff" class="img-fluid figure-img"></p>
+<figcaption>Infectiousness score without chest congestion</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>How patients define congestion symptoms is very subjective <span class="citation" data-cites="McCoul2019">[<a href="#ref-McCoul2019" role="doc-biblioref">2</a>]</span>, so we created a score excluding both of the congestion-related variables to see if the overall conclusions would change. The new score could have a value of 0 to 3 (SM Figure @ref(fig:InfectScore3Fig)A).</p>
+<p>The same overall relationship is observed between the new infectiousness score and activity. The curved relationship is not as clear but still present. Spearman’s rank correlation indicates negative relationship with (<span class="math inline">\(r=\)</span> -0.11 (95% CI: -0.22, -0.00)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 4.599, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> 0.03) (SM Figure @ref(fig:InfectScore3Fig)B).</p>
+<p>When compared to the morbidity score again, the same trends were observed, and Spearman’s rank correlation indicates positive relationship (<span class="math inline">\(r=\)</span> 0.16 (95% CI: 0.05, 0.26)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 10.023, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01). We find a mean 1.5 fold increase in the new infectiousness score going from the lowest to the highest morbidity score (SM Figure @ref(fig:InfectScore3Fig)C).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/SM_TransScore3_Lab.tiff" class="img-fluid figure-img"></p>
+<figcaption>Infectiousness score without chest and nasal congestion variables</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>For the score used in the main text, we included all relevant symptoms even if they can be considered strongly related. This might lead to potential double-counting of some symptoms. To evaluate if this might cause problems, we created an alternative score that removed highly correlated variables based on two cut off values of Yule’s Q <span class="citation" data-cites="Yule1919">[<a href="#ref-Yule1919" role="doc-biblioref">3</a>]</span>. There is no commonly used value to define a cut-off at which correlated variables should be removed. We decided to use an absolute correlation of 0.9 or 0.75 for our cut off. When using the 0.9 cut off only very strongly correlated variables were removed, while for the 0.75 even intermediately strong correlations lead to the removal of one of the variables <span class="citation" data-cites="Warrens2008">[<a href="#ref-Warrens2008" role="doc-biblioref">4</a>]</span>. For any pair of symptoms with a positive or negative correlation of 0.9 or greater, the more informative symptom (having the proportion Yes/No closest to 50%) was kept<span class="citation" data-cites="Kuhn2008">[<a href="#ref-Kuhn2008" role="doc-biblioref">5</a>]</span>. For our data, cough and chest congestion had a Yule’s Q of 0.933, and chest congestion had the best balance between yes and no responses, so it was kept. When relaxing the correlation to 0.75, there is no change in the variables included in the score.</p>
+<p>The score values range from 0 to 4 (SM Figure @ref(fig:InfectScore4Fig)A). The same overall relationship is observed between the new infectiousness score and activity. The curve is present, Spearman’s rank correlation indicates negative relationship with (<span class="math inline">\(r=\)</span> -0.16 (95% CI: -0.26, -0.05)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 7.138, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01) (SM Figure @ref(fig:InfectScore4Fig)B).</p>
+<p>When compared to the morbidity score again the same overall trends were observed with Spearman’s rank correlation indicates positive relationship (<span class="math inline">\(r=\)</span> 0.28 (95% CI: 0.18, 0.38)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 25.818, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01). We find a mean 2.1 fold increase in the new infectiousness score going from the lowest to the highest morbidity score (SM Figure @ref(fig:InfectScore4Fig)C).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/SM_TransScore4_Lab.tiff" class="img-fluid figure-img"></p>
+<figcaption>Infectiousness score removing variables determined to be redundant based on Yule’s Q</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="alternative-approaches-to-calculate-morbidity-score" class="level2">
+<h2 class="anchored" data-anchor-id="alternative-approaches-to-calculate-morbidity-score">Alternative approaches to calculate morbidity score</h2>
+<p>To see the impact of removing correlated variables from the morbidity score, we used the same methods applied to the infectiousness score above. Among the morbidity symptoms, only vomiting and weakness correlated greater than 0.9. Vomiting was included in the score since it was more balanced then weakness, which was present in 94% of patients. This score using 0.9 cut off had a possible range of 0 to 19. There are no patients with a morbidity score of 0,1,18,19 (SM Figure @ref(fig:ImpactScore2Fig)A). The same relationships observed in the main text are seen when the morbidity score is compared to activity and infectiousness scores.</p>
+<p>There is a negative correlation between the morbidity score, and the patient’s self-reported activity level suggests that higher morbidity score is associated with reduced activity levels. Spearman’s rank correlation indicates negative relationship (<span class="math inline">\(r=\)</span> -0.31 (95% CI: -0.41, -0.21)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 36.004, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01). We find a mean 4.3 fold decrease in activity level going from the lowest to the highest morbidity score (SM Figure @ref(fig:ImpactScore2Fig)B).</p>
+<p>There is a positive correlation between the morbidity and infectiousness scores show a positive correlation. Spearman’s rank correlation indicates positive relationship (<span class="math inline">\(r=\)</span> 0.28 (95% CI: 0.18, 0.38)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 25.942, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01). We find a mean 1.7 fold in the infectiousness score going from the lowest to the highest morbidity score (SM Figure @ref(fig:ImpactScore2Fig)C).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/SM_ImpactScore2_Lab.tiff" class="img-fluid figure-img"></p>
+<figcaption>Morbidity score removing variables determined to be redundant using the absolute value of Yule’s Q of 0.9 or more</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The score created using the 0.75 cut off was different, with a total of 6 symptoms being excluded. Starting with the highest correlations first: Weakness/Vomit (Q=1) keep vomit, Tooth pain/Headache (Q=.86) keep Tooth pain, Chills Sweats/SoreThroat (Q=-.8) keep Chills Sweats, Fatigue/BodyAches (Q=.80) keep BodyAches, Vomit/Nausea (Q=.79) keep Nausea, SubjectiveFever/ChillsSweats (Q=.76) keep SubjectiveFever. The 0.75 cut off morbidity score included Subjective Fever, Myalgia, Sleeplessness, Breathlessness, Wheezing, Chest pain, Abdominal Pain, Diarrhea, Nausea, Ear Pain, Tooth pain, Eye pain, Itchy Eyes, and Swollen Lymph Nodes. This morbidity score has a possible value of 0 to 14. Compared to the morbidity score used in the main text and 0.9 cut off there are now 12 patients with a score of 0 or 1, but there are still no patients with a score of 13 or 14. (SM Figure @ref(fig:ImpactScore3Fig)A). Again the overall results remain the same despite using a different version of the score.</p>
+<p>There is a negative correlation between the morbidity score and the patient’s self-reported activity level. Spearman’s rank correlation indicates negative relationship (<span class="math inline">\(r=\)</span> -0.26 (95% CI: -0.36, -0.16)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 24.987, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01). We find a mean 2.9 fold reduction in activity level going from the lowest to the highest morbidity score (SM Figure @ref(fig:ImpactScore3Fig)B).</p>
+<p>The relationship between the morbidity and infectiousness scores show a positive correlation. Spearman’s rank correlation indicates positive relationship (<span class="math inline">\(r=\)</span> 0.29 (95% CI: 0.18, 0.38)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 25.942, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01). We find a mean 1.7 fold increase in the infectiousness score going from the lowest to the highest morbidity score (SM Figure @ref(fig:ImpactScore3Fig)C).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/SM_ImpactScore3_Lab.tiff" class="img-fluid figure-img"></p>
+<figcaption>Morbidity score removing variables determined to be redundant using the absolute value of Yule’s Q of 0.75 or more</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="analysis-using-patients-with-any-diagnosis-influenza-lab-or-empiric" class="level1">
+<h1>Analysis using patients with any diagnosis influenza (Lab or Empiric)</h1>
+<section id="description-of-the-population" class="level2">
+<h2 class="anchored" data-anchor-id="description-of-the-population">Description of the population</h2>
+<p>Influenza diagnosis for our population is determined using three different methods a rapid antigen test, a PCR test, or an empirical diagnosis by a physician. In the main text, we considered any person who was diagnosed by either a rapid antigen or PCR test as having influenza. Here we repeat the analyses completed in the main text with the addition of patients with a diagnosis of influenza empirically based on symptoms. Patients with an empirical diagnosis are generally defined as having influenza-like illness (ILI). In total, there are 735 patients with any diagnosis of influenza. Among these patients, the activity levels ranged from 0 to 10, with a median of 4. All of the patients had symptoms of disease. The most common symptom is weakness, and the least common symptom is vomiting (SM Table @ref(tab:SympAnyTable)).</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption><strong>Out of the 735 patients included the table shows the number of patients who reported having the following symptoms and the corresponding percentage.</strong></caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Overall</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">735</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Abdominal Pain = Yes (%)</td>
+<td style="text-align: left;">93 (12.7)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Breathlessness = Yes (%)</td>
+<td style="text-align: left;">297 (40.4)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Chest Congestion = Yes (%)</td>
+<td style="text-align: left;">409 (55.6)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chest Pain = Yes (%)</td>
+<td style="text-align: left;">234 (31.8)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Chills/Sweats = Yes (%)</td>
+<td style="text-align: left;">604 (82.2)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cough = Yes (%)</td>
+<td style="text-align: left;">660 (89.8)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Diarrhea = Yes (%)</td>
+<td style="text-align: left;">99 (13.5)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ear Pain = Yes (%)</td>
+<td style="text-align: left;">162 (22.0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Eye Pain = Yes (%)</td>
+<td style="text-align: left;">113 (15.4)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fatigue = Yes (%)</td>
+<td style="text-align: left;">671 (91.3)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Headache = Yes (%)</td>
+<td style="text-align: left;">620 (84.4)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Itchy Eyes = Yes (%)</td>
+<td style="text-align: left;">182 (24.8)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myalgia = Yes (%)</td>
+<td style="text-align: left;">656 (89.3)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nasal Congestion = Yes (%)</td>
+<td style="text-align: left;">565 (76.9)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nausea = Yes (%)</td>
+<td style="text-align: left;">258 (35.1)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Runny Nose = Yes (%)</td>
+<td style="text-align: left;">524 (71.3)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sleeplessness = Yes (%)</td>
+<td style="text-align: left;">419 (57.0)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sneeze = Yes (%)</td>
+<td style="text-align: left;">395 (53.7)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sore Throat = Yes (%)</td>
+<td style="text-align: left;">614 (83.5)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Subjective Fever = Yes (%)</td>
+<td style="text-align: left;">505 (68.7)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Swollen Lymph Nodes = Yes (%)</td>
+<td style="text-align: left;">314 (42.7)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tooth Pain = Yes (%)</td>
+<td style="text-align: left;">166 (22.6)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Vomiting = Yes (%)</td>
+<td style="text-align: left;">79 (10.7)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Weakness = Yes (%)</td>
+<td style="text-align: left;">686 (93.3)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wheezing = Yes (%)</td>
+<td style="text-align: left;">221 (30.1)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="univariate-and-subset-selection-1" class="level2">
+<h2 class="anchored" data-anchor-id="univariate-and-subset-selection-1">Univariate and subset selection</h2>
+<p>We explored the univariate correlations between activity level and each symptom. All of the symptoms that were statistically significantly related to activity showed a negative correlation with activity level (SM Table @ref(tab:LmActvSympAny)). Based on the cross-validated variable selection, we found that a model that included chills/sweats, subjective fever, headache, weakness, sleeplessness, and vomiting creates the most predictive model (SM Table @ref(tab:LmActvSympAny)).</p>
+<table class="table">
+<caption><strong>Results of the univariate and multivariate linear regression of symptoms and activity. The coefficients are the estimated effect on activity when the symptom is present. The multivariate model was selected with a sequential forward floating selection, minimizing the root mean square error on test data through a 5-fold cross validation (20 times repeated). 95%CI = The 95% confidence interval for the coefficient.</strong></caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 3%">
+<col style="width: 9%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Dependent: Activity Level</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Mean (sd)</th>
+<th style="text-align: left;">Coefficient (univariable)</th>
+<th style="text-align: left;">Coefficient (multivariable)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Abdominal Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.8 (2.7)</td>
+<td style="text-align: left;">-0.78 (-1.35 to -0.20, p=0.008)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Breathlessness</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.6)</td>
+<td style="text-align: left;">-0.39 (-0.78 to 0.00, p=0.052)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chest Congestion</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.7 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.5)</td>
+<td style="text-align: left;">-0.49 (-0.88 to -0.11, p=0.012)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chest Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.8)</td>
+<td style="text-align: left;">-0.42 (-0.83 to -0.01, p=0.044)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chills/Sweats</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">6.2 (2.5)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.1 (2.5)</td>
+<td style="text-align: left;">-2.08 (-2.56 to -1.61, p&lt;0.001)</td>
+<td style="text-align: left;">-1.30 (-1.79 to -0.81, p&lt;0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cough</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.9 (2.8)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.4 (2.6)</td>
+<td style="text-align: left;">-0.48 (-1.11 to 0.15, p=0.137)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Diarrhea</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.7 (2.5)</td>
+<td style="text-align: left;">-0.85 (-1.41 to -0.29, p=0.003)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ear Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.5 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.7)</td>
+<td style="text-align: left;">-0.34 (-0.80 to 0.12, p=0.149)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Eye Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.5 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.5 (2.6)</td>
+<td style="text-align: left;">0.05 (-0.48 to 0.58, p=0.855)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fatigue</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.5 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.4 (2.6)</td>
+<td style="text-align: left;">-1.15 (-1.83 to -0.48, p=0.001)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Headache</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.6 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.3 (2.6)</td>
+<td style="text-align: left;">-1.34 (-1.86 to -0.82, p&lt;0.001)</td>
+<td style="text-align: left;">-0.91 (-1.39 to -0.43, p&lt;0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sleeplessness</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.0 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.5)</td>
+<td style="text-align: left;">-0.96 (-1.35 to -0.58, p&lt;0.001)</td>
+<td style="text-align: left;">-0.72 (-1.07 to -0.37, p&lt;0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Itchy Eyes</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.5 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.4 (2.5)</td>
+<td style="text-align: left;">-0.07 (-0.52 to 0.37, p=0.742)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Myalgia</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.5 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.3 (2.6)</td>
+<td style="text-align: left;">-1.14 (-1.75 to -0.53, p&lt;0.001)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nasal Congestion</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.8 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.4 (2.7)</td>
+<td style="text-align: left;">-0.39 (-0.84 to 0.07, p=0.096)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nausea</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.8 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.8 (2.5)</td>
+<td style="text-align: left;">-0.99 (-1.39 to -0.60, p&lt;0.001)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sore Throat</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.5 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.5 (2.6)</td>
+<td style="text-align: left;">-0.02 (-0.54 to 0.50, p=0.939)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Runny Nose</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.4 (2.6)</td>
+<td style="text-align: left;">-0.19 (-0.61 to 0.23, p=0.382)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sneeze</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.3 (2.6)</td>
+<td style="text-align: left;">-0.27 (-0.66 to 0.11, p=0.164)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Subjective Fever</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">5.6 (2.5)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.6)</td>
+<td style="text-align: left;">-1.62 (-2.01 to -1.22, p&lt;0.001)</td>
+<td style="text-align: left;">-0.92 (-1.33 to -0.51, p&lt;0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Swollen Lymph Nodes</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.5 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.4 (2.7)</td>
+<td style="text-align: left;">-0.13 (-0.52 to 0.25, p=0.495)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tooth Pain</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.2 (2.7)</td>
+<td style="text-align: left;">-0.40 (-0.86 to 0.05, p=0.084)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Vomiting</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.6 (2.6)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">3.1 (2.3)</td>
+<td style="text-align: left;">-1.57 (-2.18 to -0.96, p&lt;0.001)</td>
+<td style="text-align: left;">-1.27 (-1.84 to -0.71, p&lt;0.001)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Weakness</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">6.3 (2.5)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.3 (2.6)</td>
+<td style="text-align: left;">-1.98 (-2.73 to -1.22, p&lt;0.001)</td>
+<td style="text-align: left;">-0.92 (-1.64 to -0.21, p=0.011)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Wheezing</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">4.7 (2.7)</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">4.0 (2.5)</td>
+<td style="text-align: left;">-0.67 (-1.09 to -0.26, p=0.001)</td>
+<td style="text-align: left;">-</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="computation-of-infectiousness-and-morbidity-scores" class="level2">
+<h2 class="anchored" data-anchor-id="computation-of-infectiousness-and-morbidity-scores">Computation of infectiousness and morbidity scores</h2>
+<p>We used the same symptom classification presented in the main text. The median infectiousness score is 4, and a skewed distribution is present with most of the patients having a score of 4 or 5 (SM Figure @ref(fig:InfectScoreFig)).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/InfectScoreAnyBarChart.tiff" class="img-fluid figure-img"></p>
+<figcaption>Distribution of the infectiousness score.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The median morbidity score is 9, and no patients have a morbidity score of 0, 1, 19, 20 (SM Figure @ref(fig:MorbScoreFig)). Such a centered distribution is assumed to be a result of patients felling ill enough to seek medical care, but none were sick enough to require urgent care or hospitalization.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/MorbScoreAnyBarChart.tiff" class="img-fluid figure-img"></p>
+<figcaption>Distribution of the morbidity score.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="impact-of-infectiousness-score-on-activity" class="level2">
+<h2 class="anchored" data-anchor-id="impact-of-infectiousness-score-on-activity">Impact of infectiousness score on activity</h2>
+<p>Analysis of the impact of the infectiousness score on activity suggests that the value of this score has a negative correlation with the activity level. Spearman’s rank correlation is <span class="math inline">\(r =\)</span> -0.10 (95% CI: -0.17, -0.03) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 7.083, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p =\)</span> &lt; 0.01) (SM Figure @ref(fig:AnyTvAFig)). This is different from the main analysis were we did not observe a clear relationship between activity and the infectiousness score.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/ActivityVSTransScore_Any.tiff" class="img-fluid figure-img"></p>
+<figcaption>Activity level for each level of the infectiousness score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="impact-of-morbidity-score-on-activity" class="level2">
+<h2 class="anchored" data-anchor-id="impact-of-morbidity-score-on-activity">Impact of morbidity score on activity</h2>
+<p>Analysis of the impact of the morbidity score on activity suggests that the value of this score is correlated with the activity level of a patient, with higher morbidity correlating with reduced activity. Spearman’s rank correlation indicates a negative relationship <span class="math inline">\(r =\)</span> -0.32 (95% CI: -0.38, -0.25) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 78.501, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01) (SM Figure @ref(fig:AnyMvAFig)). The observed pattern is clear, with a mean 3.6 fold decrease in activity level going from the lowest to the highest morbidity score.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/ActivityVSImpactScore_Any.tiff" class="img-fluid figure-img"></p>
+<figcaption>Activity level for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="impact-of-morbidity-score-on-infectiousness-score" class="level2">
+<h2 class="anchored" data-anchor-id="impact-of-morbidity-score-on-infectiousness-score">Impact of morbidity score on infectiousness score</h2>
+<p>Analysis of the relationship between the morbidity and infectiousness scores show a positive correlation. Spearman’s rank correlation indicates a positive relationship ( <span class="math inline">\(r =\)</span> 0.26 (95% CI: 0.19, 0.33)) and the Cochran-Mantel-Haenszel trend test is statistically significant (<span class="math inline">\(\chi^2 =\)</span> 44.505, <span class="math inline">\(df =\)</span> 1, <span class="math inline">\(p\)</span> &lt; 0.01) (SM Figure @ref(fig:AnyMvTFig)). Apart from the values activity levels for low morbidity score (with small sample sizes), the pattern is consistent with a mean 1.7 fold increase in the infectiousness score going from the lowest to the highest morbidity score.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../5 Results/Figures/TransScoreVSImpactScore_Any.tiff" class="img-fluid figure-img"></p>
+<figcaption>Infectiousness score for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="references" class="level1">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-Yan2018" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Yan J <em>et al.</em> 2018 Infectious virus in exhaled breath of symptomatic seasonal influenza cases from a college community. <em>Proceedings of the National Academy of Sciences</em> <strong>115</strong>, 1081–1086.</div>
+</div>
+<div id="ref-McCoul2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">McCoul ED, Mohammed AE, Debbaneh PM, Carratola M, Patel AS. 2019 <span class="nocase">Differences in the Intended Meaning of Congestion Between Patients and Clinicians</span>. <em>JAMA Otolaryngology–Head &amp; Neck Surgery</em> <strong>145</strong>, 634–640. (doi:<a href="https://doi.org/10.1001/jamaoto.2019.1023">10.1001/jamaoto.2019.1023</a>)</div>
+</div>
+<div id="ref-Yule1919" class="csl-entry" role="listitem">
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Yule GU. 1919 <em>An introduction to the theory of statistics</em>. C. Griffin, limited. </div>
+</div>
+<div id="ref-Warrens2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Warrens MJ. 2008 On association coefficients for 2<span class="math inline">\(\times\)</span> 2 tables and properties that do not depend on the marginal distributions. <em>Psychometrika</em> <strong>73</strong>, 777.</div>
+</div>
+<div id="ref-Kuhn2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">5. </div><div class="csl-right-inline">Kuhn M <em>et al.</em> 2008 Building predictive models in r using the caret package. <em>Journal of Statistical Software</em> <strong>28</strong>, 1–26.</div>
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

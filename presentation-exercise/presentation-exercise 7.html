@@ -1,0 +1,2744 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.537">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Taylor Glass Data Analysis Portfolio - Presentation Exercise</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Taylor Glass Data Analysis Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../aboutme.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="../starter-analysis-exercise/products/report/starter-analysis-report.html">
+ <span class="dropdown-text">Starter Analysis Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../coding-exercise/coding-exercise.html">
+ <span class="dropdown-text">R Coding Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../presentation-exercise/presentation-exercise.html">
+ <span class="dropdown-text">Presentation Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../tidytuesday-exercise/tidytuesday-exercise.html">
+ <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../data-exercise/data-exercise.html">
+ <span class="dropdown-text">Data Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../cdcdata-exercise/cdcdata-exercise.html">
+ <span class="dropdown-text">CDC Data Analysis Exercise</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/taylorglass16/taylorglass-MADA-portfolio"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Presentation Exercise</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="get-the-original-data" class="level2">
+<h2 class="anchored" data-anchor-id="get-the-original-data">Get the original data</h2>
+<p>I found this data set from the FiveThirtyEight website about American opinions on the Coronavirus in relation to political events from March 2020 to April 2021: https://data.fivethirtyeight.com/ I chose to use the <code>covid_concern_polls.csv</code> file to recreate the graph about how worried Americans are about Covid infection. I examined the data to discover there are start and end dates for each response and four levels of worry for each topic: very, somewhat, not very, and not at all, which are all represented on the graph I want to replicate. There are 678 observations of 15 variables stored in this dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>here() starts at /Users/taylorglass/Documents/MADA /taylorglass-MADA-portfolio</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pollsdata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"presentation-exercise"</span>, <span class="st">"covid_concern_polls.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 678 Columns: 15</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (7): pollster, sponsor, population, party, subject, text, url
+dbl  (5): sample_size, very, somewhat, not_very, not_at_all
+lgl  (1): tracking
+date (2): start_date, end_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(pollsdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [678 × 15] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ start_date : Date[1:678], format: "2020-01-27" "2020-01-31" ...
+ $ end_date   : Date[1:678], format: "2020-01-29" "2020-02-02" ...
+ $ pollster   : chr [1:678] "Morning Consult" "Morning Consult" "YouGov" "Morning Consult" ...
+ $ sponsor    : chr [1:678] NA NA "Economist" NA ...
+ $ sample_size: num [1:678] 2202 2202 1500 2200 1000 ...
+ $ population : chr [1:678] "a" "a" "a" "a" ...
+ $ party      : chr [1:678] "all" "all" "all" "all" ...
+ $ subject    : chr [1:678] "concern-economy" "concern-economy" "concern-infected" "concern-economy" ...
+ $ tracking   : logi [1:678] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ text       : chr [1:678] "How concerned are you that the coronavirus will impact the following? U.S. economy" "How concerned are you that the coronavirus will impact the following? U.S. economy" "Taking into consideration both your risk of contracting it and the seriousness of the illness, how worried are "| __truncated__ "How concerned are you that the coronavirus will impact the following? U.S. economy" ...
+ $ very       : num [1:678] 19 26 13 23 11 11 22 22 22 10 ...
+ $ somewhat   : num [1:678] 33 32 26 32 24 28 23 35 21 28 ...
+ $ not_very   : num [1:678] 23 25 43 24 33 39 37 28 33 42 ...
+ $ not_at_all : num [1:678] 11 7 18 9 20 22 19 15 23 19 ...
+ $ url        : chr [1:678] "https://morningconsult.com/wp-content/uploads/2020/02/200167_crosstabs_CORONAVIRUS_Adults_v2_JB-1.pdf" "https://morningconsult.com/wp-content/uploads/2020/02/200191_crosstabs_CORONAVIRUS_Adults_v2_JB-1.pdf" "https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/73jqd6u5mv/econTabReport.pdf" "https://morningconsult.com/wp-content/uploads/2020/02/200214_crosstabs_CORONAVIRUS_Adults_v4_JB.pdf" ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   start_date = col_date(format = ""),
+  ..   end_date = col_date(format = ""),
+  ..   pollster = col_character(),
+  ..   sponsor = col_character(),
+  ..   sample_size = col_double(),
+  ..   population = col_character(),
+  ..   party = col_character(),
+  ..   subject = col_character(),
+  ..   tracking = col_logical(),
+  ..   text = col_character(),
+  ..   very = col_double(),
+  ..   somewhat = col_double(),
+  ..   not_very = col_double(),
+  ..   not_at_all = col_double(),
+  ..   url = col_character()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pollsdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 678  15</code></pre>
+</div>
+</div>
+</section>
+<section id="ask-ai-to-recreate-the-original-graph" class="level2">
+<h2 class="anchored" data-anchor-id="ask-ai-to-recreate-the-original-graph">Ask AI to recreate the original graph</h2>
+<p>This is the original prompt that I asked ChatGPT 3.5: R code to generate the graph titled “How worried are Americans about infection?” on this website https://projects.fivethirtyeight.com/coronavirus-polls/ using the covid_concern_polls.csv file from this github repository https://github.com/fivethirtyeight/covid-19-polls</p>
+<p>I used the links to the website and GitHub repository to ensure that it knew which graph I am trying to recreate, which has been saved as <code>Inspiration_graph.png</code> in the <code>presentation-exercise</code> folder. The first step it gave me was to load three packages: readr, dplyr, and ggplot2. The second step was to save the data as an object, which I have already done. Next, it suggested filtering the data for the question regarding infection: “How worried are you about personally being infected with coronavirus?”. I made several modifications to the code because it did not know the object name that I stored my data in, and it did not know the exact verbiage of the question that was asked. This was not successful because I do not have one “estimate” for the percentage of people in each of the worry categories ranging from <code>not_at_all</code> to <code>very</code>. I should have known that this code would not be accurate because it said these steps will produce a polar bar graph when I am trying to produce a line graph. I commented out this code for the sake of rendering my website with this exercise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load required packages</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># modified filtering code</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># concern_data &lt;- pollsdata %&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a> <span class="co"># filter(text == "How worried are you about you or someone in your family being infected with the Coronavirus??") %&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a> <span class="co"># select(starts_with("estimate"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is the second prompt I asked ChatGPT: R code to produce a line graph with percentages of four different categories “very”, “somewhat”, “not very”, and “not at all” on the y-axis and time on the x-axis using the covid_concern_polls.csv file from this github repository https://github.com/fivethirtyeight/covid-19-polls</p>
+<p>I asked for a line graph specifically, and I know that I need to create variables with the percentages of each response category. I filtered for the question of interest and found there were only 2 observations with a response to this question. The graph models how concerned Americans are that they, someone in their family or someone else they know will be infected with Coronavirus, so I filtered for responses to all of the questions asking about “concern” over Coronavirus infections, which yielded 77 observations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter for all responses about Coronavirus concern</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>concern_data <span class="ot">&lt;-</span> pollsdata <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(text <span class="sc">==</span> <span class="st">"How worried are you about you or someone in your family being infected with the Coronavirus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"Are you concerned, or not concerned about yourself personally or a close family member getting the coronavirus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned are you personally about catching coronavirus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned are you that someone you care about will get the coronavirus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned are you that you could catch the COVID-19 virus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned are you that you or someone in your family will contract the coronavirus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned are you that you or someone in your family will get sick from the coronavirus: very concerned, somewhat concerned, not too concerned, or not concerned at all?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned are you that you or someone you know will be infected with the coronavirus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned are you that you, personally, will get the coronavirus?"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned, if at all, do you currently feel about the following: - Family members getting coronavirus"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How concerned, if at all, do you currently feel about the following: - Getting coronavirus yourself"</span> <span class="sc">|</span> text <span class="sc">==</span> <span class="st">"How personally concerned are you about the chances of you or someone in your family becoming infected with the coronavirus?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The next suggestion from ChatGPT was to create percentages for each of the response variables. The first variable that had to be changed here is the grouping factor because <code>modeldate</code> was not included in the original dataset. Additionally, there were no “estimate” variables, so I just used the column names instead because each column had count data for that observation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group data by date and calculate percentages for each category</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>concern_data2 <span class="ot">&lt;-</span> concern_data <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(end_date) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">very_percent =</span> <span class="fu">sum</span>(very) <span class="sc">/</span> <span class="fu">n</span>(),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">somewhat_percent =</span> <span class="fu">sum</span>(somewhat) <span class="sc">/</span> <span class="fu">n</span>(),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">not_very_percent =</span> <span class="fu">sum</span>(not_very) <span class="sc">/</span> <span class="fu">n</span>(),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">not_at_all_percent =</span> <span class="fu">sum</span>(not_at_all) <span class="sc">/</span> <span class="fu">n</span>()</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># check that it worked </span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(concern_data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [69 × 5] (S3: tbl_df/tbl/data.frame)
+ $ end_date          : Date[1:69], format: "2020-02-09" "2020-02-16" ...
+ $ very_percent      : num [1:69] 11 22 16 24 22.3 ...
+ $ somewhat_percent  : num [1:69] 24 23 31 33 36.3 ...
+ $ not_very_percent  : num [1:69] 33 37 27 30 26.3 ...
+ $ not_at_all_percent: num [1:69] 20 19 16 12 11.3 ...</code></pre>
+</div>
+</div>
+<p>ChatGPT suggested changing the shape of the data before attempting to visualize it. It did not account for the fact that I need the <code>tidyr</code> package to use the pivot_longer() function, so I loaded that package here. This transformation left me with a data set with 276 observations of 3 variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># convert shape of the dataset</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>concern_data_long <span class="ot">&lt;-</span> concern_data2 <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(very_percent, somewhat_percent, not_very_percent, not_at_all_percent),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Concern Level"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Percentage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lastly, I attempted to recreate the plot from the original webpage. The first attempt is not bad, but it looks like I have missing data in the “not_at_all_percent” variable which was not the case in the graph on the website.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># attempt to recreate the original plot</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>graph1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(concern_data_long, <span class="fu">aes</span>(<span class="at">x =</span> end_date, <span class="at">y =</span> Percentage, <span class="at">color =</span> <span class="st">`</span><span class="at">Concern Level</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"COVID-19 Concern Levels Over Time"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Percentage"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Concern Level"</span>) <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>graph1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values (`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation-exercise_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>After finding there are 6 missing observations of the <code>Percentage</code> variable, I decided to omit those values because they account for such a minimal percentage of total observations, which fixed the strange gap in the line graph.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># explore for missing data and remove it</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(concern_data_long<span class="sc">$</span>Percentage))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>concern_data_long <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(concern_data_long)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># check that missing data removal fixed the issue</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>graph2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(concern_data_long, <span class="fu">aes</span>(<span class="at">x =</span> end_date, <span class="at">y =</span> Percentage, <span class="at">color =</span> <span class="st">`</span><span class="at">Concern Level</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"COVID-19 Concern Levels Over Time"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Percentage"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Concern Level"</span>) <span class="sc">+</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>graph2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation-exercise_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I need to make aesthetic changes, so the replicated graph matches the original graph more accurately. The title needs to be changed and centered. I used ChatGPT to create code to separate the title into three lines and change the size of the second title line, so it will fit better. I got a warning message that vectorized input to element_text is not supported in ggplot2, so all three lines of the title are the same size. The original x-axis labels each month, so I created custom labels and dropped the “date” label for the entire axis. While the original graph is interactive, that is slightly out of reach with my coding knowledge right now, so I decided to keep the stagnant legend. I noticed the legend was inverted, so I corrected that. I manually changed the colors of the lines using hex codes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create 14 breaks for the x-axis and custom labels for each break</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2020-02-28"</span>), <span class="at">by =</span> <span class="st">"month"</span>, <span class="at">length.out =</span> <span class="dv">14</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>custom_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"3/1/20"</span>, <span class="st">"4/1"</span>, <span class="st">"5/1"</span>, <span class="st">"6/1"</span>, <span class="st">"7/1"</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"8/1"</span>, <span class="st">"9/1"</span>, <span class="st">"10/1"</span>, <span class="st">"11/1"</span>, <span class="st">"12/1"</span>, <span class="st">"1/1/21"</span>, <span class="st">"2/1"</span>, <span class="st">"3/1"</span>, <span class="st">"4/1"</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create updated version of the graph with modificationss</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>graph3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(concern_data_long, <span class="fu">aes</span>(<span class="at">x =</span> end_date, <span class="at">y =</span> Percentage, <span class="at">color =</span> <span class="st">`</span><span class="at">Concern Level</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#800080"</span>,<span class="st">"#BA55D3"</span>,<span class="st">"#FFDAB9"</span>,<span class="st">"#FF0000"</span>)) <span class="sc">+</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"How worried are Americans about infection?"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"How concerned Americans say that they, someone in their family or someone else they know will"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, <span class="st">"become infected with the coronavirus"</span>)) <span class="sc">+</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">size =</span> <span class="dv">8</span>)) <span class="sc">+</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> breaks, <span class="at">labels =</span> custom_labels) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="cn">NULL</span>) <span class="sc">+</span> </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>graph3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="presentation-exercise_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Lastly, I need to add labels on specific dates. I used this simple prompt in ChatGPT: how to add labels to specific dates on a line graph. It suggested adding a geom_text() layer. I had to go back and forth with ChatGPT a couple times to find a date format that worked. Unfortunately, I received a consistent error about the geom_text() layer not being able to find the <code>Percentage</code> variable which prevented it from adding the labels onto my existing graph. I attempted the same format with geom_label() and got the same error. I added an arbitrary <code>Percentage</code> variable to the labels_data just to see if that would fix the error, but it was also unsuccessful. I would appreciate any input on how to solve this error. I commented out the last piece of code for the sake of rendering my website.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create custom labels to be added as another layer on the original graph </span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>labels_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">modeldate =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2020-02-29"</span>, <span class="st">"2020-05-28"</span>, <span class="st">"2020-10-02"</span>, <span class="st">"2020-11-07"</span>, <span class="st">"2021-01-02"</span>)),  </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_text =</span> <span class="fu">c</span>(<span class="st">"First US death reported"</span>, <span class="st">"US deaths surpass 100,000"</span>, <span class="st">"Trump diagnosed with Covid-19"</span>, <span class="st">"Biden declared election winner"</span>, <span class="st">"Biden sworn into office"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Percentage =</span> <span class="fu">c</span>(<span class="dv">60</span>, <span class="dv">60</span>, <span class="dv">60</span>, <span class="dv">60</span>, <span class="dv">60</span>))</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a> <span class="do">## graph4 &lt;- graph3 + </span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a> <span class="do">##  geom_label(data = labels_data, aes(x = modeldate, y=Percentage, label = label_text))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Since Dr.&nbsp;Handel recommended that new users begin with the <code>gt</code> package when creating tables, I specifically asked ChatGPT to use that package with this prompt: R code using the gt package to create a table displaying the percentages for four categories (very, somewhat, not very, not at all) for each daily observation. I am using the same data from the exercise above, which is stored as <code>concern_data2</code>.</p>
+<p>The original code provided by ChatGPT had outdated syntax in the column argument of the tab_spanner() function, so I updated that using the simple c() function. I also had to add the real variable names found in <code>concern_data2</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># generate publication quality table</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> concern_data2 <span class="sc">%&gt;%</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Percentage"</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(very_percent, somewhat_percent, not_very_percent, not_at_all_percent)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Observations with Percentage Breakdown"</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>table1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="qbhwgkneiu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qbhwgkneiu table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#qbhwgkneiu thead, #qbhwgkneiu tbody, #qbhwgkneiu tfoot, #qbhwgkneiu tr, #qbhwgkneiu td, #qbhwgkneiu th {
+  border-style: none;
+}
+
+#qbhwgkneiu p {
+  margin: 0;
+  padding: 0;
+}
+
+#qbhwgkneiu .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#qbhwgkneiu .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#qbhwgkneiu .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#qbhwgkneiu .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#qbhwgkneiu .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#qbhwgkneiu .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#qbhwgkneiu .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#qbhwgkneiu .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#qbhwgkneiu .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#qbhwgkneiu .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#qbhwgkneiu .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#qbhwgkneiu .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#qbhwgkneiu .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#qbhwgkneiu .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#qbhwgkneiu .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qbhwgkneiu .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#qbhwgkneiu .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#qbhwgkneiu .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#qbhwgkneiu .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qbhwgkneiu .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#qbhwgkneiu .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qbhwgkneiu .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#qbhwgkneiu .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qbhwgkneiu .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qbhwgkneiu .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qbhwgkneiu .gt_left {
+  text-align: left;
+}
+
+#qbhwgkneiu .gt_center {
+  text-align: center;
+}
+
+#qbhwgkneiu .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#qbhwgkneiu .gt_font_normal {
+  font-weight: normal;
+}
+
+#qbhwgkneiu .gt_font_bold {
+  font-weight: bold;
+}
+
+#qbhwgkneiu .gt_font_italic {
+  font-style: italic;
+}
+
+#qbhwgkneiu .gt_super {
+  font-size: 65%;
+}
+
+#qbhwgkneiu .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#qbhwgkneiu .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#qbhwgkneiu .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#qbhwgkneiu .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#qbhwgkneiu .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#qbhwgkneiu .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#qbhwgkneiu .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">Observations with Percentage Breakdown</th>
+</tr>
+<tr class="odd gt_col_headings gt_spanner_row">
+<th rowspan="2" id="end_date" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">end_date</th>
+<th colspan="4" id="Percentage" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Percentage</span></th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="very_percent" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">very_percent</th>
+<th id="somewhat_percent" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">somewhat_percent</th>
+<th id="not_very_percent" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">not_very_percent</th>
+<th id="not_at_all_percent" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">not_at_all_percent</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-02-09</td>
+<td class="gt_row gt_right" headers="very_percent">11.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">24.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">20.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-02-16</td>
+<td class="gt_row gt_right" headers="very_percent">22.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">23.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">37.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">19.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-02-28</td>
+<td class="gt_row gt_right" headers="very_percent">16.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">31.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">27.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">16.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-03-03</td>
+<td class="gt_row gt_right" headers="very_percent">24.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">30.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">12.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-03-12</td>
+<td class="gt_row gt_right" headers="very_percent">22.33333</td>
+<td class="gt_row gt_right" headers="somewhat_percent">36.33333</td>
+<td class="gt_row gt_right" headers="not_very_percent">26.33333</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">11.333333</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-03-15</td>
+<td class="gt_row gt_right" headers="very_percent">28.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">23.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-03-16</td>
+<td class="gt_row gt_right" headers="very_percent">31.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">35.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">23.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-03-19</td>
+<td class="gt_row gt_right" headers="very_percent">27.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">41.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">22.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.500000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-03-22</td>
+<td class="gt_row gt_right" headers="very_percent">40.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">32.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">18.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-03-24</td>
+<td class="gt_row gt_right" headers="very_percent">43.50000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">18.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-03-25</td>
+<td class="gt_row gt_right" headers="very_percent">32.50000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">42.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.50000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">7.500000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-03-31</td>
+<td class="gt_row gt_right" headers="very_percent">38.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">41.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">13.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-04-02</td>
+<td class="gt_row gt_right" headers="very_percent">50.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">39.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">9.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">2.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-04-04</td>
+<td class="gt_row gt_right" headers="very_percent">46.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">13.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">5.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-04-07</td>
+<td class="gt_row gt_right" headers="very_percent">39.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">37.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">18.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-04-09</td>
+<td class="gt_row gt_right" headers="very_percent">43.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">43.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">11.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">3.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-04-12</td>
+<td class="gt_row gt_right" headers="very_percent">35.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">39.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">14.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-04-16</td>
+<td class="gt_row gt_right" headers="very_percent">41.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">40.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">15.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">5.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-04-19</td>
+<td class="gt_row gt_right" headers="very_percent">36.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">36.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">16.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-04-21</td>
+<td class="gt_row gt_right" headers="very_percent">60.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">27.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">13.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">1.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-04-23</td>
+<td class="gt_row gt_right" headers="very_percent">42.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">40.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">14.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">4.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-04-26</td>
+<td class="gt_row gt_right" headers="very_percent">39.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">32.66667</td>
+<td class="gt_row gt_right" headers="not_very_percent">16.66667</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.333333</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-04-30</td>
+<td class="gt_row gt_right" headers="very_percent">39.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">42.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">13.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">4.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-05-03</td>
+<td class="gt_row gt_right" headers="very_percent">32.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">40.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">16.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-05-07</td>
+<td class="gt_row gt_right" headers="very_percent">35.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">42.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-05-10</td>
+<td class="gt_row gt_right" headers="very_percent">33.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">35.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-05-14</td>
+<td class="gt_row gt_right" headers="very_percent">36.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">43.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">5.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-05-17</td>
+<td class="gt_row gt_right" headers="very_percent">34.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">40.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">16.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">7.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-05-20</td>
+<td class="gt_row gt_right" headers="very_percent">40.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">34.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.50000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-05-21</td>
+<td class="gt_row gt_right" headers="very_percent">36.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">42.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">15.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">7.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-05-24</td>
+<td class="gt_row gt_right" headers="very_percent">32.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">34.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">21.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-05-31</td>
+<td class="gt_row gt_right" headers="very_percent">29.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">36.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">21.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-06-07</td>
+<td class="gt_row gt_right" headers="very_percent">26.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">36.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">23.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">11.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-06-11</td>
+<td class="gt_row gt_right" headers="very_percent">28.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">41.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">23.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-06-14</td>
+<td class="gt_row gt_right" headers="very_percent">29.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">37.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">11.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-06-16</td>
+<td class="gt_row gt_right" headers="very_percent">46.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">27.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">27.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">1.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-06-22</td>
+<td class="gt_row gt_right" headers="very_percent">31.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">38.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">18.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-06-25</td>
+<td class="gt_row gt_right" headers="very_percent">34.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">43.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">5.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-06-29</td>
+<td class="gt_row gt_right" headers="very_percent">33.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">38.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">18.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-07-06</td>
+<td class="gt_row gt_right" headers="very_percent">35.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">36.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">15.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-07-12</td>
+<td class="gt_row gt_right" headers="very_percent">38.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">34.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">15.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-07-19</td>
+<td class="gt_row gt_right" headers="very_percent">37.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">34.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">16.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-07-22</td>
+<td class="gt_row gt_right" headers="very_percent">51.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">28.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">20.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">1.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-07-23</td>
+<td class="gt_row gt_right" headers="very_percent">37.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">40.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-07-27</td>
+<td class="gt_row gt_right" headers="very_percent">38.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-08-03</td>
+<td class="gt_row gt_right" headers="very_percent">38.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">31.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-08-10</td>
+<td class="gt_row gt_right" headers="very_percent">38.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">35.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">16.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-08-17</td>
+<td class="gt_row gt_right" headers="very_percent">36.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">34.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">18.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">7.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-08-18</td>
+<td class="gt_row gt_right" headers="very_percent">49.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">29.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">20.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">2.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-08-22</td>
+<td class="gt_row gt_right" headers="very_percent">37.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-08-29</td>
+<td class="gt_row gt_right" headers="very_percent">31.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">37.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-09-14</td>
+<td class="gt_row gt_right" headers="very_percent">31.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">22.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">9.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-09-19</td>
+<td class="gt_row gt_right" headers="very_percent">29.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">43.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">10.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-09-25</td>
+<td class="gt_row gt_right" headers="very_percent">49.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">26.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">24.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">1.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-10-03</td>
+<td class="gt_row gt_right" headers="very_percent">37.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">44.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">13.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">6.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-10-22</td>
+<td class="gt_row gt_right" headers="very_percent">49.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">27.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">23.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-10-24</td>
+<td class="gt_row gt_right" headers="very_percent">36.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">41.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">15.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">7.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-10-27</td>
+<td class="gt_row gt_right" headers="very_percent">34.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">20.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">11.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-11-16</td>
+<td class="gt_row gt_right" headers="very_percent">38.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">31.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">12.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-11-20</td>
+<td class="gt_row gt_right" headers="very_percent">47.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">28.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">23.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2020-11-22</td>
+<td class="gt_row gt_right" headers="very_percent">36.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">39.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">17.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2020-12-17</td>
+<td class="gt_row gt_right" headers="very_percent">45.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">28.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">26.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2021-01-15</td>
+<td class="gt_row gt_right" headers="very_percent">34.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">35.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">12.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2021-01-26</td>
+<td class="gt_row gt_right" headers="very_percent">52.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">25.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">20.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2021-02-07</td>
+<td class="gt_row gt_right" headers="very_percent">32.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">33.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">19.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">11.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2021-02-18</td>
+<td class="gt_row gt_right" headers="very_percent">50.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">29.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">20.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2021-03-06</td>
+<td class="gt_row gt_right" headers="very_percent">27.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">45.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">20.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">8.000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="end_date">2021-03-13</td>
+<td class="gt_row gt_right" headers="very_percent">29.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">39.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">21.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">11.000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="end_date">2021-03-21</td>
+<td class="gt_row gt_right" headers="very_percent">35.00000</td>
+<td class="gt_row gt_right" headers="somewhat_percent">28.00000</td>
+<td class="gt_row gt_right" headers="not_very_percent">32.00000</td>
+<td class="gt_row gt_right" headers="not_at_all_percent">NA</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The first table looks decent, but I want to clean up a few things. I added a more descriptive title and renamed the columns, so the table would not contain variable names. I felt like it was unnecessary to have 5 decimal points for each percentage, so I limited the decimals to 1 place using the fmt_number() function. The result is a clean and publication-quality table.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>table2 <span class="ot">&lt;-</span> concern_data2 <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Date"</span> <span class="ot">=</span> end_date,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Very"</span> <span class="ot">=</span> very_percent,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Somewhat"</span> <span class="ot">=</span> somewhat_percent,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Not Very"</span> <span class="ot">=</span> not_very_percent,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Not at all"</span> <span class="ot">=</span> not_at_all_percent) <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Percentage"</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Very"</span>, <span class="st">"Somewhat"</span>, <span class="st">"Not Very"</span>, <span class="st">"Not at all"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Levels of concern about COVID-19 infections among Americans"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Very"</span>, <span class="st">"Somewhat"</span>, <span class="st">"Not Very"</span>, <span class="st">"Not at all"</span>),</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">decimals =</span> <span class="dv">1</span>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>table2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="gftknjghxz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gftknjghxz table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#gftknjghxz thead, #gftknjghxz tbody, #gftknjghxz tfoot, #gftknjghxz tr, #gftknjghxz td, #gftknjghxz th {
+  border-style: none;
+}
+
+#gftknjghxz p {
+  margin: 0;
+  padding: 0;
+}
+
+#gftknjghxz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#gftknjghxz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#gftknjghxz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#gftknjghxz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#gftknjghxz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#gftknjghxz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#gftknjghxz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#gftknjghxz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#gftknjghxz .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#gftknjghxz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#gftknjghxz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#gftknjghxz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#gftknjghxz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#gftknjghxz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#gftknjghxz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gftknjghxz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#gftknjghxz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#gftknjghxz .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#gftknjghxz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gftknjghxz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#gftknjghxz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gftknjghxz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#gftknjghxz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gftknjghxz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gftknjghxz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gftknjghxz .gt_left {
+  text-align: left;
+}
+
+#gftknjghxz .gt_center {
+  text-align: center;
+}
+
+#gftknjghxz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#gftknjghxz .gt_font_normal {
+  font-weight: normal;
+}
+
+#gftknjghxz .gt_font_bold {
+  font-weight: bold;
+}
+
+#gftknjghxz .gt_font_italic {
+  font-style: italic;
+}
+
+#gftknjghxz .gt_super {
+  font-size: 65%;
+}
+
+#gftknjghxz .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#gftknjghxz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#gftknjghxz .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#gftknjghxz .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#gftknjghxz .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#gftknjghxz .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#gftknjghxz .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">Levels of concern about COVID-19 infections among Americans</th>
+</tr>
+<tr class="odd gt_col_headings gt_spanner_row">
+<th rowspan="2" id="Date" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Date</th>
+<th colspan="4" id="Percentage" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><span class="gt_column_spanner">Percentage</span></th>
+</tr>
+<tr class="header gt_col_headings">
+<th id="Very" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Very</th>
+<th id="Somewhat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Somewhat</th>
+<th id="Not Very" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Not Very</th>
+<th id="Not at all" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Not at all</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-02-09</td>
+<td class="gt_row gt_right" headers="Very">11.0</td>
+<td class="gt_row gt_right" headers="Somewhat">24.0</td>
+<td class="gt_row gt_right" headers="Not Very">33.0</td>
+<td class="gt_row gt_right" headers="Not at all">20.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-02-16</td>
+<td class="gt_row gt_right" headers="Very">22.0</td>
+<td class="gt_row gt_right" headers="Somewhat">23.0</td>
+<td class="gt_row gt_right" headers="Not Very">37.0</td>
+<td class="gt_row gt_right" headers="Not at all">19.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-02-28</td>
+<td class="gt_row gt_right" headers="Very">16.0</td>
+<td class="gt_row gt_right" headers="Somewhat">31.0</td>
+<td class="gt_row gt_right" headers="Not Very">27.0</td>
+<td class="gt_row gt_right" headers="Not at all">16.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-03-03</td>
+<td class="gt_row gt_right" headers="Very">24.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">30.0</td>
+<td class="gt_row gt_right" headers="Not at all">12.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-03-12</td>
+<td class="gt_row gt_right" headers="Very">22.3</td>
+<td class="gt_row gt_right" headers="Somewhat">36.3</td>
+<td class="gt_row gt_right" headers="Not Very">26.3</td>
+<td class="gt_row gt_right" headers="Not at all">11.3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-03-15</td>
+<td class="gt_row gt_right" headers="Very">28.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">23.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-03-16</td>
+<td class="gt_row gt_right" headers="Very">31.0</td>
+<td class="gt_row gt_right" headers="Somewhat">35.0</td>
+<td class="gt_row gt_right" headers="Not Very">23.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-03-19</td>
+<td class="gt_row gt_right" headers="Very">27.0</td>
+<td class="gt_row gt_right" headers="Somewhat">41.0</td>
+<td class="gt_row gt_right" headers="Not Very">22.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-03-22</td>
+<td class="gt_row gt_right" headers="Very">40.0</td>
+<td class="gt_row gt_right" headers="Somewhat">32.0</td>
+<td class="gt_row gt_right" headers="Not Very">18.0</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-03-24</td>
+<td class="gt_row gt_right" headers="Very">43.5</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">18.0</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-03-25</td>
+<td class="gt_row gt_right" headers="Very">32.5</td>
+<td class="gt_row gt_right" headers="Somewhat">42.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.5</td>
+<td class="gt_row gt_right" headers="Not at all">7.5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-03-31</td>
+<td class="gt_row gt_right" headers="Very">38.0</td>
+<td class="gt_row gt_right" headers="Somewhat">41.0</td>
+<td class="gt_row gt_right" headers="Not Very">13.0</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-04-02</td>
+<td class="gt_row gt_right" headers="Very">50.0</td>
+<td class="gt_row gt_right" headers="Somewhat">39.0</td>
+<td class="gt_row gt_right" headers="Not Very">9.0</td>
+<td class="gt_row gt_right" headers="Not at all">2.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-04-04</td>
+<td class="gt_row gt_right" headers="Very">46.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">13.0</td>
+<td class="gt_row gt_right" headers="Not at all">5.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-04-07</td>
+<td class="gt_row gt_right" headers="Very">39.0</td>
+<td class="gt_row gt_right" headers="Somewhat">37.0</td>
+<td class="gt_row gt_right" headers="Not Very">18.0</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-04-09</td>
+<td class="gt_row gt_right" headers="Very">43.0</td>
+<td class="gt_row gt_right" headers="Somewhat">43.0</td>
+<td class="gt_row gt_right" headers="Not Very">11.0</td>
+<td class="gt_row gt_right" headers="Not at all">3.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-04-12</td>
+<td class="gt_row gt_right" headers="Very">35.0</td>
+<td class="gt_row gt_right" headers="Somewhat">39.0</td>
+<td class="gt_row gt_right" headers="Not Very">14.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-04-16</td>
+<td class="gt_row gt_right" headers="Very">41.0</td>
+<td class="gt_row gt_right" headers="Somewhat">40.0</td>
+<td class="gt_row gt_right" headers="Not Very">15.0</td>
+<td class="gt_row gt_right" headers="Not at all">5.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-04-19</td>
+<td class="gt_row gt_right" headers="Very">36.0</td>
+<td class="gt_row gt_right" headers="Somewhat">36.0</td>
+<td class="gt_row gt_right" headers="Not Very">16.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-04-21</td>
+<td class="gt_row gt_right" headers="Very">60.0</td>
+<td class="gt_row gt_right" headers="Somewhat">27.0</td>
+<td class="gt_row gt_right" headers="Not Very">13.0</td>
+<td class="gt_row gt_right" headers="Not at all">1.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-04-23</td>
+<td class="gt_row gt_right" headers="Very">42.0</td>
+<td class="gt_row gt_right" headers="Somewhat">40.0</td>
+<td class="gt_row gt_right" headers="Not Very">14.0</td>
+<td class="gt_row gt_right" headers="Not at all">4.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-04-26</td>
+<td class="gt_row gt_right" headers="Very">39.0</td>
+<td class="gt_row gt_right" headers="Somewhat">32.7</td>
+<td class="gt_row gt_right" headers="Not Very">16.7</td>
+<td class="gt_row gt_right" headers="Not at all">8.3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-04-30</td>
+<td class="gt_row gt_right" headers="Very">39.0</td>
+<td class="gt_row gt_right" headers="Somewhat">42.0</td>
+<td class="gt_row gt_right" headers="Not Very">13.0</td>
+<td class="gt_row gt_right" headers="Not at all">4.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-05-03</td>
+<td class="gt_row gt_right" headers="Very">32.0</td>
+<td class="gt_row gt_right" headers="Somewhat">40.0</td>
+<td class="gt_row gt_right" headers="Not Very">16.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-05-07</td>
+<td class="gt_row gt_right" headers="Very">35.0</td>
+<td class="gt_row gt_right" headers="Somewhat">42.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.0</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-05-10</td>
+<td class="gt_row gt_right" headers="Very">33.0</td>
+<td class="gt_row gt_right" headers="Somewhat">35.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-05-14</td>
+<td class="gt_row gt_right" headers="Very">36.0</td>
+<td class="gt_row gt_right" headers="Somewhat">43.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.0</td>
+<td class="gt_row gt_right" headers="Not at all">5.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-05-17</td>
+<td class="gt_row gt_right" headers="Very">34.0</td>
+<td class="gt_row gt_right" headers="Somewhat">40.0</td>
+<td class="gt_row gt_right" headers="Not Very">16.0</td>
+<td class="gt_row gt_right" headers="Not at all">7.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-05-20</td>
+<td class="gt_row gt_right" headers="Very">40.0</td>
+<td class="gt_row gt_right" headers="Somewhat">34.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.5</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-05-21</td>
+<td class="gt_row gt_right" headers="Very">36.0</td>
+<td class="gt_row gt_right" headers="Somewhat">42.0</td>
+<td class="gt_row gt_right" headers="Not Very">15.0</td>
+<td class="gt_row gt_right" headers="Not at all">7.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-05-24</td>
+<td class="gt_row gt_right" headers="Very">32.0</td>
+<td class="gt_row gt_right" headers="Somewhat">34.0</td>
+<td class="gt_row gt_right" headers="Not Very">21.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-05-31</td>
+<td class="gt_row gt_right" headers="Very">29.0</td>
+<td class="gt_row gt_right" headers="Somewhat">36.0</td>
+<td class="gt_row gt_right" headers="Not Very">21.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-06-07</td>
+<td class="gt_row gt_right" headers="Very">26.0</td>
+<td class="gt_row gt_right" headers="Somewhat">36.0</td>
+<td class="gt_row gt_right" headers="Not Very">23.0</td>
+<td class="gt_row gt_right" headers="Not at all">11.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-06-11</td>
+<td class="gt_row gt_right" headers="Very">28.0</td>
+<td class="gt_row gt_right" headers="Somewhat">41.0</td>
+<td class="gt_row gt_right" headers="Not Very">23.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-06-14</td>
+<td class="gt_row gt_right" headers="Very">29.0</td>
+<td class="gt_row gt_right" headers="Somewhat">37.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">11.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-06-16</td>
+<td class="gt_row gt_right" headers="Very">46.0</td>
+<td class="gt_row gt_right" headers="Somewhat">27.0</td>
+<td class="gt_row gt_right" headers="Not Very">27.0</td>
+<td class="gt_row gt_right" headers="Not at all">1.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-06-22</td>
+<td class="gt_row gt_right" headers="Very">31.0</td>
+<td class="gt_row gt_right" headers="Somewhat">38.0</td>
+<td class="gt_row gt_right" headers="Not Very">18.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-06-25</td>
+<td class="gt_row gt_right" headers="Very">34.0</td>
+<td class="gt_row gt_right" headers="Somewhat">43.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">5.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-06-29</td>
+<td class="gt_row gt_right" headers="Very">33.0</td>
+<td class="gt_row gt_right" headers="Somewhat">38.0</td>
+<td class="gt_row gt_right" headers="Not Very">18.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-07-06</td>
+<td class="gt_row gt_right" headers="Very">35.0</td>
+<td class="gt_row gt_right" headers="Somewhat">36.0</td>
+<td class="gt_row gt_right" headers="Not Very">15.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-07-12</td>
+<td class="gt_row gt_right" headers="Very">38.0</td>
+<td class="gt_row gt_right" headers="Somewhat">34.0</td>
+<td class="gt_row gt_right" headers="Not Very">15.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-07-19</td>
+<td class="gt_row gt_right" headers="Very">37.0</td>
+<td class="gt_row gt_right" headers="Somewhat">34.0</td>
+<td class="gt_row gt_right" headers="Not Very">16.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-07-22</td>
+<td class="gt_row gt_right" headers="Very">51.0</td>
+<td class="gt_row gt_right" headers="Somewhat">28.0</td>
+<td class="gt_row gt_right" headers="Not Very">20.0</td>
+<td class="gt_row gt_right" headers="Not at all">1.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-07-23</td>
+<td class="gt_row gt_right" headers="Very">37.0</td>
+<td class="gt_row gt_right" headers="Somewhat">40.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.0</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-07-27</td>
+<td class="gt_row gt_right" headers="Very">38.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-08-03</td>
+<td class="gt_row gt_right" headers="Very">38.0</td>
+<td class="gt_row gt_right" headers="Somewhat">31.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-08-10</td>
+<td class="gt_row gt_right" headers="Very">38.0</td>
+<td class="gt_row gt_right" headers="Somewhat">35.0</td>
+<td class="gt_row gt_right" headers="Not Very">16.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-08-17</td>
+<td class="gt_row gt_right" headers="Very">36.0</td>
+<td class="gt_row gt_right" headers="Somewhat">34.0</td>
+<td class="gt_row gt_right" headers="Not Very">18.0</td>
+<td class="gt_row gt_right" headers="Not at all">7.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-08-18</td>
+<td class="gt_row gt_right" headers="Very">49.0</td>
+<td class="gt_row gt_right" headers="Somewhat">29.0</td>
+<td class="gt_row gt_right" headers="Not Very">20.0</td>
+<td class="gt_row gt_right" headers="Not at all">2.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-08-22</td>
+<td class="gt_row gt_right" headers="Very">37.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-08-29</td>
+<td class="gt_row gt_right" headers="Very">31.0</td>
+<td class="gt_row gt_right" headers="Somewhat">37.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-09-14</td>
+<td class="gt_row gt_right" headers="Very">31.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">22.0</td>
+<td class="gt_row gt_right" headers="Not at all">9.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-09-19</td>
+<td class="gt_row gt_right" headers="Very">29.0</td>
+<td class="gt_row gt_right" headers="Somewhat">43.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">10.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-09-25</td>
+<td class="gt_row gt_right" headers="Very">49.0</td>
+<td class="gt_row gt_right" headers="Somewhat">26.0</td>
+<td class="gt_row gt_right" headers="Not Very">24.0</td>
+<td class="gt_row gt_right" headers="Not at all">1.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-10-03</td>
+<td class="gt_row gt_right" headers="Very">37.0</td>
+<td class="gt_row gt_right" headers="Somewhat">44.0</td>
+<td class="gt_row gt_right" headers="Not Very">13.0</td>
+<td class="gt_row gt_right" headers="Not at all">6.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-10-22</td>
+<td class="gt_row gt_right" headers="Very">49.0</td>
+<td class="gt_row gt_right" headers="Somewhat">27.0</td>
+<td class="gt_row gt_right" headers="Not Very">23.0</td>
+<td class="gt_row gt_right" headers="Not at all">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-10-24</td>
+<td class="gt_row gt_right" headers="Very">36.0</td>
+<td class="gt_row gt_right" headers="Somewhat">41.0</td>
+<td class="gt_row gt_right" headers="Not Very">15.0</td>
+<td class="gt_row gt_right" headers="Not at all">7.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-10-27</td>
+<td class="gt_row gt_right" headers="Very">34.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">20.0</td>
+<td class="gt_row gt_right" headers="Not at all">11.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-11-16</td>
+<td class="gt_row gt_right" headers="Very">38.0</td>
+<td class="gt_row gt_right" headers="Somewhat">31.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.0</td>
+<td class="gt_row gt_right" headers="Not at all">12.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-11-20</td>
+<td class="gt_row gt_right" headers="Very">47.0</td>
+<td class="gt_row gt_right" headers="Somewhat">28.0</td>
+<td class="gt_row gt_right" headers="Not Very">23.0</td>
+<td class="gt_row gt_right" headers="Not at all">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2020-11-22</td>
+<td class="gt_row gt_right" headers="Very">36.0</td>
+<td class="gt_row gt_right" headers="Somewhat">39.0</td>
+<td class="gt_row gt_right" headers="Not Very">17.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2020-12-17</td>
+<td class="gt_row gt_right" headers="Very">45.0</td>
+<td class="gt_row gt_right" headers="Somewhat">28.0</td>
+<td class="gt_row gt_right" headers="Not Very">26.0</td>
+<td class="gt_row gt_right" headers="Not at all">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2021-01-15</td>
+<td class="gt_row gt_right" headers="Very">34.0</td>
+<td class="gt_row gt_right" headers="Somewhat">35.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">12.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2021-01-26</td>
+<td class="gt_row gt_right" headers="Very">52.0</td>
+<td class="gt_row gt_right" headers="Somewhat">25.0</td>
+<td class="gt_row gt_right" headers="Not Very">20.0</td>
+<td class="gt_row gt_right" headers="Not at all">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2021-02-07</td>
+<td class="gt_row gt_right" headers="Very">32.0</td>
+<td class="gt_row gt_right" headers="Somewhat">33.0</td>
+<td class="gt_row gt_right" headers="Not Very">19.0</td>
+<td class="gt_row gt_right" headers="Not at all">11.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2021-02-18</td>
+<td class="gt_row gt_right" headers="Very">50.0</td>
+<td class="gt_row gt_right" headers="Somewhat">29.0</td>
+<td class="gt_row gt_right" headers="Not Very">20.0</td>
+<td class="gt_row gt_right" headers="Not at all">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2021-03-06</td>
+<td class="gt_row gt_right" headers="Very">27.0</td>
+<td class="gt_row gt_right" headers="Somewhat">45.0</td>
+<td class="gt_row gt_right" headers="Not Very">20.0</td>
+<td class="gt_row gt_right" headers="Not at all">8.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2021-03-13</td>
+<td class="gt_row gt_right" headers="Very">29.0</td>
+<td class="gt_row gt_right" headers="Somewhat">39.0</td>
+<td class="gt_row gt_right" headers="Not Very">21.0</td>
+<td class="gt_row gt_right" headers="Not at all">11.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2021-03-21</td>
+<td class="gt_row gt_right" headers="Very">35.0</td>
+<td class="gt_row gt_right" headers="Somewhat">28.0</td>
+<td class="gt_row gt_right" headers="Not Very">32.0</td>
+<td class="gt_row gt_right" headers="Not at all">NA</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
