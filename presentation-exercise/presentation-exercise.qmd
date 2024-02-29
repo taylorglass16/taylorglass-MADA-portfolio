@@ -218,7 +218,7 @@ table1 <- concern_data2 %>%
 table1
 ```
 
-The first table looks decent, but I want to clean up a few things stylistically.  I added a more descriptive title and renamed the columns, so the table would not contain variable names. Following my classmate Erick's suggestion, I created a new variable, `month` to summarize the data in the original table to make it more useful. I felt like it was unnecessary to have 5 decimal points for each percentage, so I limited the decimals to 1 place when I created the new average percentages by month. The result is a clean and publication-quality table that is much easier to digest than the original. 
+The first table looks decent, but I want to clean up a few things stylistically. I added a more descriptive title and renamed the columns, so the table would not contain variable names. Following my classmate Erick's suggestion, I created a new variable, `month` to summarize the data in the original table to make it more useful. I felt like it was unnecessary to have 5 decimal points for each percentage, so I limited the decimals to 1 place when I created the new average percentages by month. The result is a clean and publication-quality table that is much easier to digest than the original.
 
 ```{r}
 #| message: false

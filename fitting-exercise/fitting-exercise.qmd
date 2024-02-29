@@ -1,0 +1,389 @@
+## Fitting Exercise
+
+This is an exercise to understand `tidymodels` better. We will use data on a drug candidate called Mavoglurant. The data is store as a .csv file, and it was downloaded from the original Github repository. 
+
+# Load all packages for the exercise
+```{r}
+#| message: false
+library(readr) # to load in the data
+library(here) # to load in the data 
+library(ggplot2) # to create visualizations 
+library(dplyr) # for data processing/wrangling
+library(gtsummary) # to create summary tables 
+library(knitr) # to create summary tables
+library(tidymodels) # to fit models
+library(pROC) # to find the ROC curve 
+```
+
+## Data
+```{r}
+#| message: false
+mavo <- read_csv(here("fitting-exercise", "Mavoglurant_A2121_nmpk.csv"))
+```
+## Data processing and exploration 
+We can create a quick visual of the data by plotting `DV`, the outcome variable, over time. We will stratify by `dose` and use `ID` as a grouping factor. The line graph is busy and not particularly helpful. It could be useful to zoom in and limit the time to 25 hours because most of the variation occurs before that threshold. 
+```{r}
+#| message: false
+# plot DV as a function of TIME, stratified by DOSE and grouped by ID
+mavo %>% 
+  ggplot(aes(x=TIME, y=DV, color = DOSE)) + 
+  geom_line() 
+```
+This line graph is strongly skewed to the right with the highest drug concentration values `DV` being observed within the first 2 hours. As time progresses, the drug concentration sharply decreases until it reaches 0 around 48 hours. 
+
+
+As we look closer, some individuals received the drug more than once and have observations for both OCC=1 and OCC=2. We will only include participants who received the drug once to keep this analysis manageable. 
+```{r}
+#| message: false
+# filter for those with one drug dosage
+mavo2 <- mavo %>% 
+          filter(OCC == 1)
+
+# check the filtering worked
+summary(mavo2$OCC)
+```
+
+All individuals have an entry at time 0 that has DV=0 and a non-zero entry for the `AMT` variable. The dosing entry for everyone is located in the `AMT` variable. All other entries are the time-series values for the drug concentration. We will create a new value for the total amount of drug for each individual by adding all the `DV` values. This approach should not be used outside of this practice example because individuals may have various amounts of observations for this variable. A better approach would be using integration to get the area under the curve with a simple trapezoid rule, but we will keep things simple here. Once we create the new total drug concentration variable `Y` for those with time that does not equal zero and for those with time that does equal zero, we combine the datasets, so there is a single dataset with TIME=0 for everybody. 
+```{r}
+#| message: false
+# exclude individuals with TIME = 0 and create new variable Y as the sum of DV per individual 
+mavo3 <- mavo2 %>% 
+  filter(TIME != 0) %>%
+  group_by(ID) %>%  # this line allows the calculation to be done per individual 
+  reframe(Y = sum(DV))
+
+# keep individuals with TIME = 0 only 
+mavo4 <- mavo2 %>% 
+  filter(TIME == 0) 
+
+# combine the two datasets
+mavo5 <- left_join(mavo4, mavo3, by = "ID")
+```
+
+We only need a few of these variables to create our model. We will slim down the dataset to only include `Y`, `DOSE`, `AGE`, `SEX`, `RACE`, `WT`, and `HT`. It will also be beneficial for the `RACE` and `SEX` variables to be factors. 
+```{r}
+#| message: false
+mavo5 <- mavo5 %>% 
+            select(Y, DOSE, AGE, SEX, RACE, WT, HT) %>% 
+            mutate(SEX = as.factor(SEX),
+                   RACE = as.factor(RACE))
+```
+
+## Exploratory Data Analysis 
+# Summary Tables
+To get a better understanding of the data, I made a simple summary table to examine the distribution for each of the variables. 
+```{r}
+#| message: false
+# create simple summary table
+summary <- mavo5 %>% 
+            tbl_summary()
+summary
+```
+The average total dose concentration across the 120 observations is 2,349. Dosage is split into three discrete options: 25, 37.5, and 50. Almost 50% of the observations took the 25 unit dose and 41% took the 50 unit dose. The average age is 31 years, and the average weight is 82 units. The average height is 1.77, which must be stored in meters. Sex is very unevenly distributed with one gender accounting for 87% of observations. Race is also unevenly distributed with 62% of observations accounted for by one race.
+
+I created another table that summarized the numeric variables by `SEX` because I noticed that the distribution was so uneven. I wanted to examine the differences in the numeric variables by sex. 
+```{r}
+#| message: false
+# create summary table of numeric variables by SEX
+numtable<-  mavo5 %>% 
+              group_by(SEX) %>%
+                summarize(across(c(Y:AGE, WT, HT), mean))
+kable(numtable)
+```
+For whichever sex is denoted by 1, the average total drug concentration is higher at 2477.643 units compared to 2235.874 for sex 2. `DOSE`, `HT`, and `WT` also have higher averages among the SEX=1 group, so I hypothesize that 1 represents males and 2 represents females. It is interesting that the average age among the SEX=2 group is 9 years older compared to the SEX=1 group. 
+
+# Exploratory Graphs
+I will create histograms to explore each of the numeric variables to understand their distributions better. 
+```{r}
+#| message: false
+# histogram of total drug concentration `Y`
+plot1 <- mavo5 %>% 
+            ggplot(aes(x= Y)) + 
+              geom_histogram() + 
+                labs(x="Total Drug Concentration", y="Frequency", title = "Distribution of Total Drug Concentration")
+plot1
+
+```
+Plot 1 reveals that total drug concentration is almost normally distributed with a few trailing outliers that are greater than 4000 units. The lowest total drug concentration is around 750 units, and the highest outliter is about 5600 units. The majoirty of observations fall between 1000 and 4000 units. 
+
+```{r}
+#| message: false
+# histogram of DOSE
+plot2 <- mavo5 %>% 
+            ggplot(aes(x= DOSE)) + 
+              geom_histogram() + 
+                labs(x="Mavoglurant Dosage", y="Frequency", title = "Distribution of Dosage")
+plot2
+```
+Plot 2 reveals that there are three distinct options for Mavoglurant dosage around 25, 37.5, and 50 units. Almost half of the observations take the 25 unit dosage, and the 37.5 unit dosage is the most uncommmon. 
+
+```{r}
+#| message: false
+# histogram of AGE 
+plot3 <- mavo5 %>% 
+            ggplot(aes(x= AGE)) + 
+              geom_histogram() + 
+                labs(x="Age", y="Frequency", title = "Distribution of Age")
+plot3
+```
+Plot 3 reveals that age is not normally distributed. The two ages accounting for the most observations are around 26 and 27 years. There are also peaks in the histogram at 37 years and 30 years. This graph shows random variation in the age of the 120 observations. 
+
+```{r}
+#| message: false
+# histogram of height `HT`
+plot4 <- mavo5 %>% 
+            ggplot(aes(x= HT)) + 
+              geom_histogram() + 
+                labs(x="Height", y="Frequency", title = "Distribution of Height")
+plot4
+```
+Plot 4 reveals height to be approximately normally distributed with a peak around 1.8 units. There are a few low outliers between 1.5 and 1.6 units, but the majority of observations have a heigt between 1.62 and 1.91 unit. 
+
+```{r}
+#| message: false
+# histogram of weight `WT`
+plot5 <- mavo5 %>% 
+            ggplot(aes(x= WT)) + 
+              geom_histogram() + 
+                labs(x="Weight", y="Frequency", title = "Distribution of Weight")
+plot5
+```
+Plot 5 reveals that weight is approximately normally distributed with a peak around 82 units. The lowest weight is about 55 units, and the highest weight is about 116 units. Most of the observations fall between 68 and 100 units. 
+
+It is also important to explore the distributions of the two categorical variables using bar graphs: `RACE` and `SEX`.
+```{r}
+#| message: false
+# bar graph of race variable 
+plot6 <- mavo5 %>% 
+            ggplot(aes(x= RACE)) + 
+              geom_bar() + 
+                labs(x="Race", y="Frequency", title = "Distribution of Race")
+plot6
+```
+Plot 6 shows that race is denoted as four discrete numeric options: 1, 2, 7, and 88. Over 70 observations are accounted for in the RACE=1 category which is almost twice as large as the RACE=2 category. RACE=7 has the fewest observations, ann RACE=88 has about 8 observations. It is almost impossible to determine which race is represented by each category, but RACE=88 probably accounts for missing information. 
+
+```{r}
+#| message: false
+# bar graph of sex variable
+plot7 <- mavo5 %>% 
+            ggplot(aes(x= SEX)) + 
+              geom_bar() + 
+                labs(x="Sex", y="Frequency", title = "Distribution of Sex")
+plot7
+```
+Plot 7 confirms what we already know about sex being unevenly distributed. SEX=1 accounts for over 100 observations, which is almost 5 times as many observations included in the SEX=2 category. 
+
+I will move on to creating scatterplots and boxplots to examine the relationship between the main outcome of interest `Y` and predictor variables including `DOSE`, `AGE`, `HT`, `WT`, `RACE`, and `SEX`. 
+```{r}
+#| message: false
+# scatter plot of dosage and total drug concentration 
+plot8 <- mavo5 %>% 
+            mutate(DOSE = as.factor(DOSE)) %>% 
+              ggplot(aes(x= DOSE, y=Y)) + 
+                geom_boxplot() + 
+                  labs(x="Dose", y="Total Drug Concentration", title = "Dosage Related to Total Drug Concentration")
+plot8
+```
+I converted the `DOSAGE` variable to a factor variable here because I felt like a boxplot would display the information better than a scatterplot. The boxplot can be used to determine that the 50 unit dose accounts for the highest average total drug concentration. Total drug concentration decreases as dosage decreases to 37.5 and 25 units, which makes sense intuitively. There are a few outliers in each dosage category, but they do not seem to affect the overall trend. 
+
+```{r}
+#| message: false
+# scatter plot of age and total drug concentration
+plot9 <- mavo5 %>% 
+            ggplot(aes(x= AGE, y=Y)) + 
+              geom_point() + 
+                labs(x="Age", y="Total Drug Concentration", title = "Age Related to Total Drug Concentration")
+plot9
+```
+Plot 9 shows that there is no correlation between age and total drug concentration. The points appear to be randomly distributed without a clear trend of association. 
+
+```{r}
+#| message: false
+# scatter plot of height and total drug concentration
+plot10 <- mavo5 %>% 
+            ggplot(aes(x= HT, y=Y)) + 
+              geom_point() + 
+                labs(x="Height", y="Total Drug Concentration", title = "Height Related to Total Drug Concentration")
+plot10
+```
+Plot 10 shows that height is not correlated with total drug concentration either. The points appear to be randomly distributed with no clear trend of association. 
+
+```{r}
+#| message: false
+# scatter plot of weight and total drug concentration
+plot11 <- mavo5 %>% 
+            ggplot(aes(x= WT, y=Y)) + 
+              geom_point() + 
+                labs(x="Weight", y="Total Drug Concentration", title = "Weight Related to Total Drug Concentration")
+plot11
+```
+Plot 11 contains a lot of variation, but there appears to be weak correlation between these two variables. There seems to be a negative trend between weight and total drug concentration. As weight increases, total drug concentration decreases. 
+
+```{r}
+#| message: false
+# boxplot of race and total drug concentration
+plot12 <- mavo5 %>% 
+            ggplot(aes(x= RACE, y=Y)) + 
+              geom_boxplot() + 
+                labs(x="Race", y="Total Drug Concentration", title = "Race Related to Total Drug Concentration")
+plot12
+```
+Plot 12 shows that there is minimal variation in total drug concentration across racial categories because the averages appear to be within 100 units for all 4 categories. The interquartile range for RACE=1 appears to be the largest, and this category has the highest maximum total drug concentration as well. The interquartile range for RACE=7 is the smallest, which means there is the least variation in total drug concentration in this category. There are only 2 outliers according to this plot, one in RACE=1 and another in RACE=88. 
+
+```{r}
+#| message: false
+plot13 <- mavo5 %>% 
+            ggplot(aes(x= SEX, y=Y)) + 
+              geom_boxplot() + 
+                labs(x="Sex", y="Total Drug Concentration", title = "Sex Related to Total Drug Concentration")
+plot13
+```
+Plot 13 shows a difference in total drug concentration based on sex. The average total concentration for SEX=1 is higher than in SEX=2. The interquartile range apppears to be the same for both sexes, and there is one outlier in each category. 
+
+## Model Fitting 
+# Linear model with continuous outcome
+The first model we are interested in fitting is a linear model with the continuous outcome `Y` and the main predictor of interest `DOSE`. I will use simple linear regression with the default `lm` method for ordinary least squares. 
+```{r}
+#| message: false
+# create a linear model with main predictor only
+lm_mod <- linear_reg() #specify the type of model
+mavo_fit1 <- lm_mod %>% 
+            fit(Y ~ DOSE, data = mavo5) #estimate/train the model 
+tidy(mavo_fit1) #generate clean output with estimates and p-values
+```
+Based on the linear regression model, the total drug concentration increases by 58.21 units with every 1 unit increase in dosage. There is a statistically significant positive association between the two variables based on the tiny p-value of 2.69e-20. 
+
+The second model we are interested in is also a linear model, but we want to examine the continuous outcome with all six predictors. I will use multiple linear regression with the same default `lm` method. 
+```{r}
+#| message: false
+# create a linear model with all predictors
+lm_mod <- linear_reg() #specify the type of model
+mavo_fit2 <- lm_mod %>% 
+            fit(Y ~ DOSE + AGE + HT + WT + RACE + SEX, data = mavo5) #estimate/train the model 
+tidy(mavo_fit2) #generate clean output with estimates and p-values
+```
+The multiple linear regression yields a slightly larger coefficient for the `DOSE` variable than the simple linear regression did. As dosage increases by 1 unit, total drug concentration increases by 59.934 units according to this model. This pattern makes sense because a higher dosage of the drug is expected to create a higher total drug concentration in the body. Age is positively associated with total drug concentration because as age increases by 1 year, total drug concentration increases by 3.155 years. This pattern is expected because metabolism slows as age increases, so it makes sense that the body would retain higher levels of drug concentration if it is metabolizing the drug at a slower rate. Height has a negative correlation with total drug concentration based on a coefficient estimate of -748.487. Weight is also negatively correlated, but it has a much smaller coefficient of -23.047. These trends are intuitive given that larger bodies are able to metabolize quicker than smaller bodies on average, so taller and heavier people would have lower total drug concentration. The model chose RACE=1 as the comparison category, so the total drug concentration increases by 155.034 units when RACE=2 compared to RACE=1. The total drug concentration decreases by 405.32 units when RACE=7 compared to RACE=1. There is also a negative association between RACE=88 and total drug concentration compared to RACE=1 based on the coefficient of -53.505. It is harder to interpet these trends since we do not know which race is associated with each category. Lastly, total drug concentration decreases by 357.734 units when SEX=2 compared to when SEX=1. Males and femaless have completely different metabolism rate, so it makes sense that this trend exists. All of these associations are statistically significant because the p-values are all less than 0.001. 
+
+# Testing linear model performance
+To determine how well these models perform, we will compute the RMSE and R squared metrics. To find RMSE, I made predictions using each model to compare to the real data stored in `mavo5`. I selected the prediction column and bound it to the column with true values of Y from the original data to create a new data frame. I used the rmse() function from the `yardstick` package in `tidymodels` to find the RMSE values. R squared is calculated from the same prediction and truth values using the rsq() function. 
+```{r}
+#| message: false
+# create predictions using the simple linear regression model
+predictions1 <- predict(mavo_fit1, new_data = mavo5) %>% 
+                  select(.pred)
+
+# create a data frame with the predictions and true values of Y
+data1 <- bind_cols(predictions1, mavo5$Y) %>%
+            rename(Y = "...2")
+
+# find RMSE and R squared to determine model fit
+rmse1<- rmse(data1, truth = Y, estimate = .pred)
+rsq1 <- rsq(data1, truth = Y, estimate = .pred)
+print(rmse1)
+print(rsq1)
+
+# create predictions using the multiple linear regression model
+predictions2 <- predict(mavo_fit2, new_data = mavo5) %>% 
+                  select(.pred)
+
+# create a data frame with the predictions and true values of Y
+data2 <- bind_cols(predictions2, mavo5$Y) %>%
+            rename(Y = "...2")
+
+# find RMSE and R squared to determine model fit
+rmse2<- rmse(data2, truth = Y, estimate = .pred)
+rsq2<- rsq(data2, truth = Y, estimate = .pred)
+print(rmse2)
+print(rsq2)
+```
+The RMSE for the simple linear regression model is 666.4618, which is much higher than the RMSE of 590.8535 for the multiple linear regression model. The model with all of the predictors is a better fit for the data. The R squared value for the multiple linear regression model is higher than the simple linear regression model. All the predictors account for 61.93% of variation in the graph, while the `DOSE` variable alone only accounts for 51.56% of the variation. Overall, the multiple linear regression model is the better choice. 
+
+# Logistic model with binary outcome 
+We will know consider `SEX` as the outcome of interest for the sake of practicing modeling with categorical outcomes. First, we will use logistic regression to model `SEX` using the main predictor, `DOSE`. 
+```{r}
+#| message: false
+# create a logistic regression model with main predictor only
+log_mod <- logistic_reg() #specify the type of model
+mavo_fit3 <- log_mod %>% 
+                fit(SEX ~ DOSE, data = mavo5) #estimate/train the model 
+tidy(mavo_fit3) #generate clean output with estimates and p-values
+
+#exponentiate coefficient estimate 
+exp(-0.03175443)
+```
+The logistic regression model shows a negative relationship between `SEX` and `DOSE`. The coefficient estimate is on the log odds scale, so it must be exponentiated before interpretation. The odds of `SEX` being SEX=2 increase multiplicatively by a factor of 0.9687 for every increase in dosage. This interpretation does not make a ton of sense logically, but it is important to remember that coefficient estimates are on the log odds scale. 
+
+Next, we will fit a model for `SEX` with all of the predictors. 
+```{r}
+#| message: false
+# create a logistic regression model with all predictors
+log_mod <- logistic_reg() #specify the type of model
+mavo_fit4 <- log_mod %>% 
+                fit(SEX ~ DOSE + Y + AGE + HT + WT + RACE, data = mavo5) #estimate/train the model 
+tidy(mavo_fit4) #generate clean output with estimates and p-values
+
+# exponentiate coefficient estimates
+exp(-0.03075591)
+exp(-0.00104044)
+exp(-33.19601486)
+```
+This model shows negative associations between most of the variables and the outcome of `SEX`. The dose coefficient estimate changed only slightly with the addition of the other predictors, and now dosage is associated with a 0.9697 multiplicative effect on the odds of SEX=2. Total drug concentration `Y` appears to have the smallest effect on the outcome, which is to be expected because the total concentration of the drug in your body will have no effect on your sex. Regardless, for every 1 unit increase in total drug concentration, the odds of SEX=2 increase multiplicatively by a factor of 0.9989, which is essentially null. Height has the strongest relationship with the outcome variable, and that trend is expected because males are taller on average than females, which makes height the best predictor of the binary `SEX` outcome. As height increases by 1 unit, the odds of SEX=2 increase multiplicatively by a factor of 3.829e-15. Weight has a significantly smaller effect on `SEX` that is not statistically significant, but the same logic as the height variable applies here. It makes sense that this trend would be weaker because weight fluctuates muchh more than height, regardless of sex. While it is difficult to interpret the change in odds in this situation, the overall trends make sense intuitively. 
+
+# Testing logistic model performance
+For both models, we will assess the fit using accuracy and ROC-AUC metrics. The setup is similar to calculating RMSE and R squared for linear models. I found the predictions for the `SEX` variable first. I created a new dataset with the predictions and the true value from the original dataset. The accuracy() function uses the dataset, truth, and estimate arguments.
+```{r}
+#| message: false
+# make predictions using the logistic model with main predictor only 
+predictions3 <- predict(mavo_fit3, new_data = mavo5) %>% 
+                  select(.pred_class)
+
+# create a data frame with the predicted and true values 
+data3 <- bind_cols(predictions3, mavo5$SEX) %>% 
+            rename(SEX = "...2")
+
+# find accuracy of the first logistic model
+acc1 <- accuracy(data3, truth = SEX, estimate = .pred_class)
+acc1
+
+# make predictions using the logistic model with all predictors
+predictions4 <- predict(mavo_fit4, new_data = mavo5) %>%
+                    select(.pred_class)
+
+# create a data frame with the predicted and true values
+data4 <- bind_cols(predictions4, mavo5$SEX) %>% 
+            rename(SEX = "...2")
+
+# find accuracy of the second logistic model
+acc2 <- accuracy(data4, truth = SEX, estimate = .pred_class)
+acc2
+```
+The accuracy for the logistic model with the main predictor only is 0.867, and the accuracy for the model with all predictors is 0.942. Once again,the model with all predictors is the better choice. 
+
+Ideally, we would use the roc_auc() function from the `tidymodels` package to find the area under the curve. I received persistent errors when I tried this approach about not being able to rename variables in this context. I removed the variable names from my prediction data set and tried to call the columns in multiple formats, but I could not get this function to run. Instead, I used the `pROC` package to find the ROC curve first and the area under the curve second. 
+
+```{r}
+#| message: false
+# create data set with truth and prediction variables for model with main predictor only 
+data4 <- data.frame(truth = mavo5$SEX,
+                    estimate = as.numeric(predictions3$.pred_class))
+
+# find the ROC curve
+roc_curve1 <- roc(data4$truth, data4$estimate)
+
+# calculate area under the curve score
+roc_auc1 <- auc(roc_curve1)
+roc_auc1
+
+# create data set with truth and prediction variables for model with main predictor only 
+data5 <- data.frame(truth = mavo5$SEX,
+                    estimate = as.numeric(predictions4$.pred_class))
+
+# find the ROC curve
+roc_curve2 <- roc(data5$truth, data5$estimate)
+
+# calculate area under the curve score
+roc_auc2 <- auc(roc_curve2)
+roc_auc2
+```
+The area under the curve for the logistic regression model with the main predictor only is 0.5 compared to an AOC of 0.861 for the second model containing all the predictors. The second model is the better choice based on this metric. 
+
