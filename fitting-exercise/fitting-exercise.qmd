@@ -26,8 +26,9 @@ We can create a quick visual of the data by plotting `DV`, the outcome variable,
 #| message: false
 # plot DV as a function of TIME, stratified by DOSE and grouped by ID
 mavo %>% 
-  ggplot(aes(x=TIME, y=DV, color = DOSE)) + 
-  geom_line() 
+  ggplot(aes(x=TIME, y=DV, group= as.factor(ID), color = as.factor(DOSE))) + 
+  geom_line() +
+  facet_wrap( ~ DOSE, scales = "free_y")
 ```
 This line graph is strongly skewed to the right with the highest drug concentration values `DV` being observed within the first 2 hours. As time progresses, the drug concentration sharply decreases until it reaches 0 around 48 hours. 
 
@@ -386,4 +387,200 @@ roc_auc2 <- auc(roc_curve2)
 roc_auc2
 ```
 The area under the curve for the logistic regression model with the main predictor only is 0.5 compared to an AOC of 0.861 for the second model containing all the predictors. The second model is the better choice based on this metric. 
+
+After receiving feedback from Dr. Handel, he provided us with an example of how to find the area under the curve using the function that I attempted the first time. 
+```{r}
+# fit the first logistic model 
+logfit1 <- log_mod %>% fit(SEX ~ DOSE, data = mavo5)
+
+# find area under the curve
+m1_auc <-  logfit1 %>%
+  predict(mavo5, type = "prob") %>%
+  bind_cols(mavo5) %>%
+  roc_auc(truth = SEX, .pred_1)
+print(m1_auc)
+
+# fit the second logistic model
+logfit2 <- log_mod %>% fit(SEX ~ ., data = mavo5)
+
+# find the area under the curve
+m2_auc <-  logfit2 %>%
+  predict(mavo5, type = "prob") %>%
+  bind_cols(mavo5) %>%
+  roc_auc(truth = SEX, .pred_1)
+print(m2_auc)
+```
+# Module 10 exercise
+
+I will set a seed to ensure reproducibility when using random numbers. 
+```{r}
+# choose random seed number for the exercise
+rngseed = 1234
+```
+
+## Data prep
+I will remove the `RACE` variable because there are strange values for missingness included in it. 
+```{r}
+# remove RACE variable
+mavo6 <- mavo5 %>% 
+          select(-RACE)
+```
+
+I want to split the data into a 75% train and a 25% test set randomly, which is why I will set the seed. I will follow the tidymodels textbook example for splitting data and testing it. 
+```{r}
+# set the random seed 
+set.seed(rngseed)
+
+#load packages for splitting the data
+library("rsample")
+
+# put 75% into the training data
+datasplit <- initial_split(mavo6, prop = 3/4)
+
+# create data frames for the two sets
+train_data <- training(datasplit)
+test_data <- testing(datasplit)
+```
+
+## Model Fitting
+`mavo_fit1` is the object containing the simple linear regression with `DOSE`as the only predictor. `mavo_fit2` is the object containing the multiple linear regression with all predictors. I will modify each of these objects to only use the training data set for fitting. 
+```{r}
+# simple linear regression model
+lm_mod <- linear_reg() #specify the type of model
+train_fit1 <- lm_mod %>% 
+            fit(Y ~ DOSE, data = train_data) #estimate/train the model 
+tidy(train_fit1) #generate clean output with estimates and p-values
+
+# multiple linear regression model
+train_fit2 <- lm_mod %>% 
+            fit(Y ~ . , data = train_data) #estimate/train the model 
+tidy(mavo_fit2) #generate clean output with estimates and p-values
+```
+## Model performance assessment 1
+I will compute predictions for both models to find the RMSE metric. I will also compute the RMSE of a null model, which would just predict the mean outcome for each observation without using any predictor information. 
+```{r}
+# create predictions using the simple linear regression model
+trainpred1 <- predict(train_fit1, new_data = train_data) %>% 
+                  select(.pred)
+
+# create a data frame with the predictions and true values of Y
+train1 <- bind_cols(trainpred1, train_data$Y) %>%
+            rename(Y = "...2")
+
+# find RMSE to determine model fit
+trainrmse1<- rmse(train1, truth = Y, estimate = .pred)
+print(trainrmse1)
+
+# create predictions using the multiple linear regression model
+trainpred2 <- predict(train_fit2, new_data = train_data) %>% 
+                  select(.pred)
+
+# create a data frame with the predictions and true values of Y
+train2 <- bind_cols(trainpred2, train_data$Y) %>%
+            rename(Y = "...2")
+
+# find RMSE to determine model fit
+trainrmse2<- rmse(train2, truth = Y, estimate = .pred)
+print(trainrmse2)
+```
+I will also compute the RMSE of a null model, which would just predict the mean outcome for each observation without using any predictor information.
+```{r}
+# create a null model
+null_model <- null_model(mode = "regression") %>% 
+    set_engine("parsnip") %>%
+    fit(Y ~ 1, data = train_data)
+
+# create predictions using the null model
+nullpred <- predict(null_model, new_data = train_data) %>%
+                select(.pred)
+
+# create a data frame with the predictions (means) and true values of Y 
+trainingnull <- bind_cols(nullpred, train_data$Y) %>% 
+                  rename(Y = "...2")
+
+# find RMSE to determine model fit
+predrmse<- rmse(trainingnull, truth = Y, estimate = .pred)
+print(predrmse)
+```
+The RMSE for the null model is 948.356, which is much higher than an RMSE of 702.8078 for the simple linear model and 627.4408 for the multiple linear model. Since the model with all predictors has the lowest RMSE metric, it is clear that the multiple linear regression model is performing the best because it has the lowest difference between the values predicted by the model and the values observed. According to these metrics, the simple linear model performs better than the null model, so it is still useful as well.
+
+## Model Performance assessment 2 
+I will use cross-validation as another method of assessing the model performance. I will follow the tidymodels textbook example for creating a 10-fold cross-validation. 
+```{r}
+# set the seed for reproducibility
+set.seed(rngseed)
+
+# create 10 folds
+folds <- vfold_cv(train_data, v=10)
+
+# load packages to create a workflow
+library(parsnip) 
+
+# define your model specification
+lm_spec <- linear_reg() %>% 
+  set_engine("lm")
+
+# initialize a workflow and fit it to the training data for the simple linear model
+mavo_wf <- workflow() %>%
+  add_model(lm_spec) %>% 
+  add_formula(Y~DOSE) %>% #specify the formula since we are not using a recipe
+  fit(data = train_data) 
+
+# resample the model 
+mavo_wf_rs <- mavo_wf %>% 
+                fit_resamples(folds)
+mavo_wf_rs
+
+# collect the metrics from the model 
+collect_metrics(mavo_wf_rs)
+```
+The RMSE for the simple linear model decreased to 686.885, which is substantially smaller than 702.8078. The cross-validation method of testing the model shows that it performs better than the train/test splitting metho did. The standard error for the RMSE is 69.71588 when using the cross-validation method, which allows us to observe the variability in RMSE estimates. 
+
+```{r}
+# set the seed for reproducibility
+set.seed(rngseed)
+
+# create 10 folds
+folds <- vfold_cv(train_data, v=10)
+
+# define your model specification
+lm_spec <- linear_reg() %>% 
+  set_engine("lm")
+
+# initialize a workflow and fit it to the training data for the multiple linear model
+mavo_wf2 <- workflow() %>%
+  add_model(lm_spec) %>% 
+  add_formula(Y~DOSE + AGE + SEX + WT + HT) %>% #specify the formula since we are not using a recipe
+  fit(data = train_data) 
+
+# resample the model 
+mavo_wf_rs2 <- mavo_wf2 %>% 
+                fit_resamples(folds)
+
+# collect the metrics from the model 
+collect_metrics(mavo_wf_rs2)
+```
+The RMSE for the model with all the predictors also decreased from when it was estimated with the test/training method to a value of 649.0276. The standard error for the RMSE is 65.374, which is lower than the standard error of the RMSE for the simple linear model. The cross-validation test shows that the multiple linear regression model performs better in comparison to the simple linear regression model and itself according to the test/train method. 
+
+```{r}
+# create 10 folds
+folds <- vfold_cv(train_data, v=10)
+
+# define the null model
+null_model <- null_model(mode = "regression") 
+
+# initialize a workflow and fit it to the training data for the null model
+mavo_wf3 <- workflow() %>%
+  add_model(null_model) %>% 
+  add_formula(Y~ 1) %>% #specify the formula since we are not using a recipe
+  fit(data = train_data) 
+
+# resample the model 
+mavo_wf_rs2 <- mavo_wf2 %>% 
+                fit_resamples(folds)
+
+# collect the metrics from the model 
+collect_metrics(mavo_wf_rs2)
+```
+Nothing changes for the null model, which is to be expected. 
 
