@@ -186,12 +186,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="fitting-exercise" class="level2">
-<h2 class="anchored" data-anchor-id="fitting-exercise">Fitting Exercise</h2>
+<section id="fitting-exercise" class="level1">
+<h1>Fitting Exercise</h1>
 <p>This is an exercise to understand <code>tidymodels</code> better. We will use data on a drug candidate called Mavoglurant. The data is store as a .csv file, and it was downloaded from the original Github repository.</p>
-</section>
-<section id="load-all-packages-for-the-exercise" class="level1">
-<h1>Load all packages for the exercise</h1>
+<section id="load-all-packages-for-the-exercise" class="level3">
+<h3 class="anchored" data-anchor-id="load-all-packages-for-the-exercise">Load all packages for the exercise</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr) <span class="co"># to load in the data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here) <span class="co"># to load in the data </span></span>
@@ -202,14 +201,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels) <span class="co"># to fit models</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC) <span class="co"># to find the ROC curve </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="data" class="level2">
-<h2 class="anchored" data-anchor-id="data">Data</h2>
+</section>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mavo <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"fitting-exercise"</span>, <span class="st">"Mavoglurant_A2121_nmpk.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="data-processing-and-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="data-processing-and-exploration">Data processing and exploration</h2>
+<section id="data-processing-and-exploration" class="level3">
+<h3 class="anchored" data-anchor-id="data-processing-and-exploration">Data processing and exploration</h3>
 <p>We can create a quick visual of the data by plotting <code>DV</code>, the outcome variable, over time. We will stratify by <code>dose</code> and use <code>ID</code> as a grouping factor. The line graph is busy and not particularly helpful. It could be useful to zoom in and limit the time to 25 hours because most of the variation occurs before that threshold.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot DV as a function of TIME, stratified by DOSE and grouped by ID</span></span>
@@ -264,10 +264,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="exploratory-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
-</section>
-</section>
-<section id="summary-tables" class="level1">
-<h1>Summary Tables</h1>
+<section id="summary-tables" class="level3">
+<h3 class="anchored" data-anchor-id="summary-tables">Summary Tables</h3>
 <p>To get a better understanding of the data, I made a simple summary table to examine the distribution for each of the variables.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create simple summary table</span></span>
@@ -275,23 +273,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tbl_summary</span>()</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="ccqoblppfs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ccqoblppfs table {
+<div id="cwyvlgxsrb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cwyvlgxsrb table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ccqoblppfs thead, #ccqoblppfs tbody, #ccqoblppfs tfoot, #ccqoblppfs tr, #ccqoblppfs td, #ccqoblppfs th {
+#cwyvlgxsrb thead, #cwyvlgxsrb tbody, #cwyvlgxsrb tfoot, #cwyvlgxsrb tr, #cwyvlgxsrb td, #cwyvlgxsrb th {
   border-style: none;
 }
 
-#ccqoblppfs p {
+#cwyvlgxsrb p {
   margin: 0;
   padding: 0;
 }
 
-#ccqoblppfs .gt_table {
+#cwyvlgxsrb .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -317,12 +315,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_caption {
+#cwyvlgxsrb .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ccqoblppfs .gt_title {
+#cwyvlgxsrb .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -334,7 +332,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#ccqoblppfs .gt_subtitle {
+#cwyvlgxsrb .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -346,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#ccqoblppfs .gt_heading {
+#cwyvlgxsrb .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -358,13 +356,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_bottom_border {
+#cwyvlgxsrb .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_col_headings {
+#cwyvlgxsrb .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -379,7 +377,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_col_heading {
+#cwyvlgxsrb .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -399,7 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ccqoblppfs .gt_column_spanner_outer {
+#cwyvlgxsrb .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -411,15 +409,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#ccqoblppfs .gt_column_spanner_outer:first-child {
+#cwyvlgxsrb .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ccqoblppfs .gt_column_spanner_outer:last-child {
+#cwyvlgxsrb .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ccqoblppfs .gt_column_spanner {
+#cwyvlgxsrb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -431,11 +429,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#ccqoblppfs .gt_spanner_row {
+#cwyvlgxsrb .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ccqoblppfs .gt_group_heading {
+#cwyvlgxsrb .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -461,7 +459,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#ccqoblppfs .gt_empty_group_heading {
+#cwyvlgxsrb .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -476,15 +474,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#ccqoblppfs .gt_from_md > :first-child {
+#cwyvlgxsrb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ccqoblppfs .gt_from_md > :last-child {
+#cwyvlgxsrb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ccqoblppfs .gt_row {
+#cwyvlgxsrb .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -503,7 +501,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ccqoblppfs .gt_stub {
+#cwyvlgxsrb .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -516,7 +514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ccqoblppfs .gt_stub_row_group {
+#cwyvlgxsrb .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -530,15 +528,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#ccqoblppfs .gt_row_group_first td {
+#cwyvlgxsrb .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ccqoblppfs .gt_row_group_first th {
+#cwyvlgxsrb .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ccqoblppfs .gt_summary_row {
+#cwyvlgxsrb .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -548,16 +546,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ccqoblppfs .gt_first_summary_row {
+#cwyvlgxsrb .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_first_summary_row.thick {
+#cwyvlgxsrb .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ccqoblppfs .gt_last_summary_row {
+#cwyvlgxsrb .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -567,7 +565,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_grand_summary_row {
+#cwyvlgxsrb .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -577,7 +575,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ccqoblppfs .gt_first_grand_summary_row {
+#cwyvlgxsrb .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -587,7 +585,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_last_grand_summary_row_top {
+#cwyvlgxsrb .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -597,11 +595,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_striped {
+#cwyvlgxsrb .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ccqoblppfs .gt_table_body {
+#cwyvlgxsrb .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -610,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_footnotes {
+#cwyvlgxsrb .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -624,7 +622,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_footnote {
+#cwyvlgxsrb .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -633,7 +631,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ccqoblppfs .gt_sourcenotes {
+#cwyvlgxsrb .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -647,7 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ccqoblppfs .gt_sourcenote {
+#cwyvlgxsrb .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -655,63 +653,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ccqoblppfs .gt_left {
+#cwyvlgxsrb .gt_left {
   text-align: left;
 }
 
-#ccqoblppfs .gt_center {
+#cwyvlgxsrb .gt_center {
   text-align: center;
 }
 
-#ccqoblppfs .gt_right {
+#cwyvlgxsrb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ccqoblppfs .gt_font_normal {
+#cwyvlgxsrb .gt_font_normal {
   font-weight: normal;
 }
 
-#ccqoblppfs .gt_font_bold {
+#cwyvlgxsrb .gt_font_bold {
   font-weight: bold;
 }
 
-#ccqoblppfs .gt_font_italic {
+#cwyvlgxsrb .gt_font_italic {
   font-style: italic;
 }
 
-#ccqoblppfs .gt_super {
+#cwyvlgxsrb .gt_super {
   font-size: 65%;
 }
 
-#ccqoblppfs .gt_footnote_marks {
+#cwyvlgxsrb .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ccqoblppfs .gt_asterisk {
+#cwyvlgxsrb .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ccqoblppfs .gt_indent_1 {
+#cwyvlgxsrb .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ccqoblppfs .gt_indent_2 {
+#cwyvlgxsrb .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ccqoblppfs .gt_indent_3 {
+#cwyvlgxsrb .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ccqoblppfs .gt_indent_4 {
+#cwyvlgxsrb .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ccqoblppfs .gt_indent_5 {
+#cwyvlgxsrb .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -849,8 +847,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>For whichever sex is denoted by 1, the average total drug concentration is higher at 2477.643 units compared to 2235.874 for sex 2. <code>DOSE</code>, <code>HT</code>, and <code>WT</code> also have higher averages among the SEX=1 group, so I hypothesize that 1 represents males and 2 represents females. It is interesting that the average age among the SEX=2 group is 9 years older compared to the SEX=1 group.</p>
 </section>
-<section id="exploratory-graphs" class="level1">
-<h1>Exploratory Graphs</h1>
+<section id="exploratory-graphs" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-graphs">Exploratory Graphs</h3>
 <p>I will create histograms to explore each of the numeric variables to understand their distributions better.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of total drug concentration `Y`</span></span>
@@ -1062,12 +1060,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Plot 13 shows a difference in total drug concentration based on sex. The average total concentration for SEX=1 is higher than in SEX=2. The interquartile range apppears to be the same for both sexes, and there is one outlier in each category.</p>
+</section>
+</section>
 <section id="model-fitting" class="level2">
 <h2 class="anchored" data-anchor-id="model-fitting">Model Fitting</h2>
-</section>
-</section>
-<section id="linear-model-with-continuous-outcome" class="level1">
-<h1>Linear model with continuous outcome</h1>
+<section id="linear-model-with-continuous-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-with-continuous-outcome">Linear model with continuous outcome</h3>
 <p>The first model we are interested in fitting is a linear model with the continuous outcome <code>Y</code> and the main predictor of interest <code>DOSE</code>. I will use simple linear regression with the default <code>lm</code> method for ordinary least squares.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a linear model with main predictor only</span></span>
@@ -1108,8 +1106,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The multiple linear regression yields a slightly larger coefficient for the <code>DOSE</code> variable than the simple linear regression did. As dosage increases by 1 unit, total drug concentration increases by 59.934 units according to this model. This pattern makes sense because a higher dosage of the drug is expected to create a higher total drug concentration in the body. Age is positively associated with total drug concentration because as age increases by 1 year, total drug concentration increases by 3.155 years. This pattern is expected because metabolism slows as age increases, so it makes sense that the body would retain higher levels of drug concentration if it is metabolizing the drug at a slower rate. Height has a negative correlation with total drug concentration based on a coefficient estimate of -748.487. Weight is also negatively correlated, but it has a much smaller coefficient of -23.047. These trends are intuitive given that larger bodies are able to metabolize quicker than smaller bodies on average, so taller and heavier people would have lower total drug concentration. The model chose RACE=1 as the comparison category, so the total drug concentration increases by 155.034 units when RACE=2 compared to RACE=1. The total drug concentration decreases by 405.32 units when RACE=7 compared to RACE=1. There is also a negative association between RACE=88 and total drug concentration compared to RACE=1 based on the coefficient of -53.505. It is harder to interpet these trends since we do not know which race is associated with each category. Lastly, total drug concentration decreases by 357.734 units when SEX=2 compared to when SEX=1. Males and femaless have completely different metabolism rate, so it makes sense that this trend exists. All of these associations are statistically significant because the p-values are all less than 0.001.</p>
 </section>
-<section id="testing-linear-model-performance" class="level1">
-<h1>Testing linear model performance</h1>
+<section id="testing-linear-model-performance" class="level3">
+<h3 class="anchored" data-anchor-id="testing-linear-model-performance">Testing linear model performance</h3>
 <p>To determine how well these models perform, we will compute the RMSE and R squared metrics. To find RMSE, I made predictions using each model to compare to the real data stored in <code>mavo5</code>. I selected the prediction column and bound it to the column with true values of Y from the original data to create a new data frame. I used the rmse() function from the <code>yardstick</code> package in <code>tidymodels</code> to find the RMSE values. R squared is calculated from the same prediction and truth values using the rsq() function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the simple linear regression model</span></span>
@@ -1165,8 +1163,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The RMSE for the simple linear regression model is 666.4618, which is much higher than the RMSE of 590.8535 for the multiple linear regression model. The model with all of the predictors is a better fit for the data. The R squared value for the multiple linear regression model is higher than the simple linear regression model. All the predictors account for 61.93% of variation in the graph, while the <code>DOSE</code> variable alone only accounts for 51.56% of the variation. Overall, the multiple linear regression model is the better choice.</p>
 </section>
-<section id="logistic-model-with-binary-outcome" class="level1">
-<h1>Logistic model with binary outcome</h1>
+<section id="logistic-model-with-binary-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="logistic-model-with-binary-outcome">Logistic model with binary outcome</h3>
 <p>We will know consider <code>SEX</code> as the outcome of interest for the sake of practicing modeling with categorical outcomes. First, we will use logistic regression to model <code>SEX</code> using the main predictor, <code>DOSE</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a logistic regression model with main predictor only</span></span>
@@ -1225,8 +1223,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>This model shows negative associations between most of the variables and the outcome of <code>SEX</code>. The dose coefficient estimate changed only slightly with the addition of the other predictors, and now dosage is associated with a 0.9697 multiplicative effect on the odds of SEX=2. Total drug concentration <code>Y</code> appears to have the smallest effect on the outcome, which is to be expected because the total concentration of the drug in your body will have no effect on your sex. Regardless, for every 1 unit increase in total drug concentration, the odds of SEX=2 increase multiplicatively by a factor of 0.9989, which is essentially null. Height has the strongest relationship with the outcome variable, and that trend is expected because males are taller on average than females, which makes height the best predictor of the binary <code>SEX</code> outcome. As height increases by 1 unit, the odds of SEX=2 increase multiplicatively by a factor of 3.829e-15. Weight has a significantly smaller effect on <code>SEX</code> that is not statistically significant, but the same logic as the height variable applies here. It makes sense that this trend would be weaker because weight fluctuates muchh more than height, regardless of sex. While it is difficult to interpret the change in odds in this situation, the overall trends make sense intuitively.</p>
 </section>
-<section id="testing-logistic-model-performance" class="level1">
-<h1>Testing logistic model performance</h1>
+<section id="testing-logistic-model-performance" class="level3">
+<h3 class="anchored" data-anchor-id="testing-logistic-model-performance">Testing logistic model performance</h3>
 <p>For both models, we will assess the fit using accuracy and ROC-AUC metrics. The setup is similar to calculating RMSE and R squared for linear models. I found the predictions for the <code>SEX</code> variable first. I created a new dataset with the predictions and the true value from the original dataset. The accuracy() function uses the dataset, truth, and estimate arguments.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make predictions using the logistic model with main predictor only </span></span>
@@ -1329,6 +1327,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+</section>
+</section>
 <section id="module-10-exercise" class="level1">
 <h1>Module 10 exercise</h1>
 <p>I will set a seed to ensure reproducibility when using random numbers.</p>
@@ -1336,8 +1336,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># choose random seed number for the exercise</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>rngseed <span class="ot">=</span> <span class="dv">1234</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="data-prep" class="level2">
-<h2 class="anchored" data-anchor-id="data-prep">Data prep</h2>
+<section id="data-prep" class="level3">
+<h3 class="anchored" data-anchor-id="data-prep">Data prep</h3>
 <p>I will remove the <code>RACE</code> variable because there are strange values for missingness included in it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove RACE variable</span></span>
@@ -1360,8 +1360,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> <span class="fu">testing</span>(datasplit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="model-fitting-1" class="level2">
-<h2 class="anchored" data-anchor-id="model-fitting-1">Model Fitting</h2>
+<section id="model-fitting-1" class="level3">
+<h3 class="anchored" data-anchor-id="model-fitting-1">Model Fitting</h3>
 <p><code>mavo_fit1</code> is the object containing the simple linear regression with <code>DOSE</code>as the only predictor. <code>mavo_fit2</code> is the object containing the multiple linear regression with all predictors. I will modify each of these objects to only use the training data set for fitting.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simple linear regression model</span></span>
@@ -1396,8 +1396,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="model-performance-assessment-1" class="level2">
-<h2 class="anchored" data-anchor-id="model-performance-assessment-1">Model performance assessment 1</h2>
+<section id="model-performance-assessment-1" class="level3">
+<h3 class="anchored" data-anchor-id="model-performance-assessment-1">Model performance assessment 1</h3>
 <p>I will compute predictions for both models to find the RMSE metric. I will also compute the RMSE of a null model, which would just predict the mean outcome for each observation without using any predictor information.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the simple linear regression model</span></span>
@@ -1406,34 +1406,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions and true values of Y</span></span>
 <span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>train1 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(trainpred1, train_data<span class="sc">$</span>Y) <span class="sc">%&gt;%</span></span>
-<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">Y =</span> <span class="st">"...2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-• `` -&gt; `...2`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find RMSE to determine model fit</span></span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>trainrmse1<span class="ot">&lt;-</span> <span class="fu">rmse</span>(train1, <span class="at">truth =</span> Y, <span class="at">estimate =</span> .pred)</span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(trainrmse1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">Y =</span> <span class="st">"...2"</span>)</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a><span class="co"># find RMSE to determine model fit</span></span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>trainrmse1<span class="ot">&lt;-</span> <span class="fu">rmse</span>(train1, <span class="at">truth =</span> Y, <span class="at">estimate =</span> .pred)</span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(trainrmse1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 1 rmse    standard        703.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the multiple linear regression model</span></span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>trainpred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(train_fit2, <span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(.pred)</span>
-<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions and true values of Y</span></span>
-<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>train2 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(trainpred2, train_data<span class="sc">$</span>Y) <span class="sc">%&gt;%</span></span>
-<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">Y =</span> <span class="st">"...2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-• `` -&gt; `...2`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find RMSE to determine model fit</span></span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>trainrmse2<span class="ot">&lt;-</span> <span class="fu">rmse</span>(train2, <span class="at">truth =</span> Y, <span class="at">estimate =</span> .pred)</span>
-<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(trainrmse2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the multiple linear regression model</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>trainpred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(train_fit2, <span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(.pred)</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions and true values of Y</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>train2 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(trainpred2, train_data<span class="sc">$</span>Y) <span class="sc">%&gt;%</span></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">Y =</span> <span class="st">"...2"</span>)</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a><span class="co"># find RMSE to determine model fit</span></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>trainrmse2<span class="ot">&lt;-</span> <span class="fu">rmse</span>(train2, <span class="at">truth =</span> Y, <span class="at">estimate =</span> .pred)</span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(trainrmse2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
@@ -1443,25 +1437,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>I will also compute the RMSE of a null model, which would just predict the mean outcome for each observation without using any predictor information.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a null model</span></span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>null_model <span class="ot">&lt;-</span> <span class="fu">null_model</span>(<span class="at">mode =</span> <span class="st">"regression"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_engine</span>(<span class="st">"parsnip"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit</span>(Y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> train_data)</span>
-<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the null model</span></span>
-<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>nullpred <span class="ot">&lt;-</span> <span class="fu">predict</span>(null_model, <span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span></span>
-<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(.pred)</span>
-<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions (means) and true values of Y </span></span>
-<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>trainingnull <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(nullpred, train_data<span class="sc">$</span>Y) <span class="sc">%&gt;%</span> </span>
-<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">rename</span>(<span class="at">Y =</span> <span class="st">"...2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-• `` -&gt; `...2`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find RMSE to determine model fit</span></span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>predrmse<span class="ot">&lt;-</span> <span class="fu">rmse</span>(trainingnull, <span class="at">truth =</span> Y, <span class="at">estimate =</span> .pred)</span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(predrmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a null model</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>null_model <span class="ot">&lt;-</span> <span class="fu">null_model</span>(<span class="at">mode =</span> <span class="st">"regression"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_engine</span>(<span class="st">"parsnip"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit</span>(Y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> train_data)</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the null model</span></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>nullpred <span class="ot">&lt;-</span> <span class="fu">predict</span>(null_model, <span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(.pred)</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions (means) and true values of Y </span></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>trainingnull <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(nullpred, train_data<span class="sc">$</span>Y) <span class="sc">%&gt;%</span> </span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">rename</span>(<span class="at">Y =</span> <span class="st">"...2"</span>)</span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a><span class="co"># find RMSE to determine model fit</span></span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true" tabindex="-1"></a>predrmse<span class="ot">&lt;-</span> <span class="fu">rmse</span>(trainingnull, <span class="at">truth =</span> Y, <span class="at">estimate =</span> .pred)</span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(predrmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
@@ -1471,33 +1462,96 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The RMSE for the null model is 948.356, which is much higher than an RMSE of 702.8078 for the simple linear model and 627.4408 for the multiple linear model. Since the model with all predictors has the lowest RMSE metric, it is clear that the multiple linear regression model is performing the best because it has the lowest difference between the values predicted by the model and the values observed. According to these metrics, the simple linear model performs better than the null model, so it is still useful as well.</p>
 </section>
-<section id="model-performance-assessment-2" class="level2">
-<h2 class="anchored" data-anchor-id="model-performance-assessment-2">Model Performance assessment 2</h2>
+<section id="model-performance-assessment-2" class="level3">
+<h3 class="anchored" data-anchor-id="model-performance-assessment-2">Model Performance assessment 2</h3>
 <p>I will use cross-validation as another method of assessing the model performance. I will follow the tidymodels textbook example for creating a 10-fold cross-validation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(rngseed)</span>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(rngseed)</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create 10 folds</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train_data, <span class="at">v=</span><span class="dv">10</span>)</span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages to create a workflow</span></span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parsnip) </span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a><span class="co"># define your model specification</span></span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-14"><a href="#cb72-14" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a workflow and fit it to the training data for the simple linear model</span></span>
+<span id="cb72-15"><a href="#cb72-15" aria-hidden="true" tabindex="-1"></a>mavo_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb72-16"><a href="#cb72-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb72-17"><a href="#cb72-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(Y<span class="sc">~</span>DOSE) <span class="sc">%&gt;%</span> <span class="co">#specify the formula since we are not using a recipe</span></span>
+<span id="cb72-18"><a href="#cb72-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_data) </span>
+<span id="cb72-19"><a href="#cb72-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-20"><a href="#cb72-20" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model </span></span>
+<span id="cb72-21"><a href="#cb72-21" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs <span class="ot">&lt;-</span> mavo_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb72-22"><a href="#cb72-22" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb72-23"><a href="#cb72-23" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Resampling results
+# 10-fold cross-validation 
+# A tibble: 10 × 4
+   splits         id     .metrics         .notes          
+   &lt;list&gt;         &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;          
+ 1 &lt;split [81/9]&gt; Fold01 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 2 &lt;split [81/9]&gt; Fold02 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 3 &lt;split [81/9]&gt; Fold03 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 4 &lt;split [81/9]&gt; Fold04 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 5 &lt;split [81/9]&gt; Fold05 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 6 &lt;split [81/9]&gt; Fold06 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 7 &lt;split [81/9]&gt; Fold07 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 8 &lt;split [81/9]&gt; Fold08 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+ 9 &lt;split [81/9]&gt; Fold09 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+10 &lt;split [81/9]&gt; Fold10 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># collect the metrics from the model </span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mavo_wf_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator    mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   691.       10 67.5    Preprocessor1_Model1
+2 rsq     standard     0.512    10  0.0592 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+<p>The RMSE for the simple linear model decreased to 690.5397679, which is less than 702.8078. The cross-validation method of testing the model shows that it performs better than the train/test splitting method did. The standard error for the RMSE is 67.495 when using the cross-validation method, which allows us to observe the variability in RMSE estimates. I will use the same number of folds from the previous model along with the same model specification.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(rngseed)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a workflow and fit it to the training data for the multiple linear model</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>mavo_wf2 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(Y<span class="sc">~</span>DOSE <span class="sc">+</span> AGE <span class="sc">+</span> SEX <span class="sc">+</span> WT <span class="sc">+</span> HT) <span class="sc">%&gt;%</span> <span class="co">#specify the formula since we are not using a recipe</span></span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_data) </span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model </span></span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs2 <span class="ot">&lt;-</span> mavo_wf2 <span class="sc">%&gt;%</span> </span>
+<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a><span class="co"># collect the metrics from the model </span></span>
+<span id="cb76-15"><a href="#cb76-15" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mavo_wf_rs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator    mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   646.       10 64.8    Preprocessor1_Model1
+2 rsq     standard     0.573    10  0.0686 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+<p>The RMSE for the model with all the predictors also decreased from when it was estimated with the test/training method to a value of 645.6909159. The standard error for the RMSE is 64.81927084, which is lower than the standard error of the RMSE for the simple linear model. The cross-validation test shows that the multiple linear regression model performs better in comparison to the simple linear regression model and itself according to the test/train method.</p>
+<p>Nothing changes for the null model, which is to be expected because it is only predicting the average.</p>
+<p>I will repeat this process using a different random seed to observe the changes in the RMSE values due to randomness in the data splitting.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set new seed for reproducibility </span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
 <span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create 10 folds</span></span>
-<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train_data, <span class="at">v=</span><span class="dv">10</span>)</span>
-<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages to create a workflow</span></span>
-<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parsnip) </span>
-<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a><span class="co"># define your model specification</span></span>
-<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
-<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a workflow and fit it to the training data for the simple linear model</span></span>
-<span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a>mavo_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb78-16"><a href="#cb78-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
-<span id="cb78-17"><a href="#cb78-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(Y<span class="sc">~</span>DOSE) <span class="sc">%&gt;%</span> <span class="co">#specify the formula since we are not using a recipe</span></span>
-<span id="cb78-18"><a href="#cb78-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_data) </span>
-<span id="cb78-19"><a href="#cb78-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb78-20"><a href="#cb78-20" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model </span></span>
-<span id="cb78-21"><a href="#cb78-21" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs <span class="ot">&lt;-</span> mavo_wf <span class="sc">%&gt;%</span> </span>
-<span id="cb78-22"><a href="#cb78-22" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
-<span id="cb78-23"><a href="#cb78-23" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model with a different seed</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs <span class="ot">&lt;-</span> mavo_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># Resampling results
 # 10-fold cross-validation 
@@ -1524,24 +1578,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 1 rmse    standard   691.       10 67.5    Preprocessor1_Model1
 2 rsq     standard     0.512    10  0.0592 Preprocessor1_Model1</code></pre>
 </div>
-</div>
-<p>The RMSE for the simple linear model decreased to 690.5397679, which is less than 702.8078. The cross-validation method of testing the model shows that it performs better than the train/test splitting method did. The standard error for the RMSE is 67.495 when using the cross-validation method, which allows us to observe the variability in RMSE estimates. I will use the same number of folds from the previous model along with the same model specification.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
-<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(rngseed)</span>
-<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a workflow and fit it to the training data for the multiple linear model</span></span>
-<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>mavo_wf2 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
-<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(Y<span class="sc">~</span>DOSE <span class="sc">+</span> AGE <span class="sc">+</span> SEX <span class="sc">+</span> WT <span class="sc">+</span> HT) <span class="sc">%&gt;%</span> <span class="co">#specify the formula since we are not using a recipe</span></span>
-<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_data) </span>
-<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model </span></span>
-<span id="cb82-11"><a href="#cb82-11" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs2 <span class="ot">&lt;-</span> mavo_wf2 <span class="sc">%&gt;%</span> </span>
-<span id="cb82-12"><a href="#cb82-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
-<span id="cb82-13"><a href="#cb82-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb82-14"><a href="#cb82-14" aria-hidden="true" tabindex="-1"></a><span class="co"># collect the metrics from the model </span></span>
-<span id="cb82-15"><a href="#cb82-15" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mavo_wf_rs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model with a different seed </span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs2 <span class="ot">&lt;-</span> mavo_wf2 <span class="sc">%&gt;%</span> </span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a><span class="co"># collect the metrics from the model </span></span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mavo_wf_rs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   .metric .estimator    mean     n std_err .config             
@@ -1550,58 +1592,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 2 rsq     standard     0.573    10  0.0686 Preprocessor1_Model1</code></pre>
 </div>
 </div>
-<p>The RMSE for the model with all the predictors also decreased from when it was estimated with the test/training method to a value of 645.6909159. The standard error for the RMSE is 64.81927084, which is lower than the standard error of the RMSE for the simple linear model. The cross-validation test shows that the multiple linear regression model performs better in comparison to the simple linear regression model and itself according to the test/train method.</p>
-<p>Nothing changes for the null model, which is to be expected because it is only predicting the average.</p>
-<p>I will repeat this process using a different random seed to observe the changes in the RMSE values due to randomness in the data splitting.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set new seed for reproducibility </span></span>
-<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
-<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model with a different seed</span></span>
-<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs <span class="ot">&lt;-</span> mavo_wf <span class="sc">%&gt;%</span> </span>
-<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
-<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># Resampling results
-# 10-fold cross-validation 
-# A tibble: 10 × 4
-   splits         id     .metrics         .notes          
-   &lt;list&gt;         &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;          
- 1 &lt;split [81/9]&gt; Fold01 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 2 &lt;split [81/9]&gt; Fold02 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 3 &lt;split [81/9]&gt; Fold03 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 4 &lt;split [81/9]&gt; Fold04 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 5 &lt;split [81/9]&gt; Fold05 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 6 &lt;split [81/9]&gt; Fold06 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 7 &lt;split [81/9]&gt; Fold07 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 8 &lt;split [81/9]&gt; Fold08 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
- 9 &lt;split [81/9]&gt; Fold09 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
-10 &lt;split [81/9]&gt; Fold10 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># collect the metrics from the model </span></span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mavo_wf_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 6
-  .metric .estimator    mean     n std_err .config             
-  &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   691.       10 67.5    Preprocessor1_Model1
-2 rsq     standard     0.512    10  0.0592 Preprocessor1_Model1</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the model with a different seed </span></span>
-<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>mavo_wf_rs2 <span class="ot">&lt;-</span> mavo_wf2 <span class="sc">%&gt;%</span> </span>
-<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
-<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a><span class="co"># collect the metrics from the model </span></span>
-<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mavo_wf_rs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 6
-  .metric .estimator    mean     n std_err .config             
-  &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   646.       10 64.8    Preprocessor1_Model1
-2 rsq     standard     0.573    10  0.0686 Preprocessor1_Model1</code></pre>
-</div>
-</div>
-<p>I get slightly different values for both models. The simple linear regression model now has an RMSE of 696.8889145 and a standard error of 72.62528985, which shows more variance in the model than the previous time I ran it. The multiple linear regression model has an RMSE of 631.1949075 this time, and the standard error is 70.40354955. The conclusion about which model performs better remains the same: the multiple linear regression out-performs the simple linear regression. The pattern of the multiple linear regression model having a lower standard error and less variability also remains.</p>
+<p>I get slightly different values for both models. The simple linear regression model now has an RMSE of 690.5397670 and a standard error of 67.49509367, which shows more variance in the model than the previous time I ran it. The multiple linear regression model has an RMSE of 645.6909159 this time, and the standard error is 64.81927084. The conclusion about which model performs better remains the same: the multiple linear regression out-performs the simple linear regression. The pattern of the multiple linear regression model having a lower standard error and less variability also remains.</p>
 
 
 </section>

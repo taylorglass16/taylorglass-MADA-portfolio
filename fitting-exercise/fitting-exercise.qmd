@@ -1,8 +1,8 @@
-## Fitting Exercise
+# Fitting Exercise
 
 This is an exercise to understand `tidymodels` better. We will use data on a drug candidate called Mavoglurant. The data is store as a .csv file, and it was downloaded from the original Github repository. 
 
-# Load all packages for the exercise
+### Load all packages for the exercise
 ```{r}
 #| message: false
 library(readr) # to load in the data
@@ -15,12 +15,13 @@ library(tidymodels) # to fit models
 library(pROC) # to find the ROC curve 
 ```
 
-## Data
+### Data
 ```{r}
 #| message: false
 mavo <- read_csv(here("fitting-exercise", "Mavoglurant_A2121_nmpk.csv"))
 ```
-## Data processing and exploration 
+
+### Data processing and exploration 
 We can create a quick visual of the data by plotting `DV`, the outcome variable, over time. We will stratify by `dose` and use `ID` as a grouping factor. The line graph is busy and not particularly helpful. It could be useful to zoom in and limit the time to 25 hours because most of the variation occurs before that threshold. 
 ```{r}
 #| message: false
@@ -71,7 +72,7 @@ mavo5 <- mavo5 %>%
 ```
 
 ## Exploratory Data Analysis 
-# Summary Tables
+### Summary Tables
 To get a better understanding of the data, I made a simple summary table to examine the distribution for each of the variables. 
 ```{r}
 #| message: false
@@ -93,7 +94,7 @@ kable(numtable)
 ```
 For whichever sex is denoted by 1, the average total drug concentration is higher at 2477.643 units compared to 2235.874 for sex 2. `DOSE`, `HT`, and `WT` also have higher averages among the SEX=1 group, so I hypothesize that 1 represents males and 2 represents females. It is interesting that the average age among the SEX=2 group is 9 years older compared to the SEX=1 group. 
 
-# Exploratory Graphs
+### Exploratory Graphs
 I will create histograms to explore each of the numeric variables to understand their distributions better. 
 ```{r}
 #| message: false
@@ -242,7 +243,7 @@ plot13
 Plot 13 shows a difference in total drug concentration based on sex. The average total concentration for SEX=1 is higher than in SEX=2. The interquartile range apppears to be the same for both sexes, and there is one outlier in each category. 
 
 ## Model Fitting 
-# Linear model with continuous outcome
+### Linear model with continuous outcome
 The first model we are interested in fitting is a linear model with the continuous outcome `Y` and the main predictor of interest `DOSE`. I will use simple linear regression with the default `lm` method for ordinary least squares. 
 ```{r}
 #| message: false
@@ -265,7 +266,7 @@ tidy(mavo_fit2) #generate clean output with estimates and p-values
 ```
 The multiple linear regression yields a slightly larger coefficient for the `DOSE` variable than the simple linear regression did. As dosage increases by 1 unit, total drug concentration increases by 59.934 units according to this model. This pattern makes sense because a higher dosage of the drug is expected to create a higher total drug concentration in the body. Age is positively associated with total drug concentration because as age increases by 1 year, total drug concentration increases by 3.155 years. This pattern is expected because metabolism slows as age increases, so it makes sense that the body would retain higher levels of drug concentration if it is metabolizing the drug at a slower rate. Height has a negative correlation with total drug concentration based on a coefficient estimate of -748.487. Weight is also negatively correlated, but it has a much smaller coefficient of -23.047. These trends are intuitive given that larger bodies are able to metabolize quicker than smaller bodies on average, so taller and heavier people would have lower total drug concentration. The model chose RACE=1 as the comparison category, so the total drug concentration increases by 155.034 units when RACE=2 compared to RACE=1. The total drug concentration decreases by 405.32 units when RACE=7 compared to RACE=1. There is also a negative association between RACE=88 and total drug concentration compared to RACE=1 based on the coefficient of -53.505. It is harder to interpet these trends since we do not know which race is associated with each category. Lastly, total drug concentration decreases by 357.734 units when SEX=2 compared to when SEX=1. Males and femaless have completely different metabolism rate, so it makes sense that this trend exists. All of these associations are statistically significant because the p-values are all less than 0.001. 
 
-# Testing linear model performance
+### Testing linear model performance
 To determine how well these models perform, we will compute the RMSE and R squared metrics. To find RMSE, I made predictions using each model to compare to the real data stored in `mavo5`. I selected the prediction column and bound it to the column with true values of Y from the original data to create a new data frame. I used the rmse() function from the `yardstick` package in `tidymodels` to find the RMSE values. R squared is calculated from the same prediction and truth values using the rsq() function. 
 ```{r}
 #| message: false
@@ -299,7 +300,7 @@ print(rsq2)
 ```
 The RMSE for the simple linear regression model is 666.4618, which is much higher than the RMSE of 590.8535 for the multiple linear regression model. The model with all of the predictors is a better fit for the data. The R squared value for the multiple linear regression model is higher than the simple linear regression model. All the predictors account for 61.93% of variation in the graph, while the `DOSE` variable alone only accounts for 51.56% of the variation. Overall, the multiple linear regression model is the better choice. 
 
-# Logistic model with binary outcome 
+### Logistic model with binary outcome 
 We will know consider `SEX` as the outcome of interest for the sake of practicing modeling with categorical outcomes. First, we will use logistic regression to model `SEX` using the main predictor, `DOSE`. 
 ```{r}
 #| message: false
@@ -330,7 +331,7 @@ exp(-33.19601486)
 ```
 This model shows negative associations between most of the variables and the outcome of `SEX`. The dose coefficient estimate changed only slightly with the addition of the other predictors, and now dosage is associated with a 0.9697 multiplicative effect on the odds of SEX=2. Total drug concentration `Y` appears to have the smallest effect on the outcome, which is to be expected because the total concentration of the drug in your body will have no effect on your sex. Regardless, for every 1 unit increase in total drug concentration, the odds of SEX=2 increase multiplicatively by a factor of 0.9989, which is essentially null. Height has the strongest relationship with the outcome variable, and that trend is expected because males are taller on average than females, which makes height the best predictor of the binary `SEX` outcome. As height increases by 1 unit, the odds of SEX=2 increase multiplicatively by a factor of 3.829e-15. Weight has a significantly smaller effect on `SEX` that is not statistically significant, but the same logic as the height variable applies here. It makes sense that this trend would be weaker because weight fluctuates muchh more than height, regardless of sex. While it is difficult to interpret the change in odds in this situation, the overall trends make sense intuitively. 
 
-# Testing logistic model performance
+### Testing logistic model performance
 For both models, we will assess the fit using accuracy and ROC-AUC metrics. The setup is similar to calculating RMSE and R squared for linear models. I found the predictions for the `SEX` variable first. I created a new dataset with the predictions and the true value from the original dataset. The accuracy() function uses the dataset, truth, and estimate arguments.
 ```{r}
 #| message: false
@@ -390,6 +391,7 @@ The area under the curve for the logistic regression model with the main predict
 
 After receiving feedback from Dr. Handel, he provided us with an example of how to find the area under the curve using the function that I attempted the first time. 
 ```{r}
+#| message: false
 # fit the first logistic model 
 logfit1 <- log_mod %>% fit(SEX ~ DOSE, data = mavo5)
 
@@ -416,13 +418,15 @@ print(m2_auc)
 
 I will set a seed to ensure reproducibility when using random numbers. 
 ```{r}
+#| message: false
 # choose random seed number for the exercise
 rngseed = 1234
 ```
 
-## Data prep
+### Data prep
 I will remove the `RACE` variable because there are strange values for missingness included in it. 
 ```{r}
+#| message: false
 # remove RACE variable
 mavo6 <- mavo5 %>% 
           select(-RACE)
@@ -430,6 +434,7 @@ mavo6 <- mavo5 %>%
 
 I want to split the data into a 75% train and a 25% test set randomly, which is why I will set the seed. I will follow the tidymodels textbook example for splitting data and testing it. 
 ```{r}
+#| message: false
 # set the random seed 
 set.seed(rngseed)
 
@@ -444,9 +449,10 @@ train_data <- training(datasplit)
 test_data <- testing(datasplit)
 ```
 
-## Model Fitting
+### Model Fitting
 `mavo_fit1` is the object containing the simple linear regression with `DOSE`as the only predictor. `mavo_fit2` is the object containing the multiple linear regression with all predictors. I will modify each of these objects to only use the training data set for fitting. 
 ```{r}
+#| message: false
 # simple linear regression model
 lm_mod <- linear_reg() #specify the type of model
 train_fit1 <- lm_mod %>% 
@@ -460,9 +466,10 @@ tidy(mavo_fit2) #generate clean output with estimates and p-values
 ```
 
 
-## Model performance assessment 1
+### Model performance assessment 1
 I will compute predictions for both models to find the RMSE metric. I will also compute the RMSE of a null model, which would just predict the mean outcome for each observation without using any predictor information. 
 ```{r}
+#| message: false
 # create predictions using the simple linear regression model
 trainpred1 <- predict(train_fit1, new_data = train_data) %>% 
                   select(.pred)
@@ -489,6 +496,7 @@ print(trainrmse2)
 ```
 I will also compute the RMSE of a null model, which would just predict the mean outcome for each observation without using any predictor information.
 ```{r}
+#| message: false
 # create a null model
 null_model <- null_model(mode = "regression") %>% 
     set_engine("parsnip") %>%
@@ -508,9 +516,10 @@ print(predrmse)
 ```
 The RMSE for the null model is 948.356, which is much higher than an RMSE of 702.8078 for the simple linear model and 627.4408 for the multiple linear model. Since the model with all predictors has the lowest RMSE metric, it is clear that the multiple linear regression model is performing the best because it has the lowest difference between the values predicted by the model and the values observed. According to these metrics, the simple linear model performs better than the null model, so it is still useful as well.
 
-## Model Performance assessment 2 
+### Model Performance assessment 2 
 I will use cross-validation as another method of assessing the model performance. I will follow the tidymodels textbook example for creating a 10-fold cross-validation. 
 ```{r}
+#| message: false
 # set the seed for reproducibility
 set.seed(rngseed)
 
@@ -541,6 +550,7 @@ collect_metrics(mavo_wf_rs)
 The RMSE for the simple linear model decreased to 690.5397679, which is less than 702.8078. The cross-validation method of testing the model shows that it performs better than the train/test splitting method did. The standard error for the RMSE is 67.495 when using the cross-validation method, which allows us to observe the variability in RMSE estimates. I will use the same number of folds from the previous model along with the same model specification. 
 
 ```{r}
+#| message: false
 # set the seed for reproducibility
 set.seed(rngseed)
 
@@ -563,6 +573,7 @@ Nothing changes for the null model, which is to be expected because it is only p
 
 I will repeat this process using a different random seed to observe the changes in the RMSE values due to randomness in the data splitting. 
 ```{r}
+#| message: false
 # set new seed for reproducibility 
 set.seed(2468)
 
@@ -582,4 +593,4 @@ mavo_wf_rs2 <- mavo_wf2 %>%
 collect_metrics(mavo_wf_rs2)
 
 ```
-I get slightly different values for both models. The simple linear regression model now has an RMSE of 696.8889145 and a standard error of 72.62528985, which shows more variance in the model than the previous time I ran it. The multiple linear regression model has an RMSE of 631.1949075 this time, and the standard error is 70.40354955. The conclusion about which model performs better remains the same: the multiple linear regression out-performs the simple linear regression. The pattern of the multiple linear regression model having a lower standard error and less variability also remains.
+I get slightly different values for both models. The simple linear regression model now has an RMSE of 690.5397670 and a standard error of 67.49509367, which shows more variance in the model than the previous time I ran it. The multiple linear regression model has an RMSE of 645.6909159 this time, and the standard error is 64.81927084. The conclusion about which model performs better remains the same: the multiple linear regression out-performs the simple linear regression. The pattern of the multiple linear regression model having a lower standard error and less variability also remains.
