@@ -410,6 +410,8 @@ m2_auc <-  logfit2 %>%
   roc_auc(truth = SEX, .pred_1)
 print(m2_auc)
 ```
+
+
 # Module 10 exercise
 
 I will set a seed to ensure reproducibility when using random numbers. 
@@ -456,6 +458,8 @@ train_fit2 <- lm_mod %>%
             fit(Y ~ . , data = train_data) #estimate/train the model 
 tidy(mavo_fit2) #generate clean output with estimates and p-values
 ```
+
+
 ## Model performance assessment 1
 I will compute predictions for both models to find the RMSE metric. I will also compute the RMSE of a null model, which would just predict the mean outcome for each observation without using any predictor information. 
 ```{r}
@@ -534,18 +538,11 @@ mavo_wf_rs
 # collect the metrics from the model 
 collect_metrics(mavo_wf_rs)
 ```
-The RMSE for the simple linear model decreased to 686.885, which is substantially smaller than 702.8078. The cross-validation method of testing the model shows that it performs better than the train/test splitting metho did. The standard error for the RMSE is 69.71588 when using the cross-validation method, which allows us to observe the variability in RMSE estimates. 
+The RMSE for the simple linear model decreased to 690.5397679, which is less than 702.8078. The cross-validation method of testing the model shows that it performs better than the train/test splitting method did. The standard error for the RMSE is 67.495 when using the cross-validation method, which allows us to observe the variability in RMSE estimates. I will use the same number of folds from the previous model along with the same model specification. 
 
 ```{r}
 # set the seed for reproducibility
 set.seed(rngseed)
-
-# create 10 folds
-folds <- vfold_cv(train_data, v=10)
-
-# define your model specification
-lm_spec <- linear_reg() %>% 
-  set_engine("lm")
 
 # initialize a workflow and fit it to the training data for the multiple linear model
 mavo_wf2 <- workflow() %>%
@@ -560,27 +557,29 @@ mavo_wf_rs2 <- mavo_wf2 %>%
 # collect the metrics from the model 
 collect_metrics(mavo_wf_rs2)
 ```
-The RMSE for the model with all the predictors also decreased from when it was estimated with the test/training method to a value of 649.0276. The standard error for the RMSE is 65.374, which is lower than the standard error of the RMSE for the simple linear model. The cross-validation test shows that the multiple linear regression model performs better in comparison to the simple linear regression model and itself according to the test/train method. 
+The RMSE for the model with all the predictors also decreased from when it was estimated with the test/training method to a value of 645.6909159. The standard error for the RMSE is 64.81927084, which is lower than the standard error of the RMSE for the simple linear model. The cross-validation test shows that the multiple linear regression model performs better in comparison to the simple linear regression model and itself according to the test/train method. 
 
+Nothing changes for the null model, which is to be expected because it is only predicting the average.
+
+I will repeat this process using a different random seed to observe the changes in the RMSE values due to randomness in the data splitting. 
 ```{r}
-# create 10 folds
-folds <- vfold_cv(train_data, v=10)
+# set new seed for reproducibility 
+set.seed(2468)
 
-# define the null model
-null_model <- null_model(mode = "regression") 
+# resample the model with a different seed
+mavo_wf_rs <- mavo_wf %>% 
+                fit_resamples(folds)
+mavo_wf_rs
 
-# initialize a workflow and fit it to the training data for the null model
-mavo_wf3 <- workflow() %>%
-  add_model(null_model) %>% 
-  add_formula(Y~ 1) %>% #specify the formula since we are not using a recipe
-  fit(data = train_data) 
+# collect the metrics from the model 
+collect_metrics(mavo_wf_rs)
 
-# resample the model 
+# resample the model with a different seed 
 mavo_wf_rs2 <- mavo_wf2 %>% 
                 fit_resamples(folds)
 
 # collect the metrics from the model 
 collect_metrics(mavo_wf_rs2)
-```
-Nothing changes for the null model, which is to be expected. 
 
+```
+I get slightly different values for both models. The simple linear regression model now has an RMSE of 696.8889145 and a standard error of 72.62528985, which shows more variance in the model than the previous time I ran it. The multiple linear regression model has an RMSE of 631.1949075 this time, and the standard error is 70.40354955. The conclusion about which model performs better remains the same: the multiple linear regression out-performs the simple linear regression. The pattern of the multiple linear regression model having a lower standard error and less variability also remains.
