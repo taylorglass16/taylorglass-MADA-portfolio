@@ -462,7 +462,7 @@ tidy(train_fit1) #generate clean output with estimates and p-values
 # multiple linear regression model
 train_fit2 <- lm_mod %>% 
             fit(Y ~ . , data = train_data) #estimate/train the model 
-tidy(mavo_fit2) #generate clean output with estimates and p-values
+tidy(train_fit2) #generate clean output with estimates and p-values
 ```
 
 
@@ -658,7 +658,7 @@ ggsave(filename = figure_file, plot=plot)
 #| label: fig-mod2-resids
 #| fig-cap: "Correlation between multiple regression model residuals and predicted outcome."
 #| echo: FALSE
-knitr::include_graphics(here("fitting-exercise","mod_preds_plot.png"))
+knitr::include_graphics(here("fitting-exercise","mod2_resids_plot.png"))
 ```
 
 @fig-mod2-resids reveals that there are more negative residuals (observation is greater than prediction) and of greater magnitude than positive residuals. Perhaps our linear model is missing some crucial predictor, or, our one/some/all of our predictors impact the outcome in a nonlinear way. 
@@ -669,7 +669,7 @@ For now, however, we will be exploring ways to get a sense of the uncertainty in
 
 ## Model Predictions and Uncertainty
 
-Usually, linear models lend themselves to nice metrics which demosntrate the uncertainty in their estimates of the parameters. More comples and nonlinear models, however, often aren't so generous. 
+Usually, linear models lend themselves to nice metrics which demonstrate the uncertainty in their estimates of the parameters. More comples and nonlinear models, however, often aren't so generous. 
 Another way to estimate uncertainty, however, is the "manual" or "brute-force" sort of way. Is it the most elegant? Ask a statistician. Does it work well? Absolutely - most of the time. This method is called "bootstrapping."
 
 We are going to give it a try on our linear model here, to provide us a nice framework for how bootstrapping works and what it tell us. 
@@ -736,7 +736,48 @@ ggsave(filename = figure_file, plot=plot)
 #| label: fig-mod2-bootstrap-scatter
 #| fig-cap: "Correlation between multiple regression model residuals and predicted outcome. Blue points show median prediction from bootstrap with 100 samples, blue lines show 89% confidence interval in model prediction."
 #| echo: FALSE
-knitr::include_graphics(here("fitting-exercise","mod_preds_plot.png"))
+knitr::include_graphics(here("fitting-exercise","mod2_bootstrap_scatter.png"))
 ```
 
 We can see from @fig-mod2-bootstrap-scatter that our 89% confidence intervals for the predictions which fall off the 1:1 correlation with observation line do not intersect this line; we can be fairly confident that at high Y observations, our model underestimates the value of Y. There may thus be some underlying non-linear relationship between our predictors and the outcome variable `Y` which would result in a greater value of `Y` than is predicted linearly as `Y` gets larger. 
+
+# Part 3 
+### Final Evaluation Using Test Data
+Using the fit of the model 2 on the training data, I will use this fitted model to make predictions for the test data. 
+```{r}
+#| message: false
+# set seed for reproducibility
+set.seed(rngseed)
+
+# create predictions using model 2 with the test data
+testpred <- predict(train_fit2, new_data = test_data) %>% 
+                  select(.pred)
+```
+
+I will make a plot that shows both the predicted versus observed values for both the training data and the test data. 
+```{r}
+#| message: false
+# create data frame with the observed values predicted values from model 2
+plotdata <- data.frame(
+  observed = c(train_data$Y), 
+  training_model2 = c(trainpred2$.pred), 
+  test_model2 = c(testpred$.pred),
+  model = rep(c("observed", "training model", "testing model"), each = nrow(train_data))) # add label indicating the model
+
+# create a visual representation with 2 sets of predicted and observed values 
+ggplot(plotdata, aes(x = observed)) +
+  geom_point(aes(y = training_model2, color = "training model"), shape = 3) +
+  geom_point(aes(y = test_model2, color = "testing model"), shape = 3) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "black") + #add the 45 degree line
+  xlim(0, 5000) + #limit the x-axis values
+  ylim(0, 5000) + #limit the y-axis values
+  labs(x = "Observed Values", y = "Predicted Values", title = "Comparing Training and Testing Data on Model 2")
+```
+I see that the predicted and observed values for the test data are mixed in with the training data, which is a good thing because it proves that our training data calibrated the model appropriately. As Dr. Handel mentioned, if the test data points were systematically "off", it would indicated a problem such as overfitting of the training data. 
+
+### Overall Model Assessment 
+Both of the models are suitable options because they perform better than the null model based on RMSE values. The null RMSE value for the rngseed we set is 948, while model 1 received a 702 and model 2 received a 627. This trend held when I tried another random seed an found RMSE values of 691 for model 1 and 646 for model 2, so the second model with all of the predictors had a lower RMSE value than model 1 in both investigations. These observations prove that there is nothing fundamentally wrong with model 1 or 2, which is the basic requirement of a good model. 
+
+Model 1 with only `DOSE` in the model does perform better than the null model in terms of RMSE, but I would not say that the results are usable. Since the `DOSE` variable is a discrete value with 3 options, there are 3 horizontal lines in the predicted versus observed values graph for this model. Essentially, the model predicts an average response `Y` for each dosage level, which is not very useful. It basically gives a null model result, but there are 3 different levels of `DOSE`. THis makes the model slightly more usable in terms of real purpose because we know that dosage has a biological plausible impact on `Y`. You could use this model to make basic predictions about `Y` based on level of dosage, but there is no variation in the predictions, which decreases how useful the predictions are. 
+
+Model 2 will all of the predictors performs better than both the null model and model 1, and the results from this model are more useful. These results make sense because they hover around an expected linear relationship that is graphically displayed as a 45 degree line. Since this model takes several factors about a person into account, it is more usable in terms of predicting `Y` on an individual basis. Since we used this model on the test_data as well, we see that the predictions from the training and testing data overlap, which means that the model fits our data well enough to be usable because there is no sign of overfitting to the training data. After reading through Cora's explanation of part 2, I see how the unequal distribution of residuals in this model affects the usability of the model. Since we have more negative residuals than positive residuals, it is reasonable to conclude that the model is more likely to underestimate the observed values. If this bias exists in the model, then we can not use the results with as much certainty because the residual plot shows some concern with the predicted values. I think this could be cited as a limitation of the model when reporting the results because the bootstrapping method with 100 samples showed consistent overlap with the point estimates, which increases the reliability of the model. 
