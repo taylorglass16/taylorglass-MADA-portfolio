@@ -594,3 +594,149 @@ collect_metrics(mavo_wf_rs2)
 
 ```
 I get slightly different values for both models. The simple linear regression model now has an RMSE of 690.5397670 and a standard error of 67.49509367, which shows more variance in the model than the previous time I ran it. The multiple linear regression model has an RMSE of 645.6909159 this time, and the standard error is 64.81927084. The conclusion about which model performs better remains the same: the multiple linear regression out-performs the simple linear regression. The pattern of the multiple linear regression model having a lower standard error and less variability also remains.
+
+
+# <span style="color:red;"> This section added by Cora Hirst </span> R.
+
+We would like to visualize the performance of the three models - a "null" model predicting the mean on the `Y` outcome, a model utilizing the variable `DOSE` to predict `Y` outcome, and a model utilizing all predictor variables (`SEX`, `DOSE`, `AGE`, `WT`, and `HT`) to predict outcome `Y` - by plotting their predicted values against the true `Y` observations. 
+
+The code chunk below generates a long-form dataframe of `Y` outcomes predicted by each model, where each observation contains the observed `Y` value and a model's prediction for that observation. We plot the predictions against the observations for each `Y` value to get a sense of the models' performances. 
+
+```{r plotting-model-output}
+#model predictions dataframe wide
+all_mod_preds = data.frame("observed_Y" = train_data$Y, "null_Y" = nullpred$.pred, "DOSE_Y" = trainpred1$.pred, "all_Y" = trainpred2$.pred)
+
+#creating dataframe
+all_mod_preds_long = all_mod_preds %>%
+  pivot_longer(cols = c("null_Y", "DOSE_Y", "all_Y"),
+               names_to = "model",
+               values_to = "outcome")
+
+#plot observed values against predicted values
+
+plot = ggplot() + geom_point(data = all_mod_preds_long, aes(x = observed_Y, y = outcome, shape = model, col = model)) + 
+  xlim(c(0,5000)) +
+  ylim(c(0,5000)) +
+  geom_abline(linetype = "dashed") + 
+  labs(x = "Observed Y", y = "Predicted Y", title = "Model predictions of Y outcome observations")
+
+# Save Figure
+figure_file = here("fitting-exercise", "mod_preds_plot.png")
+ggsave(filename = figure_file, plot=plot) 
+
+```
+
+```{r load-fig-mod-preds}
+#| label: fig-mod-preds
+#| fig-cap: "Comparison of model-predicted Y outcome with observed values. Dashed lines shows a 1:1 correlation between model prediction and observed value."
+#| echo: FALSE
+knitr::include_graphics(here("fitting-exercise","mod_preds_plot.png"))
+```
+
+The null model only predicts a single value for all observations - the mean of the observations. Thus, we see only a horizontal line plotting `Y` predictions against `Y` observations for the null model (@fig-mod-preds). Similarly, we observe 3 horizontal lines representing the `Y` predictions made by the numeric variable `DOSE` - this is simply because `DOSE` only takes on 3 values, and thus, there are only 3 predicted `Y` outcomes by dose. The `All_y` multiple regression model, which uses all variables as predictors, contains outcomes with a much finer grained range of possible outcome values, solely because of the range of combinations of predictor variables (consider just that the predictor variables contain two continuous variables, `HT` and `WT`.)
+
+There is still quite a bit of residual from this best-performing multiple regression model, `all_Y`, which we can observe as the extent of scatter abound the 1:1 line. 
+
+This scatter could be due solely to noisiness in the measurements, in which case we would not expect to see any pattern in our predictions. Here, however, we see that the predicted `Y` values appear to saturate at high `Y` observations - predictions are regularly less than observations at high values of `Y`. This could be indicative a pattern in the Y variable that, as Andreas puts it, out (linear multiple regression) model can't explain. 
+
+Focusing on this multiple regression model, we can first attempt to identify a relationship between scatter and model predicted values by plotting our residuals (our measurement of "scatter") against the model-predicted values (of course!). Here, we can observe whether there is some pattern in the range of predictions our model might be failing to accurately capture. 
+
+```{r plotting-resids}
+#using wide form dataframe to make residuals plot
+plot = ggplot() + geom_point(data = all_mod_preds, aes(x = all_Y, y = all_Y - observed_Y)) + 
+  ylim(c(-2500, 2500)) +
+  xlim(c(1000, 4000)) +
+  geom_hline(yintercept = 0)
+
+# Save Figure
+figure_file = here("fitting-exercise", "mod2_resids_plot.png")
+ggsave(filename = figure_file, plot=plot) 
+
+```
+
+```{r load-fig-mod2-resids}
+#| label: fig-mod2-resids
+#| fig-cap: "Correlation between multiple regression model residuals and predicted outcome."
+#| echo: FALSE
+knitr::include_graphics(here("fitting-exercise","mod_preds_plot.png"))
+```
+
+@fig-mod2-resids reveals that there are more negative residuals (observation is greater than prediction) and of greater magnitude than positive residuals. Perhaps our linear model is missing some crucial predictor, or, our one/some/all of our predictors impact the outcome in a nonlinear way. 
+
+While we won't be discerning between these two hypotheses now, it's good to start building an intuition of how to improve our models based not only on their performance, but how their performance may indicate some natural phenomena we were previously naive to!
+
+For now, however, we will be exploring ways to get a sense of the uncertainty in our model predictions. 
+
+## Model Predictions and Uncertainty
+
+Usually, linear models lend themselves to nice metrics which demosntrate the uncertainty in their estimates of the parameters. More comples and nonlinear models, however, often aren't so generous. 
+Another way to estimate uncertainty, however, is the "manual" or "brute-force" sort of way. Is it the most elegant? Ask a statistician. Does it work well? Absolutely - most of the time. This method is called "bootstrapping."
+
+We are going to give it a try on our linear model here, to provide us a nice framework for how bootstrapping works and what it tell us. 
+
+The logic behind bootstrapping is simple - we take a certain number of sample of the data, fit our models to the data, and examine the distributions of the estimated parameters. It's somewhat similar to cross-validation, expect that cross-validation splits the entire dataset into k-subsets and trains/predicts models on each combination of $k-1$ subsets to train and $k$ subset to predict, while bootstrapping fits estimates to n randomly generated subsets (which can overlap). Thus, cross validation shows us how well a model can perform on unseen data, while boostrapping does not make predictions on unseen data and rather provides an estimate of how widely parameters estimated from subsets of the same data vary. (CV is good for model performance; bootstrapping is good for uncertainty. Obviously, the two goals are not mutually exclusive.) 
+
+And now that I've written all of this I see that Andreas also include a much nicer and briefer explanation of the difference on his MADA assignment page. Ah, c'est la vie. 
+
+All that said, let's go ahead an bootstrap our multiple regression model. We will be using hte `bootstraps` function from the `rsample` package.  
+
+```{r bootstrapping-multiple-regression}
+# we are taking random samples again, so lets set our seed
+set.seed(rngseed)
+
+# create 100 bootstraps from the training data
+bootstraps = train_data %>%
+  rsample::bootstraps(times = 100)
+
+# estimating multiple regression model parameters from each of these bootstraps, and generating predictions for the original training data
+# define your model specification
+lm_spec <- linear_reg() %>% 
+  set_engine("lm")
+
+# creating function to fit our bootstrap to multiple regression model
+multi_reg.preds  = function(i){ # i is the index of our bootstrap
+  bs = rsample::analysis(bootstraps$splits[[i]])
+  mod_preds = lm_spec %>% fit(Y ~ ., data = bs) %>% predict(new_data = train_data) %>% select(.pred) %>% as.vector() %>% unlist()
+  
+  return(mod_preds)
+}
+
+# create an array in which to store 
+bs_preds = matrix(ncol = nrow(bootstraps), nrow = nrow(train_data))
+
+# generate predictions
+for(i in 1:nrow(bootstraps)){
+  bs_preds[,i] = multi_reg.preds(i)
+}
+
+# median and 89% confidence intervals
+preds <- bs_preds %>% apply(1, quantile,  c(0.055, 0.5, 0.945)) %>%  t() %>% cbind("observed_Y" = train_data$Y) %>% as.data.frame() 
+colnames(preds) = c("lower", "median", "upper", "observed_Y")
+
+# I might do something with bootstrap predictions late, so don't mind me here
+for_plot = as.data.frame(cbind(train_data$Y, trainpred2, bs_preds))
+colnames(for_plot) = c("observed_Y", "all_Y", paste0("bs_", 1:nrow(bootstraps)))
+
+# finally, plot!
+plot = ggplot() + geom_point(data = for_plot, aes(x = observed_Y, y = all_Y)) +
+  geom_point(data = preds, aes(x = observed_Y, y = median), col = "blue") +
+  geom_errorbar(data = preds, aes(ymin = lower, ymax = upper, x = observed_Y), color = "blue") +
+  geom_abline(linetype = "dashed", col = "red") + 
+  xlim(0, 5000) +
+  ylim(0,5000) +
+  labs(x = "Observed Y", y = "Model Prediction", title = "Uncertainty in multiple regrerssion model predictions of outcome Y")
+
+# Save Figure
+figure_file = here("fitting-exercise", "mod2_bootstrap_scatter.png")
+ggsave(filename = figure_file, plot=plot) 
+
+```
+
+```{r load-fig-mod2-bootstrap-scatter}
+#| label: fig-mod2-bootstrap-scatter
+#| fig-cap: "Correlation between multiple regression model residuals and predicted outcome. Blue points show median prediction from bootstrap with 100 samples, blue lines show 89% confidence interval in model prediction."
+#| echo: FALSE
+knitr::include_graphics(here("fitting-exercise","mod_preds_plot.png"))
+```
+
+We can see from @fig-mod2-bootstrap-scatter that our 89% confidence intervals for the predictions which fall off the 1:1 correlation with observation line do not intersect this line; we can be fairly confident that at high Y observations, our model underestimates the value of Y. There may thus be some underlying non-linear relationship between our predictors and the outcome variable `Y` which would result in a greater value of `Y` than is predicted linearly as `Y` gets larger. 

@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.537">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="">
-<meta name="dcterms.date" content="2024-03-18">
+<meta name="dcterms.date" content="2024-03-22">
 
 <title>Taylor Glass Data Analysis Portfolio - Supplemental Material: The Impact of Symptom and Activity Trade-offs on Transmission Potential of Patients Infected with Influenza</title>
 <style>
@@ -66,13 +66,7 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -81,7 +75,6 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -91,33 +84,6 @@ div.csl-indent {
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
 <link rel="stylesheet" href="../../../../styles.css">
 </head>
 
@@ -125,9 +91,9 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Taylor Glass Data Analysis Portfolio</span>
     </a>
@@ -139,40 +105,40 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../aboutme.html"> 
-<span class="menu-text">About Me</span></a>
+    <a class="nav-link" href="../../../../aboutme.html" rel="" target="">
+ <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Projects</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
         <li>
-    <a class="dropdown-item" href="../../../../starter-analysis-exercise/products/report/starter-analysis-report.html">
+    <a class="dropdown-item" href="../../../../starter-analysis-exercise/products/report/starter-analysis-report.html" rel="" target="">
  <span class="dropdown-text">Starter Analysis Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../../coding-exercise/coding-exercise.html">
+    <a class="dropdown-item" href="../../../../coding-exercise/coding-exercise.html" rel="" target="">
  <span class="dropdown-text">R Coding Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../../presentation-exercise/presentation-exercise.html">
+    <a class="dropdown-item" href="../../../../presentation-exercise/presentation-exercise.html" rel="" target="">
  <span class="dropdown-text">Presentation Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../../tidytuesday-exercise/tidytuesday-exercise.html">
+    <a class="dropdown-item" href="../../../../tidytuesday-exercise/tidytuesday-exercise.html" rel="" target="">
  <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../../data-exercise/data-exercise.html">
+    <a class="dropdown-item" href="../../../../data-exercise/data-exercise.html" rel="" target="">
  <span class="dropdown-text">Data Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../../cdcdata-exercise/cdcdata-exercise.html">
+    <a class="dropdown-item" href="../../../../cdcdata-exercise/cdcdata-exercise.html" rel="" target="">
  <span class="dropdown-text">CDC Data Analysis Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../../fitting-exercise/fitting-exercise.html">
+    <a class="dropdown-item" href="../../../../fitting-exercise/fitting-exercise.html" rel="" target="">
  <span class="dropdown-text">Fitting Exercise</span></a>
   </li>  
     </ul>
@@ -180,14 +146,14 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/taylorglass16/taylorglass-MADA-portfolio"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/taylorglass16/taylorglass-MADA-portfolio" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -212,7 +178,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 18, 2024</p>
+      <p class="date">March 22, 2024</p>
     </div>
   </div>
   
@@ -220,9 +186,7 @@ window.Quarto = {
   </div>
   
 
-
 </header>
-
 
 <section id="authors" class="level1">
 <h1>Authors</h1>
@@ -307,7 +271,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/ActivityLabBarChart.tiff" class="img-fluid figure-img"></p>
-<figcaption>Histogram of reported activity levels for patients with a lab diagnosis of influenza.</figcaption>
+<figcaption class="figure-caption">Histogram of reported activity levels for patients with a lab diagnosis of influenza.</figcaption>
 </figure>
 </div>
 </div>
@@ -439,6 +403,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <section id="univariate-and-subset-selection" class="level2">
 <h2 class="anchored" data-anchor-id="univariate-and-subset-selection">Univariate and subset selection</h2>
 <p>Correlations between activity level and each symptom from the univariate linear analysis and the multivariate regression model selected using cross-validation (SM Table @ref(tab:LmActvSympLab)).</p>
+<div class="cell-output-display">
 <table class="table">
 <caption><strong>Results of the univariate and multivariate linear regression of symptoms and activity. The coefficients are the estimated effect on activity when the symptom is present. The multivariate model was selected with a sequential forward floating selection, minimizing the RMSE on test data through a 5-fold cross validation (20 times repeated). 95%CI = The 95% confidence interval for the coefficient.</strong></caption>
 <colgroup>
@@ -810,6 +775,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="distribution-of-scores" class="level2">
 <h2 class="anchored" data-anchor-id="distribution-of-scores">Distribution of scores</h2>
@@ -819,7 +785,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/IandMScoresLabBarChart.tiff" class="img-fluid figure-img"></p>
-<figcaption>(A) Histogram of infectiousness score for patients with a lab diagnosis of influenza. (B) Histogram of morbidity score for patients with a lab diagnosis of influenza.</figcaption>
+<figcaption class="figure-caption">(A) Histogram of infectiousness score for patients with a lab diagnosis of influenza. (B) Histogram of morbidity score for patients with a lab diagnosis of influenza.</figcaption>
 </figure>
 </div>
 </div>
@@ -834,7 +800,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/TransScorevsCoughIntensity_Lab_Score1.tiff" class="img-fluid figure-img"></p>
-<figcaption>Relationship between cough intensity and the infectiousness score from main text using all Y/N variables plausibly related to infectiousness.</figcaption>
+<figcaption class="figure-caption">Relationship between cough intensity and the infectiousness score from main text using all Y/N variables plausibly related to infectiousness.</figcaption>
 </figure>
 </div>
 </div>
@@ -844,7 +810,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/ImpactScorevsWeakness_Lab_Score1.tiff" class="img-fluid figure-img"></p>
-<figcaption>Relationship between weakness intensity and the morbidity score from main text using all Y/N variables related to morbidity.</figcaption>
+<figcaption class="figure-caption">Relationship between weakness intensity and the morbidity score from main text using all Y/N variables related to morbidity.</figcaption>
 </figure>
 </div>
 </div>
@@ -854,7 +820,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/ImpactScorevsMyalgia_Lab_Score1.tiff" class="img-fluid figure-img"></p>
-<figcaption>Relationship between body ache intensity and the morbidity score from main text using all Y/N variables related to morbidity.</figcaption>
+<figcaption class="figure-caption">Relationship between body ache intensity and the morbidity score from main text using all Y/N variables related to morbidity.</figcaption>
 </figure>
 </div>
 </div>
@@ -871,7 +837,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/SM_TransScore2_Lab.tiff" class="img-fluid figure-img"></p>
-<figcaption>Infectiousness score without chest congestion</figcaption>
+<figcaption class="figure-caption">Infectiousness score without chest congestion</figcaption>
 </figure>
 </div>
 </div>
@@ -884,7 +850,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/SM_TransScore3_Lab.tiff" class="img-fluid figure-img"></p>
-<figcaption>Infectiousness score without chest and nasal congestion variables</figcaption>
+<figcaption class="figure-caption">Infectiousness score without chest and nasal congestion variables</figcaption>
 </figure>
 </div>
 </div>
@@ -897,7 +863,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/SM_TransScore4_Lab.tiff" class="img-fluid figure-img"></p>
-<figcaption>Infectiousness score removing variables determined to be redundant based on Yule’s Q</figcaption>
+<figcaption class="figure-caption">Infectiousness score removing variables determined to be redundant based on Yule’s Q</figcaption>
 </figure>
 </div>
 </div>
@@ -913,7 +879,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/SM_ImpactScore2_Lab.tiff" class="img-fluid figure-img"></p>
-<figcaption>Morbidity score removing variables determined to be redundant using the absolute value of Yule’s Q of 0.9 or more</figcaption>
+<figcaption class="figure-caption">Morbidity score removing variables determined to be redundant using the absolute value of Yule’s Q of 0.9 or more</figcaption>
 </figure>
 </div>
 </div>
@@ -926,7 +892,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/SM_ImpactScore3_Lab.tiff" class="img-fluid figure-img"></p>
-<figcaption>Morbidity score removing variables determined to be redundant using the absolute value of Yule’s Q of 0.75 or more</figcaption>
+<figcaption class="figure-caption">Morbidity score removing variables determined to be redundant using the absolute value of Yule’s Q of 0.75 or more</figcaption>
 </figure>
 </div>
 </div>
@@ -1061,6 +1027,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <section id="univariate-and-subset-selection-1" class="level2">
 <h2 class="anchored" data-anchor-id="univariate-and-subset-selection-1">Univariate and subset selection</h2>
 <p>We explored the univariate correlations between activity level and each symptom. All of the symptoms that were statistically significantly related to activity showed a negative correlation with activity level (SM Table @ref(tab:LmActvSympAny)). Based on the cross-validated variable selection, we found that a model that included chills/sweats, subjective fever, headache, weakness, sleeplessness, and vomiting creates the most predictive model (SM Table @ref(tab:LmActvSympAny)).</p>
+<div class="cell-output-display">
 <table class="table">
 <caption><strong>Results of the univariate and multivariate linear regression of symptoms and activity. The coefficients are the estimated effect on activity when the symptom is present. The multivariate model was selected with a sequential forward floating selection, minimizing the root mean square error on test data through a 5-fold cross validation (20 times repeated). 95%CI = The 95% confidence interval for the coefficient.</strong></caption>
 <colgroup>
@@ -1432,6 +1399,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="computation-of-infectiousness-and-morbidity-scores" class="level2">
 <h2 class="anchored" data-anchor-id="computation-of-infectiousness-and-morbidity-scores">Computation of infectiousness and morbidity scores</h2>
@@ -1441,7 +1409,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/InfectScoreAnyBarChart.tiff" class="img-fluid figure-img"></p>
-<figcaption>Distribution of the infectiousness score.</figcaption>
+<figcaption class="figure-caption">Distribution of the infectiousness score.</figcaption>
 </figure>
 </div>
 </div>
@@ -1452,7 +1420,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/MorbScoreAnyBarChart.tiff" class="img-fluid figure-img"></p>
-<figcaption>Distribution of the morbidity score.</figcaption>
+<figcaption class="figure-caption">Distribution of the morbidity score.</figcaption>
 </figure>
 </div>
 </div>
@@ -1466,7 +1434,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/ActivityVSTransScore_Any.tiff" class="img-fluid figure-img"></p>
-<figcaption>Activity level for each level of the infectiousness score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
+<figcaption class="figure-caption">Activity level for each level of the infectiousness score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
 </figure>
 </div>
 </div>
@@ -1480,7 +1448,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/ActivityVSImpactScore_Any.tiff" class="img-fluid figure-img"></p>
-<figcaption>Activity level for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
+<figcaption class="figure-caption">Activity level for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
 </figure>
 </div>
 </div>
@@ -1494,7 +1462,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../5 Results/Figures/TransScoreVSImpactScore_Any.tiff" class="img-fluid figure-img"></p>
-<figcaption>Infectiousness score for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
+<figcaption class="figure-caption">Infectiousness score for each level of the morbidity score. The red diamond is the mean. The solid blue line is the linear regression fit. The shaded area is the 95% confidence interval for the linear regression.</figcaption>
 </figure>
 </div>
 </div>
@@ -1508,7 +1476,7 @@ DOI: 10.1098/rspb.2020.0496</p>
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" role="list">
 <div id="ref-Yan2018" class="csl-entry" role="listitem">
 <div class="csl-left-margin">1. </div><div class="csl-right-inline">Yan J <em>et al.</em> 2018 Infectious virus in exhaled breath of symptomatic seasonal influenza cases from a college community. <em>Proceedings of the National Academy of Sciences</em> <strong>115</strong>, 1081–1086.</div>
 </div>
@@ -1604,9 +1572,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1616,17 +1585,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1639,120 +1599,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1796,7 +1642,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1822,32 +1667,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1908,7 +1727,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
 
 
 
