@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.537">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Taylor Glass Data Analysis Portfolio</title>
+<title>Taylor Glass Data Analysis Portfolio – fitting-exercise</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -79,13 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -94,13 +88,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -109,9 +104,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Taylor Glass Data Analysis Portfolio</span>
     </a>
@@ -123,40 +118,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../aboutme.html"> 
-<span class="menu-text">About Me</span></a>
+    <a class="nav-link" href="../aboutme.html" rel="" target="">
+ <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Projects</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
         <li>
-    <a class="dropdown-item" href="../starter-analysis-exercise/products/report/starter-analysis-report.html">
+    <a class="dropdown-item" href="../starter-analysis-exercise/products/report/starter-analysis-report.html" rel="" target="">
  <span class="dropdown-text">Starter Analysis Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../coding-exercise/coding-exercise.html">
+    <a class="dropdown-item" href="../coding-exercise/coding-exercise.html" rel="" target="">
  <span class="dropdown-text">R Coding Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../presentation-exercise/presentation-exercise.html">
+    <a class="dropdown-item" href="../presentation-exercise/presentation-exercise.html" rel="" target="">
  <span class="dropdown-text">Presentation Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../tidytuesday-exercise/tidytuesday-exercise.html">
+    <a class="dropdown-item" href="../tidytuesday-exercise/tidytuesday-exercise.html" rel="" target="">
  <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../data-exercise/data-exercise.html">
+    <a class="dropdown-item" href="../data-exercise/data-exercise.html" rel="" target="">
  <span class="dropdown-text">Data Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../cdcdata-exercise/cdcdata-exercise.html">
+    <a class="dropdown-item" href="../cdcdata-exercise/cdcdata-exercise.html" rel="" target="">
  <span class="dropdown-text">CDC Data Analysis Exercise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../fitting-exercise/fitting-exercise.html">
+    <a class="dropdown-item" href="../fitting-exercise/fitting-exercise.html" rel="" target="">
  <span class="dropdown-text">Fitting Exercise</span></a>
   </li>  
     </ul>
@@ -164,14 +159,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/taylorglass16/taylorglass-MADA-portfolio"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/taylorglass16/taylorglass-MADA-portfolio" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -182,7 +177,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     
 <!-- main -->
 <main class="content" id="quarto-document-content">
-
 
 
 
@@ -218,11 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> DOSE, <span class="at">scales =</span> <span class="st">"free_y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>This line graph is strongly skewed to the right with the highest drug concentration values <code>DV</code> being observed within the first 2 hours. As time progresses, the drug concentration sharply decreases until it reaches 0 around 48 hours.</p>
@@ -273,23 +263,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tbl_summary</span>()</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="cwyvlgxsrb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cwyvlgxsrb table {
+
+<div id="eegfewiyom" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eegfewiyom table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cwyvlgxsrb thead, #cwyvlgxsrb tbody, #cwyvlgxsrb tfoot, #cwyvlgxsrb tr, #cwyvlgxsrb td, #cwyvlgxsrb th {
+#eegfewiyom thead, #eegfewiyom tbody, #eegfewiyom tfoot, #eegfewiyom tr, #eegfewiyom td, #eegfewiyom th {
   border-style: none;
 }
 
-#cwyvlgxsrb p {
+#eegfewiyom p {
   margin: 0;
   padding: 0;
 }
 
-#cwyvlgxsrb .gt_table {
+#eegfewiyom .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -315,12 +306,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_caption {
+#eegfewiyom .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cwyvlgxsrb .gt_title {
+#eegfewiyom .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -332,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#cwyvlgxsrb .gt_subtitle {
+#eegfewiyom .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -344,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#cwyvlgxsrb .gt_heading {
+#eegfewiyom .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -356,13 +347,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_bottom_border {
+#eegfewiyom .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_col_headings {
+#eegfewiyom .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -377,7 +368,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_col_heading {
+#eegfewiyom .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -397,7 +388,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#cwyvlgxsrb .gt_column_spanner_outer {
+#eegfewiyom .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -409,15 +400,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#cwyvlgxsrb .gt_column_spanner_outer:first-child {
+#eegfewiyom .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cwyvlgxsrb .gt_column_spanner_outer:last-child {
+#eegfewiyom .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cwyvlgxsrb .gt_column_spanner {
+#eegfewiyom .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -429,11 +420,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#cwyvlgxsrb .gt_spanner_row {
+#eegfewiyom .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cwyvlgxsrb .gt_group_heading {
+#eegfewiyom .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -459,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#cwyvlgxsrb .gt_empty_group_heading {
+#eegfewiyom .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -474,15 +465,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#cwyvlgxsrb .gt_from_md > :first-child {
+#eegfewiyom .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cwyvlgxsrb .gt_from_md > :last-child {
+#eegfewiyom .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cwyvlgxsrb .gt_row {
+#eegfewiyom .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -501,7 +492,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#cwyvlgxsrb .gt_stub {
+#eegfewiyom .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -514,7 +505,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwyvlgxsrb .gt_stub_row_group {
+#eegfewiyom .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -528,15 +519,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#cwyvlgxsrb .gt_row_group_first td {
+#eegfewiyom .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cwyvlgxsrb .gt_row_group_first th {
+#eegfewiyom .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cwyvlgxsrb .gt_summary_row {
+#eegfewiyom .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -546,16 +537,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwyvlgxsrb .gt_first_summary_row {
+#eegfewiyom .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_first_summary_row.thick {
+#eegfewiyom .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cwyvlgxsrb .gt_last_summary_row {
+#eegfewiyom .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -565,7 +556,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_grand_summary_row {
+#eegfewiyom .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -575,7 +566,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwyvlgxsrb .gt_first_grand_summary_row {
+#eegfewiyom .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -585,7 +576,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_last_grand_summary_row_top {
+#eegfewiyom .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -595,11 +586,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_striped {
+#eegfewiyom .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cwyvlgxsrb .gt_table_body {
+#eegfewiyom .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -608,7 +599,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_footnotes {
+#eegfewiyom .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -622,7 +613,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_footnote {
+#eegfewiyom .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -631,7 +622,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwyvlgxsrb .gt_sourcenotes {
+#eegfewiyom .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -645,7 +636,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#cwyvlgxsrb .gt_sourcenote {
+#eegfewiyom .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -653,154 +644,114 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#cwyvlgxsrb .gt_left {
+#eegfewiyom .gt_left {
   text-align: left;
 }
 
-#cwyvlgxsrb .gt_center {
+#eegfewiyom .gt_center {
   text-align: center;
 }
 
-#cwyvlgxsrb .gt_right {
+#eegfewiyom .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cwyvlgxsrb .gt_font_normal {
+#eegfewiyom .gt_font_normal {
   font-weight: normal;
 }
 
-#cwyvlgxsrb .gt_font_bold {
+#eegfewiyom .gt_font_bold {
   font-weight: bold;
 }
 
-#cwyvlgxsrb .gt_font_italic {
+#eegfewiyom .gt_font_italic {
   font-style: italic;
 }
 
-#cwyvlgxsrb .gt_super {
+#eegfewiyom .gt_super {
   font-size: 65%;
 }
 
-#cwyvlgxsrb .gt_footnote_marks {
+#eegfewiyom .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cwyvlgxsrb .gt_asterisk {
+#eegfewiyom .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cwyvlgxsrb .gt_indent_1 {
+#eegfewiyom .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cwyvlgxsrb .gt_indent_2 {
+#eegfewiyom .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cwyvlgxsrb .gt_indent_3 {
+#eegfewiyom .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cwyvlgxsrb .gt_indent_4 {
+#eegfewiyom .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cwyvlgxsrb .gt_indent_5 {
+#eegfewiyom .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-
-<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header gt_col_headings">
-<th id="<strong>Characteristic</strong>" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
-<th id="<strong>N = 120</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>N = 120</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">Y</td>
-<td class="gt_row gt_center" headers="stat_0">2,349 (1,701, 3,050)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">DOSE</td>
-<td class="gt_row gt_center" headers="stat_0"><br>
-</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;25</td>
-<td class="gt_row gt_center" headers="stat_0">59 (49%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;37.5</td>
-<td class="gt_row gt_center" headers="stat_0">12 (10%)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;50</td>
-<td class="gt_row gt_center" headers="stat_0">49 (41%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">AGE</td>
-<td class="gt_row gt_center" headers="stat_0">31 (26, 40)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">SEX</td>
-<td class="gt_row gt_center" headers="stat_0"><br>
-</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;1</td>
-<td class="gt_row gt_center" headers="stat_0">104 (87%)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;2</td>
-<td class="gt_row gt_center" headers="stat_0">16 (13%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">RACE</td>
-<td class="gt_row gt_center" headers="stat_0"><br>
-</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;1</td>
-<td class="gt_row gt_center" headers="stat_0">74 (62%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;2</td>
-<td class="gt_row gt_center" headers="stat_0">36 (30%)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;7</td>
-<td class="gt_row gt_center" headers="stat_0">2 (1.7%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;88</td>
-<td class="gt_row gt_center" headers="stat_0">8 (6.7%)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">WT</td>
-<td class="gt_row gt_center" headers="stat_0">82 (73, 90)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">HT</td>
-<td class="gt_row gt_center" headers="stat_0">1.77 (1.70, 1.81)</td>
-</tr>
-</tbody><tfoot class="gt_footnotes">
-<tr class="odd">
-<td colspan="2" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Median (IQR); n (%)</td>
-</tr>
-</tfoot>
-
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 120</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 120</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">Y</td>
+<td headers="stat_0" class="gt_row gt_center">2,349 (1,701, 3,050)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">DOSE</td>
+<td headers="stat_0" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;25</td>
+<td headers="stat_0" class="gt_row gt_center">59 (49%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;37.5</td>
+<td headers="stat_0" class="gt_row gt_center">12 (10%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;50</td>
+<td headers="stat_0" class="gt_row gt_center">49 (41%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">AGE</td>
+<td headers="stat_0" class="gt_row gt_center">31 (26, 40)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">SEX</td>
+<td headers="stat_0" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;1</td>
+<td headers="stat_0" class="gt_row gt_center">104 (87%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2</td>
+<td headers="stat_0" class="gt_row gt_center">16 (13%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">RACE</td>
+<td headers="stat_0" class="gt_row gt_center"><br></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;1</td>
+<td headers="stat_0" class="gt_row gt_center">74 (62%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2</td>
+<td headers="stat_0" class="gt_row gt_center">36 (30%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;7</td>
+<td headers="stat_0" class="gt_row gt_center">2 (1.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;88</td>
+<td headers="stat_0" class="gt_row gt_center">8 (6.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">WT</td>
+<td headers="stat_0" class="gt_row gt_center">82 (73, 90)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">HT</td>
+<td headers="stat_0" class="gt_row gt_center">1.77 (1.70, 1.81)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="2"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Median (IQR); n (%)</td>
+    </tr>
+  </tfoot>
 </table>
-
 </div>
 </div>
 </div>
@@ -858,11 +809,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Total Drug Concentration"</span>, <span class="at">y=</span><span class="st">"Frequency"</span>, <span class="at">title =</span> <span class="st">"Distribution of Total Drug Concentration"</span>)</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plot1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 1 reveals that total drug concentration is almost normally distributed with a few trailing outliers that are greater than 4000 units. The lowest total drug concentration is around 750 units, and the highest outliter is about 5600 units. The majoirty of observations fall between 1000 and 4000 units.</p>
@@ -874,11 +821,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Mavoglurant Dosage"</span>, <span class="at">y=</span><span class="st">"Frequency"</span>, <span class="at">title =</span> <span class="st">"Distribution of Dosage"</span>)</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plot2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 2 reveals that there are three distinct options for Mavoglurant dosage around 25, 37.5, and 50 units. Almost half of the observations take the 25 unit dosage, and the 37.5 unit dosage is the most uncommmon.</p>
@@ -890,11 +833,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Age"</span>, <span class="at">y=</span><span class="st">"Frequency"</span>, <span class="at">title =</span> <span class="st">"Distribution of Age"</span>)</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plot3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 3 reveals that age is not normally distributed. The two ages accounting for the most observations are around 26 and 27 years. There are also peaks in the histogram at 37 years and 30 years. This graph shows random variation in the age of the 120 observations.</p>
@@ -906,11 +845,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Height"</span>, <span class="at">y=</span><span class="st">"Frequency"</span>, <span class="at">title =</span> <span class="st">"Distribution of Height"</span>)</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plot4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 4 reveals height to be approximately normally distributed with a peak around 1.8 units. There are a few low outliers between 1.5 and 1.6 units, but the majority of observations have a heigt between 1.62 and 1.91 unit.</p>
@@ -922,11 +857,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Weight"</span>, <span class="at">y=</span><span class="st">"Frequency"</span>, <span class="at">title =</span> <span class="st">"Distribution of Weight"</span>)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>plot5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 5 reveals that weight is approximately normally distributed with a peak around 82 units. The lowest weight is about 55 units, and the highest weight is about 116 units. Most of the observations fall between 68 and 100 units.</p>
@@ -939,11 +870,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Race"</span>, <span class="at">y=</span><span class="st">"Frequency"</span>, <span class="at">title =</span> <span class="st">"Distribution of Race"</span>)</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plot6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 6 shows that race is denoted as four discrete numeric options: 1, 2, 7, and 88. Over 70 observations are accounted for in the RACE=1 category which is almost twice as large as the RACE=2 category. RACE=7 has the fewest observations, ann RACE=88 has about 8 observations. It is almost impossible to determine which race is represented by each category, but RACE=88 probably accounts for missing information.</p>
@@ -955,11 +882,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Sex"</span>, <span class="at">y=</span><span class="st">"Frequency"</span>, <span class="at">title =</span> <span class="st">"Distribution of Sex"</span>)</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plot7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 7 confirms what we already know about sex being unevenly distributed. SEX=1 accounts for over 100 observations, which is almost 5 times as many observations included in the SEX=2 category.</p>
@@ -973,11 +896,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Dose"</span>, <span class="at">y=</span><span class="st">"Total Drug Concentration"</span>, <span class="at">title =</span> <span class="st">"Dosage Related to Total Drug Concentration"</span>)</span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plot8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>I converted the <code>DOSAGE</code> variable to a factor variable here because I felt like a boxplot would display the information better than a scatterplot. The boxplot can be used to determine that the 50 unit dose accounts for the highest average total drug concentration. Total drug concentration decreases as dosage decreases to 37.5 and 25 units, which makes sense intuitively. There are a few outliers in each dosage category, but they do not seem to affect the overall trend.</p>
@@ -989,11 +908,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Age"</span>, <span class="at">y=</span><span class="st">"Total Drug Concentration"</span>, <span class="at">title =</span> <span class="st">"Age Related to Total Drug Concentration"</span>)</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plot9</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 9 shows that there is no correlation between age and total drug concentration. The points appear to be randomly distributed without a clear trend of association.</p>
@@ -1005,11 +920,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Height"</span>, <span class="at">y=</span><span class="st">"Total Drug Concentration"</span>, <span class="at">title =</span> <span class="st">"Height Related to Total Drug Concentration"</span>)</span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>plot10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 10 shows that height is not correlated with total drug concentration either. The points appear to be randomly distributed with no clear trend of association.</p>
@@ -1021,11 +932,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Weight"</span>, <span class="at">y=</span><span class="st">"Total Drug Concentration"</span>, <span class="at">title =</span> <span class="st">"Weight Related to Total Drug Concentration"</span>)</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plot11</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 11 contains a lot of variation, but there appears to be weak correlation between these two variables. There seems to be a negative trend between weight and total drug concentration. As weight increases, total drug concentration decreases.</p>
@@ -1037,11 +944,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Race"</span>, <span class="at">y=</span><span class="st">"Total Drug Concentration"</span>, <span class="at">title =</span> <span class="st">"Race Related to Total Drug Concentration"</span>)</span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plot12</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 12 shows that there is minimal variation in total drug concentration across racial categories because the averages appear to be within 100 units for all 4 categories. The interquartile range for RACE=1 appears to be the largest, and this category has the highest maximum total drug concentration as well. The interquartile range for RACE=7 is the smallest, which means there is the least variation in total drug concentration in this category. There are only 2 outliers according to this plot, one in RACE=1 and another in RACE=88.</p>
@@ -1052,11 +955,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Sex"</span>, <span class="at">y=</span><span class="st">"Total Drug Concentration"</span>, <span class="at">title =</span> <span class="st">"Sex Related to Total Drug Concentration"</span>)</span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>plot13</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="fitting-exercise_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot 13 shows a difference in total drug concentration based on sex. The average total concentration for SEX=1 is higher than in SEX=2. The interquartile range apppears to be the same for both sexes, and there is one outlier in each category.</p>
@@ -1593,6 +1492,156 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>I get slightly different values for both models. The simple linear regression model now has an RMSE of 690.5397670 and a standard error of 67.49509367, which shows more variance in the model than the previous time I ran it. The multiple linear regression model has an RMSE of 645.6909159 this time, and the standard error is 64.81927084. The conclusion about which model performs better remains the same: the multiple linear regression out-performs the simple linear regression. The pattern of the multiple linear regression model having a lower standard error and less variability also remains.</p>
+</section>
+</section>
+<section id="this-section-added-by-cora-hirst-r." class="level1">
+<h1><span style="color:red;"> This section added by Cora Hirst </span> R.</h1>
+<p>We would like to visualize the performance of the three models - a “null” model predicting the mean on the <code>Y</code> outcome, a model utilizing the variable <code>DOSE</code> to predict <code>Y</code> outcome, and a model utilizing all predictor variables (<code>SEX</code>, <code>DOSE</code>, <code>AGE</code>, <code>WT</code>, and <code>HT</code>) to predict outcome <code>Y</code> - by plotting their predicted values against the true <code>Y</code> observations.</p>
+<p>The code chunk below generates a long-form dataframe of <code>Y</code> outcomes predicted by each model, where each observation contains the observed <code>Y</code> value and a model’s prediction for that observation. We plot the predictions against the observations for each <code>Y</code> value to get a sense of the models’ performances.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co">#model predictions dataframe wide</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>all_mod_preds <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="st">"observed_Y"</span> <span class="ot">=</span> train_data<span class="sc">$</span>Y, <span class="st">"null_Y"</span> <span class="ot">=</span> nullpred<span class="sc">$</span>.pred, <span class="st">"DOSE_Y"</span> <span class="ot">=</span> trainpred1<span class="sc">$</span>.pred, <span class="st">"all_Y"</span> <span class="ot">=</span> trainpred2<span class="sc">$</span>.pred)</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="co">#creating dataframe</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>all_mod_preds_long <span class="ot">=</span> all_mod_preds <span class="sc">%&gt;%</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"null_Y"</span>, <span class="st">"DOSE_Y"</span>, <span class="st">"all_Y"</span>),</span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"model"</span>,</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"outcome"</span>)</span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a><span class="co">#plot observed values against predicted values</span></span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> all_mod_preds_long, <span class="fu">aes</span>(<span class="at">x =</span> observed_Y, <span class="at">y =</span> outcome, <span class="at">shape =</span> model, <span class="at">col =</span> model)) <span class="sc">+</span> </span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb84-15"><a href="#cb84-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb84-16"><a href="#cb84-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Observed Y"</span>, <span class="at">y =</span> <span class="st">"Predicted Y"</span>, <span class="at">title =</span> <span class="st">"Model predictions of Y outcome observations"</span>)</span>
+<span id="cb84-17"><a href="#cb84-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-18"><a href="#cb84-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Save Figure</span></span>
+<span id="cb84-19"><a href="#cb84-19" aria-hidden="true" tabindex="-1"></a>figure_file <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"fitting-exercise"</span>, <span class="st">"mod_preds_plot.png"</span>)</span>
+<span id="cb84-20"><a href="#cb84-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> figure_file, <span class="at">plot=</span>plot) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 3 rows containing missing values (`geom_point()`).</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-mod-preds" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="mod_preds_plot.png" class="img-fluid figure-img" width="1050"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Comparison of model-predicted Y outcome with observed values. Dashed lines shows a 1:1 correlation between model prediction and observed value.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The null model only predicts a single value for all observations - the mean of the observations. Thus, we see only a horizontal line plotting <code>Y</code> predictions against <code>Y</code> observations for the null model (<a href="#fig-mod-preds">Figure&nbsp;1</a>). Similarly, we observe 3 horizontal lines representing the <code>Y</code> predictions made by the numeric variable <code>DOSE</code> - this is simply because <code>DOSE</code> only takes on 3 values, and thus, there are only 3 predicted <code>Y</code> outcomes by dose. The <code>All_y</code> multiple regression model, which uses all variables as predictors, contains outcomes with a much finer grained range of possible outcome values, solely because of the range of combinations of predictor variables (consider just that the predictor variables contain two continuous variables, <code>HT</code> and <code>WT</code>.)</p>
+<p>There is still quite a bit of residual from this best-performing multiple regression model, <code>all_Y</code>, which we can observe as the extent of scatter abound the 1:1 line.</p>
+<p>This scatter could be due solely to noisiness in the measurements, in which case we would not expect to see any pattern in our predictions. Here, however, we see that the predicted <code>Y</code> values appear to saturate at high <code>Y</code> observations - predictions are regularly less than observations at high values of <code>Y</code>. This could be indicative a pattern in the Y variable that, as Andreas puts it, out (linear multiple regression) model can’t explain.</p>
+<p>Focusing on this multiple regression model, we can first attempt to identify a relationship between scatter and model predicted values by plotting our residuals (our measurement of “scatter”) against the model-predicted values (of course!). Here, we can observe whether there is some pattern in the range of predictions our model might be failing to accurately capture.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co">#using wide form dataframe to make residuals plot</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> all_mod_preds, <span class="fu">aes</span>(<span class="at">x =</span> all_Y, <span class="at">y =</span> all_Y <span class="sc">-</span> observed_Y)) <span class="sc">+</span> </span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">2500</span>, <span class="dv">2500</span>)) <span class="sc">+</span></span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">4000</span>)) <span class="sc">+</span></span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)</span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Save Figure</span></span>
+<span id="cb87-8"><a href="#cb87-8" aria-hidden="true" tabindex="-1"></a>figure_file <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"fitting-exercise"</span>, <span class="st">"mod2_resids_plot.png"</span>)</span>
+<span id="cb87-9"><a href="#cb87-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> figure_file, <span class="at">plot=</span>plot) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-mod2-resids" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="mod_preds_plot.png" class="img-fluid figure-img" width="1050"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Correlation between multiple regression model residuals and predicted outcome.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-mod2-resids">Figure&nbsp;2</a> reveals that there are more negative residuals (observation is greater than prediction) and of greater magnitude than positive residuals. Perhaps our linear model is missing some crucial predictor, or, our one/some/all of our predictors impact the outcome in a nonlinear way.</p>
+<p>While we won’t be discerning between these two hypotheses now, it’s good to start building an intuition of how to improve our models based not only on their performance, but how their performance may indicate some natural phenomena we were previously naive to!</p>
+<p>For now, however, we will be exploring ways to get a sense of the uncertainty in our model predictions.</p>
+<section id="model-predictions-and-uncertainty" class="level2">
+<h2 class="anchored" data-anchor-id="model-predictions-and-uncertainty">Model Predictions and Uncertainty</h2>
+<p>Usually, linear models lend themselves to nice metrics which demosntrate the uncertainty in their estimates of the parameters. More comples and nonlinear models, however, often aren’t so generous. Another way to estimate uncertainty, however, is the “manual” or “brute-force” sort of way. Is it the most elegant? Ask a statistician. Does it work well? Absolutely - most of the time. This method is called “bootstrapping.”</p>
+<p>We are going to give it a try on our linear model here, to provide us a nice framework for how bootstrapping works and what it tell us.</p>
+<p>The logic behind bootstrapping is simple - we take a certain number of sample of the data, fit our models to the data, and examine the distributions of the estimated parameters. It’s somewhat similar to cross-validation, expect that cross-validation splits the entire dataset into k-subsets and trains/predicts models on each combination of <span class="math inline">\(k-1\)</span> subsets to train and <span class="math inline">\(k\)</span> subset to predict, while bootstrapping fits estimates to n randomly generated subsets (which can overlap). Thus, cross validation shows us how well a model can perform on unseen data, while boostrapping does not make predictions on unseen data and rather provides an estimate of how widely parameters estimated from subsets of the same data vary. (CV is good for model performance; bootstrapping is good for uncertainty. Obviously, the two goals are not mutually exclusive.)</p>
+<p>And now that I’ve written all of this I see that Andreas also include a much nicer and briefer explanation of the difference on his MADA assignment page. Ah, c’est la vie.</p>
+<p>All that said, let’s go ahead an bootstrap our multiple regression model. We will be using hte <code>bootstraps</code> function from the <code>rsample</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we are taking random samples again, so lets set our seed</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(rngseed)</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create 100 bootstraps from the training data</span></span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>bootstraps <span class="ot">=</span> train_data <span class="sc">%&gt;%</span></span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a>  rsample<span class="sc">::</span><span class="fu">bootstraps</span>(<span class="at">times =</span> <span class="dv">100</span>)</span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a><span class="co"># estimating multiple regression model parameters from each of these bootstraps, and generating predictions for the original training data</span></span>
+<span id="cb89-9"><a href="#cb89-9" aria-hidden="true" tabindex="-1"></a><span class="co"># define your model specification</span></span>
+<span id="cb89-10"><a href="#cb89-10" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb89-11"><a href="#cb89-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb89-12"><a href="#cb89-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-13"><a href="#cb89-13" aria-hidden="true" tabindex="-1"></a><span class="co"># creating function to fit our bootstrap to multiple regression model</span></span>
+<span id="cb89-14"><a href="#cb89-14" aria-hidden="true" tabindex="-1"></a>multi_reg.preds  <span class="ot">=</span> <span class="cf">function</span>(i){ <span class="co"># i is the index of our bootstrap</span></span>
+<span id="cb89-15"><a href="#cb89-15" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">=</span> rsample<span class="sc">::</span><span class="fu">analysis</span>(bootstraps<span class="sc">$</span>splits[[i]])</span>
+<span id="cb89-16"><a href="#cb89-16" aria-hidden="true" tabindex="-1"></a>  mod_preds <span class="ot">=</span> lm_spec <span class="sc">%&gt;%</span> <span class="fu">fit</span>(Y <span class="sc">~</span> ., <span class="at">data =</span> bs) <span class="sc">%&gt;%</span> <span class="fu">predict</span>(<span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span> <span class="fu">select</span>(.pred) <span class="sc">%&gt;%</span> <span class="fu">as.vector</span>() <span class="sc">%&gt;%</span> <span class="fu">unlist</span>()</span>
+<span id="cb89-17"><a href="#cb89-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb89-18"><a href="#cb89-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(mod_preds)</span>
+<span id="cb89-19"><a href="#cb89-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb89-20"><a href="#cb89-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-21"><a href="#cb89-21" aria-hidden="true" tabindex="-1"></a><span class="co"># create an array in which to store </span></span>
+<span id="cb89-22"><a href="#cb89-22" aria-hidden="true" tabindex="-1"></a>bs_preds <span class="ot">=</span> <span class="fu">matrix</span>(<span class="at">ncol =</span> <span class="fu">nrow</span>(bootstraps), <span class="at">nrow =</span> <span class="fu">nrow</span>(train_data))</span>
+<span id="cb89-23"><a href="#cb89-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-24"><a href="#cb89-24" aria-hidden="true" tabindex="-1"></a><span class="co"># generate predictions</span></span>
+<span id="cb89-25"><a href="#cb89-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(bootstraps)){</span>
+<span id="cb89-26"><a href="#cb89-26" aria-hidden="true" tabindex="-1"></a>  bs_preds[,i] <span class="ot">=</span> <span class="fu">multi_reg.preds</span>(i)</span>
+<span id="cb89-27"><a href="#cb89-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb89-28"><a href="#cb89-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-29"><a href="#cb89-29" aria-hidden="true" tabindex="-1"></a><span class="co"># median and 89% confidence intervals</span></span>
+<span id="cb89-30"><a href="#cb89-30" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> bs_preds <span class="sc">%&gt;%</span> <span class="fu">apply</span>(<span class="dv">1</span>, quantile,  <span class="fu">c</span>(<span class="fl">0.055</span>, <span class="fl">0.5</span>, <span class="fl">0.945</span>)) <span class="sc">%&gt;%</span>  <span class="fu">t</span>() <span class="sc">%&gt;%</span> <span class="fu">cbind</span>(<span class="st">"observed_Y"</span> <span class="ot">=</span> train_data<span class="sc">$</span>Y) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>() </span>
+<span id="cb89-31"><a href="#cb89-31" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(preds) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"lower"</span>, <span class="st">"median"</span>, <span class="st">"upper"</span>, <span class="st">"observed_Y"</span>)</span>
+<span id="cb89-32"><a href="#cb89-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-33"><a href="#cb89-33" aria-hidden="true" tabindex="-1"></a><span class="co"># I might do something with bootstrap predictions late, so don't mind me here</span></span>
+<span id="cb89-34"><a href="#cb89-34" aria-hidden="true" tabindex="-1"></a>for_plot <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(train_data<span class="sc">$</span>Y, trainpred2, bs_preds))</span>
+<span id="cb89-35"><a href="#cb89-35" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(for_plot) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"observed_Y"</span>, <span class="st">"all_Y"</span>, <span class="fu">paste0</span>(<span class="st">"bs_"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(bootstraps)))</span>
+<span id="cb89-36"><a href="#cb89-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-37"><a href="#cb89-37" aria-hidden="true" tabindex="-1"></a><span class="co"># finally, plot!</span></span>
+<span id="cb89-38"><a href="#cb89-38" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> for_plot, <span class="fu">aes</span>(<span class="at">x =</span> observed_Y, <span class="at">y =</span> all_Y)) <span class="sc">+</span></span>
+<span id="cb89-39"><a href="#cb89-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> preds, <span class="fu">aes</span>(<span class="at">x =</span> observed_Y, <span class="at">y =</span> median), <span class="at">col =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb89-40"><a href="#cb89-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">data =</span> preds, <span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper, <span class="at">x =</span> observed_Y), <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb89-41"><a href="#cb89-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span> </span>
+<span id="cb89-42"><a href="#cb89-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">5000</span>) <span class="sc">+</span></span>
+<span id="cb89-43"><a href="#cb89-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">5000</span>) <span class="sc">+</span></span>
+<span id="cb89-44"><a href="#cb89-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Observed Y"</span>, <span class="at">y =</span> <span class="st">"Model Prediction"</span>, <span class="at">title =</span> <span class="st">"Uncertainty in multiple regrerssion model predictions of outcome Y"</span>)</span>
+<span id="cb89-45"><a href="#cb89-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-46"><a href="#cb89-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Save Figure</span></span>
+<span id="cb89-47"><a href="#cb89-47" aria-hidden="true" tabindex="-1"></a>figure_file <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"fitting-exercise"</span>, <span class="st">"mod2_bootstrap_scatter.png"</span>)</span>
+<span id="cb89-48"><a href="#cb89-48" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> figure_file, <span class="at">plot=</span>plot) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 rows containing missing values (`geom_point()`).
+Removed 1 rows containing missing values (`geom_point()`).</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-mod2-bootstrap-scatter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="mod_preds_plot.png" class="img-fluid figure-img" width="1050"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Correlation between multiple regression model residuals and predicted outcome. Blue points show median prediction from bootstrap with 100 samples, blue lines show 89% confidence interval in model prediction.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see from <a href="#fig-mod2-bootstrap-scatter">Figure&nbsp;3</a> that our 89% confidence intervals for the predictions which fall off the 1:1 correlation with observation line do not intersect this line; we can be fairly confident that at high Y observations, our model underestimates the value of Y. There may thus be some underlying non-linear relationship between our predictors and the outcome variable <code>Y</code> which would result in a greater value of <code>Y</code> than is predicted linearly as <code>Y</code> gets larger.</p>
 
 
 </section>
@@ -1678,9 +1727,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1690,17 +1740,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1713,120 +1754,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1870,7 +1797,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1896,32 +1822,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1982,7 +1882,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
 
 
 
