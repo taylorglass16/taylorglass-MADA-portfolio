@@ -781,3 +781,14 @@ Both of the models are suitable options because they perform better than the nul
 Model 1 with only `DOSE` in the model does perform better than the null model in terms of RMSE, but I would not say that the results are usable. Since the `DOSE` variable is a discrete value with 3 options, there are 3 horizontal lines in the predicted versus observed values graph for this model. Essentially, the model predicts an average response `Y` for each dosage level, which is not very useful. It basically gives a null model result, but there are 3 different levels of `DOSE`. THis makes the model slightly more usable in terms of real purpose because we know that dosage has a biological plausible impact on `Y`. You could use this model to make basic predictions about `Y` based on level of dosage, but there is no variation in the predictions, which decreases how useful the predictions are. 
 
 Model 2 will all of the predictors performs better than both the null model and model 1, and the results from this model are more useful. These results make sense because they hover around an expected linear relationship that is graphically displayed as a 45 degree line. Since this model takes several factors about a person into account, it is more usable in terms of predicting `Y` on an individual basis. Since we used this model on the test_data as well, we see that the predictions from the training and testing data overlap, which means that the model fits our data well enough to be usable because there is no sign of overfitting to the training data. After reading through Cora's explanation of part 2, I see how the unequal distribution of residuals in this model affects the usability of the model. Since we have more negative residuals than positive residuals, it is reasonable to conclude that the model is more likely to underestimate the observed values. If this bias exists in the model, then we can not use the results with as much certainty because the residual plot shows some concern with the predicted values. I think this could be cited as a limitation of the model when reporting the results because the bootstrapping method with 100 samples showed consistent overlap with the point estimates, which increases the reliability of the model. 
+
+
+### Save clean data as .rds file for ml-models-exercise
+```{r}
+# specify file path
+output_file <- here("ml-models-exercise", "clean_mavo.rds")
+
+# save clean data as an .rds file
+saveRDS(mavo5, file = output_file)
+
+```

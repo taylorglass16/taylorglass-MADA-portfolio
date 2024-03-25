@@ -1,0 +1,201 @@
+# Machine Learning Models Exercise
+
+## Preliminaries
+```{r}
+# load necessary packages
+library(here) # to load data
+library(tidymodels) # for model building/processing
+library(ggplot2) # for visualizations
+library(corrplot) # for correlation plot
+library(glmnet) # for LASSO regression
+library(parsnip) # for model building and tuning
+library(ranger) # for random forest
+library(dials) # for parameter tuning
+library(ParamHelpers) # for parameter tuning
+library(parameters) # for parameter tuning 
+
+# set random seet for reproducibility
+rngseed <-set.seed(1234)
+
+# load the clean data
+clean_mavo <- readRDS(here("ml-models-exercise", "clean_mavo.rds"))
+```
+
+## More processing
+I will try to figure out what the `7` and `88` categories in the RACE variable represent. 
+```{r}
+# go on a treasure hunt within the data
+ggplot(clean_mavo, aes(x=RACE)) + geom_bar()
+
+table(clean_mavo$RACE)
+
+clean_mavo %>% filter(RACE == 7)
+
+clean_mavo %>% filter(RACE == 88)
+```
+After visualizing the RACE variable, I found that there are only 2 observations of `7` and 8 observations of `88`. I think that 1 and 2 represent `white` and `non-white` because that is the simplest way to divide a racial categorical variable. I filtered for the observations with RACE = 7 and found that there is one observation from each sex with similar age, so I do not see a correlation with any of the variables that can help me determine what it stands for. After filtering for the observations with RACE = 88, I see the majority of these observations are have SEX = 1, which has been previously determined to be male. I think `7` represents missing data because it is the least common observation, and `88` represents mixed race. 
+
+For this exercise, I will combine the 2 sparse categories into a third category. 
+```{r}
+# make sure variable is numeric 
+clean_mavo$RACE <- as.numeric(as.character(clean_mavo$RACE))
+
+#create new variable in a fresh dataset 
+clean_mavo <- clean_mavo %>% 
+                  mutate(RACE = case_when(RACE == 7 ~ 3,
+                                          RACE == 88 ~ 3,
+                                          TRUE ~ RACE))
+
+# check that the mutation worked 
+range(clean_mavo$RACE)
+```
+
+
+## Pairwise correlations
+I will select the continuous variables to create a correlation plot to determine if there are any pairwise correlations that need to be addressed. 
+```{r}
+# subset data to include continuous variables 
+clean_mavo2 <- clean_mavo %>% 
+                  select(Y, AGE, WT, HT)
+
+## create correlation matrix
+correlation_matrix <- cor(clean_mavo2, use="pairwise.complete.obs")
+
+## create correlation plot 
+corrplot1 <- corrplot(correlation_matrix, method = "color", type = "upper")
+```
+The height and weight variables have the strongest correlation with a coefficient around 0.6, followed by age and height with a coefficient around -0.3. None of the correlation coefficients indicate excessive correlation, which would be shown with an absolute value of 0.9 or higher. This implies that we won't have too much of an issue with collinearity. 
+
+## Feature Engineering
+I will combine height and weight into a variable called `BMI` to practice feature engineering. 
+```{r}
+# determine units of height and weight
+range(clean_mavo$HT)
+range(clean_mavo$WT)
+
+# add BMI variable using standard formula 
+clean_mavo <- clean_mavo %>% 
+                mutate(BMI = WT / (HT^2))
+
+# check that the mutation worked
+range(clean_mavo$BMI)
+```
+Since we do not have a codebook with the units of height and weight, we have to guess. The range of the `HT` variable is 1.52 to 1.93, so that it likely measured in meters. The range of the `WT` variable is 56.6 to 115.3, which is likely measured in kilograms considering the age of the study participants. After creating the BMI variable, I found that it ranges from 18.69 to 32.21, which make sense for the BMI scale. 
+
+## Model Building
+I will use all of the data for the cross-validation process instead of splitting it into testing and training data in this scenario. I will build 3 models: 
+  1) Linear model with all predictors
+  2) LASSO regression
+  3) Random Forest 
+
+### First fit
+I will start by performing a single fit to the training data without any cross-validation or model tuning. I have already compared this model to the null model in previous exercises, but that is always an important step. 
+```{r}
+# set seed for reproducibility
+set.seed(rngseed)
+
+# model 1: linear model with all predictors
+lm_mod <- linear_reg() # specify the model type
+model1 <- lm_mod %>% 
+            fit(Y ~ . , data=clean_mavo) # include all predictors
+tidy(model1) # print results 
+
+# model 2: LASSO regression
+lasso_mod <- linear_reg(penalty = 0.1, mixture = 1, mode = "regression") %>%
+                set_engine("glmnet") # specify the model type
+model2 <- lasso_mod %>% 
+            fit(Y ~ ., data = clean_mavo) # include all predictors
+tidy(model2) # print results
+
+# model 3: random forest 
+rf_mod <- rand_forest(mode = "regression") %>%
+            set_engine("ranger") # specify the model type
+model3 <- rf_mod %>% 
+            fit(Y ~ ., data = clean_mavo) # include all predictors
+summary(model3) # print summary 
+```
+Now that I have created the three models, I will find the RMSE for each one and plot the observed versus predicted values. 
+```{r}
+# create predictions with model 1
+pred_model1 <- predict(model1, new_data = clean_mavo) %>% 
+                  select(.pred)
+
+# combine predictions with observed values in model 1
+model1pred <- bind_cols(pred_model1, clean_mavo$Y) %>% 
+                rename(Y = "...2")
+
+# calculate RMSE to determine model fit 
+model1RMSE <- rmse(model1pred, truth = Y, estimate = .pred)
+
+# create predictions with model 2
+pred_model2 <- predict(model2, new_data = clean_mavo) %>% 
+                  select(.pred)
+
+# combine predictions with observed values in model 1
+model2pred <- bind_cols(pred_model2, clean_mavo$Y) %>% 
+                rename(Y = "...2")
+
+# calculate RMSE to determine model fit 
+model2RMSE <- rmse(model2pred, truth = Y, estimate = .pred)
+
+# create predictions with model 3
+pred_model3 <- predict(model3, new_data = clean_mavo) %>% 
+                  select(.pred)
+
+# combine predictions with observed values in model 1
+model3pred <- bind_cols(pred_model3, clean_mavo$Y) %>% 
+                rename(Y = "...2")
+
+# calculate RMSE to determine model fit 
+model3RMSE <- rmse(model3pred, truth = Y, estimate = .pred)
+
+# print all 3 RMSE values for comparison 
+print(model1RMSE)
+print(model2RMSE)
+print(model3RMSE)
+```
+The RMSE for model 1 using the standard multiple linear regression is 581.4177, which is really similar to the RMSE for model 2, which is 581.4665. These two models give very similar results because the underlying model building process is the same, but LASSO adds a penalty term to shrink coefficients, which allows for variable selection by automatically excluding irrelevant predictors. LASSO is helpful for dealing with predictors with multicollinearity, but I have already ruled out collinearity as an issue in this dataset, which is why the RMSE estimates are so similar between model 1 and model 2. The RMSE value for model 3 is much lower at 350.2411, so it is the best performing model out of these 3 options. This observation makes sense because forest models are very flexible and can capture a lot of patterns in the data. 
+
+I will also visualize the predicted versus observed values for each of the models. 
+```{r}
+# visualize model 1 predictions 
+plot1<-ggplot(model1pred, aes(x=.pred, y= Y)) + 
+  geom_point() +
+  geom_abline(linetype = "dashed") + 
+  labs(x="Predictions", y="Observed Values", title="Model 1 Predictions and Observations")
+plot1
+
+# visualize model 2 predictions
+plot2<-ggplot(model2pred, aes(x=.pred, y= Y)) + 
+  geom_point() +
+  geom_abline(linetype = "dashed") + 
+  labs(x="Predictions", y="Observed Values", title="Model 2 Predictions and Observations")
+plot2
+
+# visualize model 3 predictions
+plot3<-ggplot(model3pred, aes(x=.pred, y= Y)) + 
+  geom_point() +
+  geom_abline(linetype = "dashed") + 
+  labs(x="Predictions", y="Observed Values", title="Model 3 Predictions and Observations")
+plot3
+```
+Plots 1 and 2 look very similar, which is to be expected based on the previous discussion of similarities between multiple linear regression and LASSO regression. Plot 3 shows observations that are closer to the 45 degree line, which represents strong agreement between the predictions and the observed values. Since model 3 has the lowest RMSE value, it makes sense that it would have the observations closer to the 45 degree line. 
+
+## Tuning parameters 
+Model 1 does not need any tuning because it does not have any hyperparameters, so I will start by tuning the LASSO model first. I need to remove the 0.1 from the previous workflow to allow for tuning. I will create a grid of parameters to tune from a range of 1e-5 to 1e2. In this example, the "grid" is just a vector of numbers, but in models with multiple tuning parameters, it does become a grid. 
+```{r}
+# adjust the lasso model recipe
+lasso_mod2 <- linear_reg(penalty = tune(), mixture = 1, mode = "regression") %>% # allow for tuning
+                set_engine("glmnet") 
+
+# define a parameter grid with 50 values linearly spaced on a log scale
+
+model2_grid <- grid_regular(penalty(), levels = 50, range = c(1e-5, 1e2, transform = "log10" ))
+
+model2_grid <-  grid_regular(
+  param("penalty", transform = "log10"),
+  levels = 50,
+  range = c(1e-5, 1e2)
+)
+```
+
