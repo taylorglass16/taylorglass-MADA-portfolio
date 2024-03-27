@@ -1,6 +1,7 @@
 # Machine Learning Models Exercise
 
 ## Preliminaries
+
 ```{r}
 #| message: false
 # load necessary packages
@@ -21,8 +22,11 @@ clean_mavo <- readRDS(here("ml-models-exercise", "clean_mavo.rds"))
 ```
 
 ## More processing
-I will try to figure out what the `7` and `88` categories in the RACE variable represent. 
+
+I will try to figure out what the `7` and `88` categories in the RACE variable represent.
+
 ```{r}
+#| message: false
 # go on a treasure hunt within the data
 ggplot(clean_mavo, aes(x=RACE)) + geom_bar()
 
@@ -32,10 +36,13 @@ clean_mavo %>% filter(RACE == 7)
 
 clean_mavo %>% filter(RACE == 88)
 ```
-After visualizing the RACE variable, I found that there are only 2 observations of `7` and 8 observations of `88`. I think that 1 and 2 represent `white` and `non-white` because that is the simplest way to divide a racial categorical variable. I filtered for the observations with RACE = 7 and found that there is one observation from each sex with similar age, so I do not see a correlation with any of the variables that can help me determine what it stands for. After filtering for the observations with RACE = 88, I see the majority of these observations are have SEX = 1, which has been previously determined to be male. I think `7` represents missing data because it is the least common observation, and `88` represents mixed race. 
 
-For this exercise, I will combine the 2 sparse categories into a third category. 
+After visualizing the RACE variable, I found that there are only 2 observations of `7` and 8 observations of `88`. I think that 1 and 2 represent `white` and `non-white` because that is the simplest way to divide a racial categorical variable. I filtered for the observations with RACE = 7 and found that there is one observation from each sex with similar age, so I do not see a correlation with any of the variables that can help me determine what it stands for. After filtering for the observations with RACE = 88, I see the majority of these observations are have SEX = 1, which has been previously determined to be male. I think `7` represents missing data because it is the least common observation, and `88` represents mixed race.
+
+For this exercise, I will combine the 2 sparse categories into a third category.
+
 ```{r}
+#| message: false
 # make sure variable is numeric 
 clean_mavo$RACE <- as.numeric(as.character(clean_mavo$RACE))
 
@@ -49,10 +56,12 @@ clean_mavo <- clean_mavo %>%
 range(clean_mavo$RACE)
 ```
 
-
 ## Pairwise correlations
-I will select the continuous variables to create a correlation plot to determine if there are any pairwise correlations that need to be addressed. 
+
+I will select the continuous variables to create a correlation plot to determine if there are any pairwise correlations that need to be addressed.
+
 ```{r}
+#| message: false
 # subset data to include continuous variables 
 clean_mavo2 <- clean_mavo %>% 
                   select(Y, AGE, WT, HT)
@@ -63,11 +72,15 @@ correlation_matrix <- cor(clean_mavo2, use="pairwise.complete.obs")
 ## create correlation plot 
 corrplot1 <- corrplot(correlation_matrix, method = "color", type = "upper")
 ```
-The height and weight variables have the strongest correlation with a coefficient around 0.6, followed by age and height with a coefficient around -0.3. None of the correlation coefficients indicate excessive correlation, which would be shown with an absolute value of 0.9 or higher. This implies that we won't have too much of an issue with collinearity. 
+
+The height and weight variables have the strongest correlation with a coefficient around 0.6, followed by age and height with a coefficient around -0.3. None of the correlation coefficients indicate excessive correlation, which would be shown with an absolute value of 0.9 or higher. This implies that we won't have too much of an issue with collinearity.
 
 ## Feature Engineering
-I will combine height and weight into a variable called `BMI` to practice feature engineering. 
+
+I will combine height and weight into a variable called `BMI` to practice feature engineering.
+
 ```{r}
+#| message: false
 # determine units of height and weight
 range(clean_mavo$HT)
 range(clean_mavo$WT)
@@ -79,17 +92,19 @@ clean_mavo <- clean_mavo %>%
 # check that the mutation worked
 range(clean_mavo$BMI)
 ```
-Since we do not have a codebook with the units of height and weight, we have to guess. The range of the `HT` variable is 1.52 to 1.93, so that it likely measured in meters. The range of the `WT` variable is 56.6 to 115.3, which is likely measured in kilograms considering the age of the study participants. After creating the BMI variable, I found that it ranges from 18.69 to 32.21, which make sense for the BMI scale. 
+
+Since we do not have a codebook with the units of height and weight, we have to guess. The range of the `HT` variable is 1.52 to 1.93, so that it likely measured in meters. The range of the `WT` variable is 56.6 to 115.3, which is likely measured in kilograms considering the age of the study participants. After creating the BMI variable, I found that it ranges from 18.69 to 32.21, which make sense for the BMI scale.
 
 ## Model Building
-I will use all of the data for the cross-validation process instead of splitting it into testing and training data in this scenario. I will build 3 models: 
-  1) Linear model with all predictors
-  2) LASSO regression
-  3) Random Forest 
+
+I will use all of the data for the cross-validation process instead of splitting it into testing and training data in this scenario. I will build 3 models: 1) Linear model with all predictors 2) LASSO regression 3) Random Forest
 
 ### First fit
-I will start by performing a single fit to the training data without any cross-validation or model tuning. I have already compared this model to the null model in previous exercises, but that is always an important step. 
+
+I will start by performing a single fit to the training data without any cross-validation or model tuning. I have already compared this model to the null model in previous exercises, but that is always an important step.
+
 ```{r}
+#| message: false
 # set seed for reproducibility
 set.seed(rngseed)
 
@@ -113,8 +128,11 @@ model3 <- rf_mod %>%
             fit(Y ~ ., data = clean_mavo) # include all predictors
 summary(model3) # print summary 
 ```
-Now that I have created the three models, I will find the RMSE for each one and plot the observed versus predicted values. 
+
+Now that I have created the three models, I will find the RMSE for each one and plot the observed versus predicted values.
+
 ```{r}
+#| message: false
 # set seed for reproducibility
 set.seed(rngseed)
 
@@ -156,10 +174,13 @@ print(model1RMSE)
 print(model2RMSE)
 print(model3RMSE)
 ```
-The RMSE for model 1 using the standard multiple linear regression is `r print(model1RMSE)`, which is really similar to the RMSE for model 2, which is `r print(model2RMSE)`. These two models give very similar results because the underlying model building process is the same, but LASSO adds a penalty term to shrink coefficients, which allows for variable selection by automatically excluding irrelevant predictors. LASSO is helpful for dealing with predictors with multicollinearity, but I have already ruled out collinearity as an issue in this dataset, which is why the RMSE estimates are so similar between model 1 and model 2. The RMSE value for model 3 is much lower at `r print(model3RMSE)`, so it is the best performing model out of these 3 options. This observation makes sense because forest models are very flexible and can capture a lot of patterns in the data. 
 
-I will also visualize the predicted versus observed values for each of the models. 
+The RMSE for model 1 using the standard multiple linear regression is 581.4177, which is really similar to the RMSE for model 2, which is 581.4665. These two models give very similar results because the underlying model building process is the same, but LASSO adds a penalty term to shrink coefficients, which allows for variable selection by automatically excluding irrelevant predictors. LASSO is helpful for dealing with predictors with multicollinearity, but I have already ruled out collinearity as an issue in this dataset, which is why the RMSE estimates are so similar between model 1 and model 2. The RMSE value for model 3 is much lower at 355, so it is the best performing model out of these 3 options. This observation makes sense because forest models are very flexible and can capture a lot of patterns in the data.
+
+I will also visualize the predicted versus observed values for each of the models.
+
 ```{r}
+#| message: false
 # visualize model 1 predictions 
 plot1<-ggplot(model1pred, aes(x=.pred, y= Y)) + 
   geom_point() +
@@ -181,11 +202,15 @@ plot3<-ggplot(model3pred, aes(x=.pred, y= Y)) +
   labs(x="Predictions", y="Observed Values", title="Model 3 Predictions and Observations")
 plot3
 ```
-Plots 1 and 2 look very similar, which is to be expected based on the previous discussion of similarities between multiple linear regression and LASSO regression. Plot 3 shows observations that are closer to the 45 degree line, which represents strong agreement between the predictions and the observed values. Since model 3 has the lowest RMSE value, it makes sense that it would have the observations closer to the 45 degree line. 
 
-## Tuning parameters 
-Model 1 does not need any tuning because it does not have any hyperparameters, so I will start by tuning the LASSO model first. I need to remove the 0.1 from the previous workflow to allow for tuning. I will create a grid of parameters to tune from a range of 1e-5 to 1e2. In this example, the "grid" is just a vector of numbers, but in models with multiple tuning parameters, it does become a grid. I had to mutate all my predictors to be numeric for the tuning process, and I also had to modify my workflow slightly because I got an error about needing to preprocess with a formula or recipe when using tune_grid(). 
+Plots 1 and 2 look very similar, which is to be expected based on the previous discussion of similarities between multiple linear regression and LASSO regression. Plot 3 shows observations that are closer to the 45 degree line, which represents strong agreement between the predictions and the observed values. Since model 3 has the lowest RMSE value, it makes sense that it would have the observations closer to the 45 degree line.
+
+## Tuning parameters
+
+Model 1 does not need any tuning because it does not have any hyperparameters, so I will start by tuning the LASSO model first. I need to remove the 0.1 from the previous workflow to allow for tuning. I will create a grid of parameters to tune from a range of 1e-5 to 1e2. In this example, the "grid" is just a vector of numbers, but in models with multiple tuning parameters, it does become a grid. I had to mutate all my predictors to be numeric for the tuning process, and I also had to modify my workflow slightly because I got an error about needing to preprocess with a formula or recipe when using tune_grid().
+
 ```{r}
+#| message: false
 # set seed for reproducibility
 set.seed(rngseed)
 
@@ -221,10 +246,14 @@ tuned_model2 <- workflow %>%
 tuned_model2 %>% 
   autoplot()
 ```
-This plot shows that the model does best, shown by a lower RMSE value, for low penalty values and gets worse as the penalty parameter increases. The increases in RMSE values begin when the penalty parameter increases to around 1. LASSO regression involves adding a penalty parameter to the SSR term to determine the value of the cost function, which is RMSE in this case. This is why the RMSE can only increase and never be lower than the value from the linear and un-tuned models. The cost function for the linear model is evaluated with the SSR only, which is why it serves as the baseline in this comparison. At the lowest penalty, the RMSE for model 2 is the same as the linear model because the penalty term being added to the SSR in the cost function is negligible. As the penalty parameter goes up, you add a larger term to the SSR, which increases the value of the cost function. As the penalty increases, the RMSE value increases, and the performance of the model is considered worse and worse comparatively. 
 
-I will repeat this tuning process with the random forest model. There are many different tuning parameters, which I read about in the ranger() help file. I will tune `mtry`, the number of variables to possibly split at in each node, and `min_n`, the minimal node size. I also set the number of trees to 300. There are many other tuning options like manually setting observations per tree or choosing the regularization factor, but I will not explore those in this exercise. All other parameters will be kept at their defaults. 
+This plot shows that the model does best, shown by a lower RMSE value, for low penalty values and gets worse as the penalty parameter increases. The increases in RMSE values begin when the penalty parameter increases to around 1. LASSO regression involves adding a penalty parameter to the SSR term to determine the value of the cost function, which is RMSE in this case. This is why the RMSE can only increase and never be lower than the value from the linear and un-tuned models. The cost function for the linear model is evaluated with the SSR only, which is why it serves as the baseline in this comparison. At the lowest penalty, the RMSE for model 2 is the same as the linear model because the penalty term being added to the SSR in the cost function is negligible. As the penalty parameter goes up, you add a larger term to the SSR, which increases the value of the cost function. As the penalty increases, the RMSE value increases, and the performance of the model is considered worse and worse comparatively.
+
+I will repeat this tuning process with the random forest model. There are many different tuning parameters, which I read about in the ranger() help file. I will tune `mtry`, the number of variables to possibly split at in each node, and `min_n`, the minimal node size. I also set the number of trees to 300. There are many other tuning options like manually setting observations per tree or choosing the regularization factor, but I will not explore those in this exercise. All other parameters will be kept at their defaults.
+
 ```{r}
+#| message: false
+#| eval: false
 # view ranger() help file 
 ?ranger()
 
@@ -248,22 +277,38 @@ model3_grid <- grid_regular(mtry(range = c(1,7)),
                             levels = 7)
 
 # tune the model 
-tuned_model3 <- workflow2 %>% 
-                tune_grid(resamples = apparent_resamples,
-                          grid = model3_grid,
-                          metrics = metric_set(rmse))
+ tuned_model3 <- workflow2 %>% 
+               tune_grid(resamples = apparent_resamples,
+                        grid = model3_grid,
+                         metrics = metric_set(rmse))
 
-# observe the tuning process
-tuned_model3 %>% 
-  autoplot()
+# observe the tuning process 
+ rf_tune <- tuned_model3 %>% 
+              autoplot()
+
+# save plot 
+figure_file = here("ml-models-exercise", "rf_tune1.png")
+ggsave(filename = figure_file, plot=rf_tune) 
+
 ```
-Based on this plot, I can conclude that a higher value of `mtry` and a lower value for `min_n` lead to the best results. `mtry` is displayed on the x-axis, and the lowest RMSE value is achieved with 7 predictors regardless of the minimal node size. `min_n` options are shown by the colored lines, and it is clear that a smaller node size leads to a lower RMSE value. The best combination appears to be 5 predictors with a minimal node size of 1 to produce the lowest RMSE value of 250.This model is more difficult to understand that the LASSO regression model, so it is not clear why those values for the tuning parameters should give the best performance. This is one of the drawbacks of machine learning models. 
+
+```{r load-rf_tune}
+#| label: rf_tune
+#| fig-cap: "Visualization of Random Forest Model Tuning"
+#| echo: FALSE
+knitr::include_graphics(here("ml-models-exercise","rf_tune1.png"))
+```
+
+Based on this plot, I can conclude that a higher value of `mtry` and a lower value for `min_n` lead to the best results. `mtry` is displayed on the x-axis, and the lowest RMSE value is achieved with 7 predictors regardless of the minimal node size. `min_n` options are shown by the colored lines, and it is clear that a smaller node size leads to a lower RMSE value. The best combination appears to be 5 predictors with a minimal node size of 1 to produce the lowest RMSE value of 250.This model is more difficult to understand that the LASSO regression model, so it is not clear why those values for the tuning parameters should give the best performance. This is one of the drawbacks of machine learning models.
 
 ## Tuning with CV
-I will use cross-validation to properly assess model performance during the tuning process. I will repeat the steps above for the LASSO and random forest models, but I will create real samples of the data this time. I will do a 5-fold cross validation, 5 times repeated for each model. 
 
-I will start with the LASSO model.  
+I will use cross-validation to properly assess model performance during the tuning process. I will repeat the steps above for the LASSO and random forest models, but I will create real samples of the data this time. I will do a 5-fold cross validation, 5 times repeated for each model.
+
+I will start with the LASSO model.
+
 ```{r}
+#| message: false
 # set seed for reproducibility
 set.seed(rngseed)
 
@@ -292,12 +337,16 @@ realtuned_model2 <- workflow %>%
 realtuned_model2 %>% 
   autoplot()
 ```
+
 This plot shows more variation in the RMSE scores when the penalty term is larger than 1 compared to the first time I tuned the model. The LASSO model still does best when the penalty is small, but the smallest RMSE value for this model is now around 618. When I did not use cross-validation, the initial RMSE value was lower at about 582. The first tuning attempt produced a maximum RMSE of 625 when the penalty was 100, but the cross-validation tuning attempt produced a maximum RMSE of about 633 at the same point.
 
-Cross-validation leads to an increase in RMSE because it essentially uses 25 combinations of the data to train and estimate the model, which creates a more generalized model that will perform better on data that it has not seen before. In the previous example, I only used one subset of the data to train the model, and that probably led to overfitting, which would present as a lower RMSE value. 
+Cross-validation leads to an increase in RMSE because it essentially uses 25 combinations of the data to train and estimate the model, which creates a more generalized model that will perform better on data that it has not seen before. In the previous example, I only used one subset of the data to train the model, and that probably led to overfitting, which would present as a lower RMSE value.
 
-I will repeat this process with the random forest model. 
+I will repeat this process with the random forest model.
+
 ```{r}
+#| message: false
+#| eval: false
 # set seed for reproducibility
 set.seed(rngseed)
 
@@ -327,9 +376,21 @@ realtuned_model3 <- workflow2 %>%
                           metrics = metric_set(rmse))
 
 # observe the tuning process
-realtuned_model3 %>% 
-  autoplot()
-```
-This plot shows that the RMSE value also went up for the random forest model. The same logic of cross-validation using 25 subsets of the data instead of 1 and producing a more generalized model holds in this case as well. The lowest RMSE value with 1 predictor was about 650 the first time I tuned the model, but it is about 745 when I use cross-validation. The best combination now appears to be 6 predictors with a node size of 21, which gives the lowest RMSE score of around 662. 
+rf_tune2 <- realtuned_model3 %>% 
+              autoplot()
 
-The LASSO model now has a lower RMSE compared to the random forest model. The cross-validated LASSO model has an RMSE of 618 when the penalty is less than 1. The cross-validated random forest model has a lowest RMSE score of 662. The results of which model performs best are flipped when I use 1 subset of the data versus when I use cross-validation with 25 subsets of the data. I think the LASSO model performs better because the cross-validation process is more reliable in terms of creating a generalized model that fits well to data it has not seen before. I think having a lower RMSE value when the model is cross-validated is more important. 
+# save plot 
+figure_file = here("ml-models-exercise", "rf_tune2.png")
+ggsave(filename = figure_file, plot=rf_tune2) 
+```
+
+```{r load-rf_tune2}
+#| label: rf_tune2
+#| fig-cap: "Visualization of Random Forest Model Tuning with Cross-Validation"
+#| echo: FALSE
+knitr::include_graphics(here("ml-models-exercise","rf_tune2.png"))
+```
+
+This plot shows that the RMSE value also went up for the random forest model. The same logic of cross-validation using 25 subsets of the data instead of 1 and producing a more generalized model holds in this case as well. The lowest RMSE value with 1 predictor was about 650 the first time I tuned the model, but it is about 745 when I use cross-validation. The best combinations now appear to be with more than 4 predictors and a node size of 21, which gives the lowest RMSE score of around 660.
+
+The LASSO model now has a lower RMSE compared to the random forest model. The cross-validated LASSO model has an RMSE of 618 when the penalty is less than 1. The cross-validated random forest model has a lowest RMSE score of 662. The results of which model performs best are flipped when I use 1 subset of the data versus when I use cross-validation with 25 subsets of the data. I think the LASSO model performs better because the cross-validation process is more reliable in terms of creating a generalized model that fits well to data it has not seen before. I think having a lower RMSE value when the model is cross-validated is more important.

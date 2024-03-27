@@ -24,7 +24,7 @@ website:
             file: cdcdata-exercise/cdcdata-exercise.qmd
           - text: "Fitting Exercise"
             file: fitting-exercise/fitting-exercise.qmd
-          - text: "Machine Learning Models Exercise"
+          - text: "Machine Learning"
             file: ml-models-exercise/ml-models-exercise.qmd
     right:
       - icon: github 
