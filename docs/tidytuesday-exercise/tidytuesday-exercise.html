@@ -677,7 +677,7 @@ $ duration  &lt;drtn&gt; 242 secs, 254 secs, 149 secs, 216 secs, 186 secs, 241 s
 </div>
 </div>
 <p>This merge leaves me with a dataset containing 4,141 observations of 12 variables, including the two new ones I created, <code>region</code> and <code>duration</code>.</p>
-<p>I want to create a logistic model in the next section, so I will use the average duration to divide the observations into <code>short</code> eclipse and <code>long</code> eclipse to create a binary outcome variable, but this is not necessarily meaningful.</p>
+<p>I want to create a logistic model in the next section, so I will use the average duration to divide the observations into <code>short</code> eclipse and <code>long</code> eclipse to create a binary outcome variable.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find average duration in the training data </span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(all_total<span class="sc">$</span>duration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -753,7 +753,7 @@ $ duration  &lt;drtn&gt; 242 secs, 254 secs, 149 secs, 216 secs, 186 secs, 241 s
 </section>
 <section id="fit-3-different-model-types" class="level1">
 <h1>Fit 3 different model types</h1>
-<p>I want to build a simple linear model, a multivariate linear model, and a logistic model. For the purpose of this exercise, I will use my binary variable to use as my outcome for a logistic regression. Again, it is not necessarily very meaningful.</p>
+<p>I want to build a simple linear model, a multivariate linear model, and a logistic model. I will use <code>duration</code> as the outcome of interest for the two linear models and the new binary variable <code>logoutcome</code> as my outcome for a logistic regression. Both outcomes will help answer my research question about which regions experience the longest amount of time in a total eclipse.</p>
 <p>I will create the workflows for each of my models first. The simple linear regression model with include the <code>region</code> as the single predictor for the duration outcome because I am most interested in this variable. I will add the <code>lat</code>, <code>lon</code>, and <code>eclipse_3</code> variables as predictors for the multivariate linear model. I considered using the <code>state</code> as a predictor as well, but that generates too many coefficients which decreases interpretability. The state is captured by the <code>region</code>, <code>lat</code>, and <code>lon</code> variables, so it still has an effect in the model. The logistic regression model will include all 4 predictors in the multivariate linear model for the binary outcome.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create simple linear regression workflow </span></span>
@@ -826,7 +826,7 @@ $ duration  &lt;drtn&gt; 242 secs, 254 secs, 149 secs, 216 secs, 186 secs, 241 s
 </section>
 <section id="choosing-the-best-model" class="level1">
 <h1>Choosing the best model</h1>
-<p>I need to make predictions for each of the models to explore performance metrics for my models. I have experience with interpreting RMSE and R-squared values, so I am going to experiment with MAE (mean absolute error) and MSE (mean square error) as well, which are appropriate performance metrics for models with a continuous outcome. I will explore accuracy and ROC for the linear regression model because I had trouble making the ROC curve during the first exercise with it.</p>
+<p>I need to make predictions for each of the models to explore performance metrics for my models. I have experience with interpreting RMSE and R-squared values, so I am going to experiment with MAE (mean absolute error) and MSE (mean square error) as well, which are also appropriate performance metrics for models with a continuous outcome. I will explore accuracy and ROC for the linear regression model because I had trouble making the ROC curve during the first exercise with it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
@@ -948,7 +948,7 @@ $ duration  &lt;drtn&gt; 242 secs, 254 secs, 149 secs, 216 secs, 186 secs, 241 s
 <pre><code>Area under the curve: 0.5</code></pre>
 </div>
 </div>
-<p>The accuracy for the SLR model is 0.6074074, and the area under the curve is 0.5 for this model.</p>
+<p>The accuracy for the SLR model is 0.6074074, and the area under the curve is 0.5 for this model, which seems like a very average performance.</p>
 <p>I will use cross-validation with 10 folds for each of the linear models to see if there is improvement in the performance metrics.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
@@ -1003,7 +1003,7 @@ $ duration  &lt;drtn&gt; 242 secs, 254 secs, 149 secs, 216 secs, 186 secs, 241 s
 </section>
 <section id="pick-final-model" class="level1">
 <h1>Pick Final Model</h1>
-<p>Since I created the binary outcome for the purpose of practicing logistic regression, I will not consider that model as the final model because the outcome is not particularly meaningful. Before I can pick the final model, I need to assess the predicted versus observed outcomes, the residuals, and the uncertainty for the SLM and MLR models.</p>
+<p>Since I created the binary outcome for the purpose of practicing logistic regression, I will not consider this model for the final model because the outcome is not as specific as the continuous <code>duration</code> outcome, and I want more detailed results from this analysis. Before I can pick the final model, I need to assess the predicted versus observed outcomes, the residuals, and the uncertainty for the SLM and MLR models.</p>
 <p>I will model the predicted versus the observed outcomes first.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>

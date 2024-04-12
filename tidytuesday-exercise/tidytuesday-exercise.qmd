@@ -212,7 +212,7 @@ glimpse(all_total)
 ```
 This merge leaves me with a dataset containing 4,141 observations of 12 variables, including the two new ones I created, `region` and `duration`.
 
-I want to create a logistic model in the next section, so I will use the average duration to divide the observations into `short` eclipse and `long` eclipse to create a binary outcome variable, but this is not necessarily meaningful.  
+I want to create a logistic model in the next section, so I will use the average duration to divide the observations into `short` eclipse and `long` eclipse to create a binary outcome variable.  
 ```{r}
 #| message: false
 # find average duration in the training data 
@@ -271,7 +271,7 @@ test_data <- testing(datasplit)
 
 # Fit 3 different model types 
 
-I want to build a simple linear model, a multivariate linear model, and a logistic model. For the purpose of this exercise, I will use my binary variable to use as my outcome for a logistic regression. Again, it is not necessarily very meaningful. 
+I want to build a simple linear model, a multivariate linear model, and a logistic model. I will use `duration` as the outcome of interest for the two linear models and the new binary variable `logoutcome` as my outcome for a logistic regression. Both outcomes will help answer my research question about which regions experience the longest amount of time in a total eclipse. 
 
 I will create the workflows for each of my models first. The simple linear regression model with include the `region` as the single predictor for the duration outcome because I am most interested in this variable. I will add the `lat`, `lon`, and `eclipse_3` variables as predictors for the multivariate linear model. I considered using the `state` as a predictor as well, but that generates too many coefficients which decreases interpretability. The state is captured by the `region`,  `lat`, and `lon` variables, so it still has an effect in the model. The logistic regression model will include all 4 predictors in the multivariate linear model for the binary outcome. 
 ```{r}
@@ -310,7 +310,7 @@ The logistic regression model draws similar conclusions with the `region` variab
 
 # Choosing the best model 
 
-I need to make predictions for each of the models to explore performance metrics for my models. I have experience with interpreting RMSE and R-squared values, so I am going to experiment with MAE (mean absolute error) and MSE (mean square error) as well, which are appropriate performance metrics for models with a continuous outcome. I will explore accuracy and ROC for the linear regression model because I had trouble making the ROC curve during the first exercise with it. 
+I need to make predictions for each of the models to explore performance metrics for my models. I have experience with interpreting RMSE and R-squared values, so I am going to experiment with MAE (mean absolute error) and MSE (mean square error) as well, which are also appropriate performance metrics for models with a continuous outcome. I will explore accuracy and ROC for the linear regression model because I had trouble making the ROC curve during the first exercise with it. 
 ```{r}
 #| message: false
 # set seed for reproducibility
@@ -385,7 +385,7 @@ print(acc1)
 print(roc_auc1)
   
 ```
-The accuracy for the SLR model is 0.6074074, and the area under the curve is 0.5 for this model. 
+The accuracy for the SLR model is 0.6074074, and the area under the curve is 0.5 for this model, which seems like a very average performance. 
 
 I will use cross-validation with 10 folds for each of the linear models to see if there is improvement in the performance metrics. 
 ```{r}
@@ -428,7 +428,7 @@ collect_metrics(mlr_wf_rs)
 The cross-validation results yield an RMSE of 64.7009 for the SLM model and an R-squared of 0.01458156. The original RMSE value of 64.6212 indicates that the cross-validated results are slightly worse because the RMSE is a little higher, and the original R-squared of 0.01375 indicates the cross-validated model performs slightly worse. The cross-validated results for the MLR model yield an RSE of 63.9469 compared to an original RMSE of 63.77313, which shows slightly worse performance. The cross-validated R-squared value is 0.03789013 compared to the original R-squared of 0.03944, which also suggests slightly worse performance. Since these differences are so small, the conclusions from both processes should be the same: the MLR model out-performs the SLM model by a slight margin. 
 
 # Pick Final Model 
-Since I created the binary outcome for the purpose of practicing logistic regression, I will not consider that model as the final model because the outcome is not particularly meaningful. Before I can pick the final model, I need to assess the predicted versus observed outcomes, the residuals, and the uncertainty for the SLM and MLR models. 
+Since I created the binary outcome for the purpose of practicing logistic regression, I will not consider this model for the final model because the outcome is not as specific as the continuous `duration` outcome, and I want more detailed results from this analysis. Before I can pick the final model, I need to assess the predicted versus observed outcomes, the residuals, and the uncertainty for the SLM and MLR models. 
 
 I will model the predicted versus the observed outcomes first. 
 ```{r}
