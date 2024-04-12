@@ -442,7 +442,7 @@ censor_probs  0     -none-      list</code></pre>
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        356.</code></pre>
+1 rmse    standard        358.</code></pre>
 </div>
 </div>
 <p>The RMSE for model 1 using the standard multiple linear regression is 581.4177, which is really similar to the RMSE for model 2, which is 581.4665. These two models give very similar results because the underlying model building process is the same, but LASSO adds a penalty term to shrink coefficients, which allows for variable selection by automatically excluding irrelevant predictors. LASSO is helpful for dealing with predictors with multicollinearity, but I have already ruled out collinearity as an issue in this dataset, which is why the RMSE estimates are so similar between model 1 and model 2. The RMSE value for model 3 is much lower at 355, so it is the best performing model out of these 3 options. This observation makes sense because forest models are very flexible and can capture a lot of patterns in the data.</p>

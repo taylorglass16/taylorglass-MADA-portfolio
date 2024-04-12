@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -172,9 +206,1231 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Placeholder file for the future Tidy Tuesday exercise.</p>
+<section id="load-wrangle-and-explore-the-data" class="level1">
+<h1>Load, Wrangle, and Explore the data</h1>
+<p>This week’s Tidy Tuesday exercise uses data from NASA’s Scientific Visualization Studio about the annular solar eclipse paths seen on October 14, 2023 and today, April 8, 2024. I added the eclipse_annular_2023.csv file into the data folder in the tidytuesday-exercise folder. The eclipse_partial_2023.csv and eclipse_partial_2024 files were not available for download because it is too large. I added the eclipse_total_2024.csv file to the same data folder. Step 1 is to load the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data directly from Tidy Tuesday GitHub</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>eclipse_annular_2023 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-04-09/eclipse_annular_2023.csv'</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>eclipse_total_2024 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-04-09/eclipse_total_2024.csv'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>eclipse_partial_2023 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-04-09/eclipse_partial_2023.csv'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>eclipse_partial_2024 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-04-09/eclipse_partial_2024.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I need several package for this exercise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># for basic syntax</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here) <span class="co"># for setting file paths to save images</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar) <span class="co"># for exploring missingness </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># for exploratory plots </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr) <span class="co"># for summary tables</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample) <span class="co"># for sampling the testing/training data</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot) <span class="co"># for finding correlations between predictors </span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC) <span class="co"># to find the ROC curve</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parsnip) <span class="co"># for resampling in cross validation </span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels) <span class="co"># for building models </span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork) <span class="co"># for creating final figure </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data dictionary shows that both datasets with information about total solar eclipse contains the same 10 variables: state, city name, latitude, longitude, time at which the moon first contacts the sun in this location, time at which the eclipse is at 50% in this location, time at which annularity begins in this location, time at which annularity ends in this location, time at which the eclipse is back to 50% in this location, and time at which the moon last contacts the sun in this location. The 2 datasets with partial solar eclipse information have the same first 4 variables, but contain 5 slightly different variables about when the moon contacts the sun. These 5 variables include time at which the moon first contacts the sun in this location, time at which the eclipse is at 50% of this location’s maximum, time at which the eclipse reaches 100% of this location’s maximum, time at which the eclipse is again at 50% of this location’s maximum, and time at which the moon last contacts the sun in this location.</p>
+<p>Step 2 involves wrangling and exploring the data. I will check for missing variables first.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># explore missingness in each dataset</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(eclipse_annular_2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(eclipse_partial_2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(eclipse_partial_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(eclipse_total_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-3-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Fortunately, there are no missing values! Thank you TidyTuedsay creators!</p>
+<p>I need to take a glimpse of each dataset to get a sense of what I am working with.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># explore the structure of the dataset </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(eclipse_annular_2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 811
+Columns: 10
+$ state     &lt;chr&gt; "AZ", "AZ", "AZ", "AZ", "AZ", "AZ", "AZ", "AZ", "AZ", "AZ", …
+$ name      &lt;chr&gt; "Chilchinbito", "Chinle", "Del Muerto", "Dennehotso", "Fort …
+$ lat       &lt;dbl&gt; 36.49200, 36.15115, 36.18739, 36.82900, 35.74750, 36.71717, …
+$ lon       &lt;dbl&gt; -110.0492, -109.5787, -109.4359, -109.8757, -109.0680, -110.…
+$ eclipse_1 &lt;time&gt; 15:10:50, 15:11:10, 15:11:20, 15:10:50, 15:11:40, 15:10:40,…
+$ eclipse_2 &lt;time&gt; 15:56:20, 15:56:50, 15:57:00, 15:56:20, 15:57:40, 15:56:00,…
+$ eclipse_3 &lt;time&gt; 16:30:29, 16:31:21, 16:31:13, 16:29:50, 16:32:28, 16:29:54,…
+$ eclipse_4 &lt;time&gt; 16:33:31, 16:34:06, 16:34:31, 16:34:07, 16:34:35, 16:33:21,…
+$ eclipse_5 &lt;time&gt; 17:09:40, 17:10:30, 17:10:40, 17:09:40, 17:11:30, 17:09:10,…
+$ eclipse_6 &lt;time&gt; 18:02:10, 18:03:20, 18:03:30, 18:02:00, 18:04:30, 18:01:30,…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(eclipse_partial_2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 31,363
+Columns: 9
+$ state     &lt;chr&gt; "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", …
+$ name      &lt;chr&gt; "Abanda", "Abbeville", "Adamsville", "Addison", "Akron", "Al…
+$ lat       &lt;dbl&gt; 33.09163, 31.56471, 33.60231, 34.20268, 32.87907, 33.21435, …
+$ lon       &lt;dbl&gt; -85.52703, -85.25912, -86.97153, -87.17800, -87.74090, -86.8…
+$ eclipse_1 &lt;time&gt; 15:41:20, 15:42:30, 15:38:20, 15:37:50, 15:37:20, 15:38:50,…
+$ eclipse_2 &lt;time&gt; 16:23:30, 16:25:50, 16:20:50, 16:19:50, 16:20:40, 16:21:30,…
+$ eclipse_3 &lt;time&gt; 17:11:10, 17:13:50, 17:07:50, 17:06:50, 17:07:30, 17:08:40,…
+$ eclipse_4 &lt;time&gt; 18:00:00, 18:03:10, 17:56:30, 17:55:10, 17:56:00, 17:57:20,…
+$ eclipse_5 &lt;time&gt; 18:45:10, 18:49:30, 18:42:10, 18:40:30, 18:42:50, 18:43:20,…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(eclipse_partial_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 28,844
+Columns: 9
+$ state     &lt;chr&gt; "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", …
+$ name      &lt;chr&gt; "Abanda", "Abbeville", "Adamsville", "Addison", "Akron", "Al…
+$ lat       &lt;dbl&gt; 33.09163, 31.56471, 33.60231, 34.20268, 32.87907, 33.21435, …
+$ lon       &lt;dbl&gt; -85.52703, -85.25912, -86.97153, -87.17800, -87.74090, -86.8…
+$ eclipse_1 &lt;time&gt; 17:43:00, 17:41:40, 17:41:00, 17:41:30, 17:38:40, 17:40:40,…
+$ eclipse_2 &lt;time&gt; 18:24:10, 18:21:40, 18:23:10, 18:24:10, 18:20:40, 18:22:40,…
+$ eclipse_3 &lt;time&gt; 19:02:00, 19:00:30, 19:00:00, 19:00:30, 18:58:00, 18:59:50,…
+$ eclipse_4 &lt;time&gt; 19:39:20, 19:38:50, 19:36:40, 19:36:40, 19:35:00, 19:36:50,…
+$ eclipse_5 &lt;time&gt; 20:18:50, 20:17:20, 20:17:30, 20:18:00, 20:15:50, 20:17:20,…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(eclipse_total_2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 3,330
+Columns: 10
+$ state     &lt;chr&gt; "AR", "AR", "AR", "AR", "AR", "AR", "AR", "AR", "AR", "AR", …
+$ name      &lt;chr&gt; "Acorn", "Adona", "Alexander", "Alicia", "Alix", "Alleene", …
+$ lat       &lt;dbl&gt; 34.63879, 35.03993, 34.61859, 35.89291, 35.42200, 33.76482, …
+$ lon       &lt;dbl&gt; -94.20011, -92.89913, -92.45122, -91.08345, -93.72878, -94.2…
+$ eclipse_1 &lt;time&gt; 17:30:40, 17:33:20, 17:33:20, 17:37:30, 17:32:50, 17:29:10,…
+$ eclipse_2 &lt;time&gt; 18:15:50, 18:18:30, 18:18:30, 18:22:40, 18:17:50, 18:14:20,…
+$ eclipse_3 &lt;time&gt; 18:47:35, 18:50:08, 18:51:09, 18:54:29, 18:49:54, 18:46:15,…
+$ eclipse_4 &lt;time&gt; 18:51:37, 18:54:22, 18:53:38, 18:58:05, 18:53:00, 18:50:16,…
+$ eclipse_5 &lt;time&gt; 19:23:40, 19:26:10, 19:26:20, 19:29:50, 19:25:20, 19:22:30,…
+$ eclipse_6 &lt;time&gt; 20:08:30, 20:10:50, 20:11:10, 20:14:10, 20:10:00, 20:07:40,…</code></pre>
+</div>
+</div>
+<p>Each dataset has two character variables, two numeric variables, and 5 or 6 times variables. The partial eclipse datasets are obviously much larger because it is more common for states to experience a partial eclipse. The 2024 total eclipse dataset <code>eclipse_total_2024</code> has 3,330 observations while <code>eclipse_annular_2024</code> only has 811 observations.</p>
+</section>
+<section id="formulate-questions-and-explore-the-data-further" class="level1">
+<h1>Formulate questions and explore the data further</h1>
+<p>This process is iterative, so I added more questions as I created new variables and explored them.</p>
+<ol type="1">
+<li>How many states experience a total eclipse in both 2023 and 2024?</li>
+<li>Which region of the US experiences the longest amount of time in a total eclipse?</li>
+<li>How long does a total eclipse last on average?</li>
+<li>What are the factors affecting the duration of the eclipse in the US?</li>
+</ol>
+<p>The first question I want to explore is how many states experience a total eclipse in both years. I need to find the unique states in each dataset first.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find how many states experience total eclipses </span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(eclipse_annular_2023<span class="sc">$</span>state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AZ" "CA" "CO" "NV" "NM" "OR" "TX" "UT"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(eclipse_total_2024<span class="sc">$</span>state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "AR" "IL" "IN" "KY" "ME" "MI" "MO" "NH" "NY" "OH" "OK" "PA" "TX" "VT"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize these distributions</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>states_2023 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eclipse_annular_2023, <span class="fu">aes</span>(<span class="at">x=</span>state)) <span class="sc">+</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"States"</span>, <span class="at">y=</span><span class="st">"Cities Experiencing Total Eclipse"</span>, <span class="at">title=</span> <span class="st">"2023 Total Eclipse Distribution"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>states_2024 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eclipse_total_2024, <span class="fu">aes</span>(<span class="at">x=</span>state)) <span class="sc">+</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">geom_bar</span>() <span class="sc">+</span> </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"States"</span>, <span class="at">y=</span><span class="st">"Cities Experiencing Total Eclipse"</span>, <span class="at">title=</span> <span class="st">"2024 Total Eclipse Distribution"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>states_2023</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>states_2024</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The states that experience a full eclipse in 2023 include Arizona, California, Colorado, Nevada, Oregon, Texas, and Utah. New Mexico accounts for over 300 observations of cities that experience the total eclipse with Texas following at 240 cities. The states that experience a full eclipse in 2024 are Arkansas, Illinois, Indiana, Kentucky, Maine, Michigan, Missouri, New Hampshire, New York, Ohio, Oklahoma, Pennsylvania, Texas, and Vermont. Ohio accounts for the most cities experiencing the total eclipse in 2024 with almost 650 observations, followed by Indiana and Texas with 590 observations each. It is clear that more states experience a total eclipse in 2024 compared to 2023, and Texas is the only state that experiences both total eclipses.</p>
+<p>I think a region variable would be helpful for exploring areas that experience both total eclipses and possibly predicting which states experience both eclipses. I will use the <code>lat</code> and <code>long</code> variables to create a new <code>region</code> variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new region variable </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>eclipse_annular_2023 <span class="ot">&lt;-</span> eclipse_annular_2023 <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">mutate</span>(<span class="at">region =</span> <span class="fu">case_when</span>(</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">37</span>, <span class="fl">47.5</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">82</span>, <span class="sc">-</span><span class="dv">66</span>) <span class="sc">~</span> <span class="st">"Northeast"</span>, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">37</span>, <span class="fl">47.5</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">97</span>, <span class="sc">-</span><span class="dv">82</span>) <span class="sc">~</span> <span class="st">"Midwest"</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">24</span>, <span class="dv">37</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">97</span>, <span class="sc">-</span><span class="dv">66</span>) <span class="sc">~</span> <span class="st">"South"</span>, </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">24</span>, <span class="fl">47.5</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">104</span>) <span class="sc">~</span> <span class="st">"West"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                                          <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span> )) <span class="co"># set NA if city does not fall in one of these regions</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot distribution by region </span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>regions_2023 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eclipse_annular_2023, <span class="fu">aes</span>(<span class="at">x=</span>region)) <span class="sc">+</span> <span class="fu">geom_bar</span>()</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>regions_2023</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I see that over 200 cities were not assigned to a region, so I think these boundaries are too specific. These NA observations account for too large of a portion of the data to be removed or ignored, so I need to change my regional boundaries.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new boundaries for broader regions </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>eclipse_annular_2023 <span class="ot">&lt;-</span> eclipse_annular_2023 <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">mutate</span>(<span class="at">region =</span> <span class="fu">case_when</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">37</span>, <span class="fl">47.5</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">82</span>, <span class="sc">-</span><span class="dv">66</span>) <span class="sc">~</span> <span class="st">"Northeastern"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">24</span>, <span class="dv">37</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">82</span>, <span class="sc">-</span><span class="dv">66</span>) <span class="sc">~</span> <span class="st">"Southeastern"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">37</span>, <span class="fl">47.5</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">104</span>) <span class="sc">~</span> <span class="st">"Northwestern"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">24</span>, <span class="dv">37</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">104</span>) <span class="sc">~</span> <span class="st">"Southwestern"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                                          <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Central"</span>)) <span class="co">#set to Central if city does not fall into one of these regions</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot new region variable distribution </span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>region2_2023 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eclipse_annular_2023, <span class="fu">aes</span>(<span class="at">x=</span>region)) <span class="sc">+</span> <span class="fu">geom_bar</span>()</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>region2_2023</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I think this distribution more accurately reflects what I am trying to create for my future model. I need to repeat this process with the data from 2024.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new boundaries for broader regions </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>eclipse_total_2024 <span class="ot">&lt;-</span> eclipse_total_2024 <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">mutate</span>(<span class="at">region =</span> <span class="fu">case_when</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">37</span>, <span class="fl">47.5</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">82</span>, <span class="sc">-</span><span class="dv">66</span>) <span class="sc">~</span> <span class="st">"Northeastern"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">24</span>, <span class="dv">37</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">82</span>, <span class="sc">-</span><span class="dv">66</span>) <span class="sc">~</span> <span class="st">"Southeastern"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">37</span>, <span class="fl">47.5</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">104</span>) <span class="sc">~</span> <span class="st">"Northwestern"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">between</span>(lat, <span class="dv">24</span>, <span class="dv">37</span>) <span class="sc">&amp;</span> <span class="fu">between</span>(lon, <span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">104</span>) <span class="sc">~</span> <span class="st">"Southwestern"</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                                          <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Central"</span>)) <span class="co">#set to Central if city does not fall into one of these regions</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot new region variable distribution </span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>region_2024 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eclipse_total_2024, <span class="fu">aes</span>(<span class="at">x=</span>region)) <span class="sc">+</span> <span class="fu">geom_bar</span>()</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>region_2024</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It is interesting that most cities that experienced the total eclipse were in the Southeastern region in 2023, but most cities experiencing the total eclipse in 2024 are in the central region.</p>
+<p>I want to explore the time variables in the datasets to answer my questions about length of time. I will create a new variable <code>duration</code> using the time at which annularity begins in each location minus the time annularity ends in each location for each year.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new variable for length of time experiencing annularity in 2023</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>eclipse_annular_2023 <span class="ot">&lt;-</span> eclipse_annular_2023 <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">mutate</span>(<span class="at">duration =</span> eclipse_4<span class="sc">-</span>eclipse_3)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># determine average time each city experiences annularity in 2023</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(eclipse_annular_2023<span class="sc">$</span>duration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 206.0284 secs</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new variable for length of time experiencing annularity in 2024</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>eclipse_total_2024 <span class="ot">&lt;-</span> eclipse_total_2024 <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">mutate</span>(<span class="at">duration =</span> eclipse_4<span class="sc">-</span>eclipse_3)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># determine average time each city experiences annularity in 2024</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(eclipse_total_2024<span class="sc">$</span>duration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 185.0441 secs</code></pre>
+</div>
+</div>
+<p>The average duration of annularity in 2023 was 206.0284 seconds compared to 185.0441 seconds in 2024. This is an interesting finding because I would have expected the duration to be longer in 2024 since more states experience the total eclipse in 2024.</p>
+<p>I want to explore this finding further by plotting region against the duration of the total eclipse.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot state and duration by region in 2023</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>region_duration2023 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eclipse_annular_2023, <span class="fu">aes</span>(<span class="at">x=</span>state, <span class="at">y=</span>duration, <span class="at">by =</span> region)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot state and duration by region in 2024</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>region_duration2024 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eclipse_total_2024, <span class="fu">aes</span>(<span class="at">x=</span>state, <span class="at">y=</span>duration, <span class="at">by =</span> region)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># compare the two graphs </span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>region_duration2023</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>region_duration2024</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The distributions of duration time are surprising to me because each state experiences a similar range of duration times, but I expected durations within each state to be more similar with a smaller range. In 2023, Texas had the widest range of duration times even though it did not have the most cities experiencing the total eclipse. New Mexico, Texas, and Utah have the most observations of duration time above the mean of 206 seconds, which makes sense because these states account for the most cities experiencing total eclipse. In 2024, Texas also has the widest range of duration times, followed by Missouri, Arkansas, and Ohio. Another interesting finding is the New Hampshire still has a range of duration times from about 50 seconds to 200 seconds, which is interesting because there are only 4 cities that experience the total eclipse in this state. I would expect those 4 cities to have more similar duration times because they are so close together.</p>
+<p>I want to get more exact information on the range of duration time between the 2 years.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># explore the range of duration times over each year</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(eclipse_annular_2023<span class="sc">$</span>duration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time differences in secs
+[1]   4 293</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(eclipse_total_2024<span class="sc">$</span>duration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time differences in secs
+[1]   2 269</code></pre>
+</div>
+</div>
+<p>The range of duration times is slightly larger in 2023 with 293 being the longest duration time and 4 seconds being the shortest duration time. The range of duration times in 2024 exist between 2 and 269 seconds.</p>
+<p>For the last piece of my exploratory data analysis, I want to get a summary table of numeric variables grouped by region for each year.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary table for 2023</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>summary2023 <span class="ot">&lt;-</span> eclipse_annular_2023 <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(lat, lon, eclipse_1, eclipse_2, eclipse_3, eclipse_4, eclipse_5, eclipse_6, duration), mean))</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summary2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">region</th>
+<th style="text-align: right;">lat</th>
+<th style="text-align: right;">lon</th>
+<th style="text-align: left;">eclipse_1</th>
+<th style="text-align: left;">eclipse_2</th>
+<th style="text-align: left;">eclipse_3</th>
+<th style="text-align: left;">eclipse_4</th>
+<th style="text-align: left;">eclipse_5</th>
+<th style="text-align: left;">eclipse_6</th>
+<th style="text-align: left;">duration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Central</td>
+<td style="text-align: right;">29.59810</td>
+<td style="text-align: right;">-99.24227</td>
+<td style="text-align: left;">55403.19 secs</td>
+<td style="text-align: left;">58425.28 secs</td>
+<td style="text-align: left;">60671.92 secs</td>
+<td style="text-align: left;">60897.17 secs</td>
+<td style="text-align: left;">63259.84 secs</td>
+<td style="text-align: left;">66680.87 secs</td>
+<td style="text-align: left;">225.2480 secs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Northwestern</td>
+<td style="text-align: right;">41.42616</td>
+<td style="text-align: right;">-118.48570</td>
+<td style="text-align: left;">54425.93 secs</td>
+<td style="text-align: left;">56977.03 secs</td>
+<td style="text-align: left;">58878.69 secs</td>
+<td style="text-align: left;">59075.54 secs</td>
+<td style="text-align: left;">61087.24 secs</td>
+<td style="text-align: left;">64019.76 secs</td>
+<td style="text-align: left;">196.8496 secs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Southwestern</td>
+<td style="text-align: right;">35.38936</td>
+<td style="text-align: right;">-106.98187</td>
+<td style="text-align: left;">54794.89 secs</td>
+<td style="text-align: left;">57591.61 secs</td>
+<td style="text-align: left;">59682.54 secs</td>
+<td style="text-align: left;">59880.13 secs</td>
+<td style="text-align: left;">62093.73 secs</td>
+<td style="text-align: left;">65309.58 secs</td>
+<td style="text-align: left;">197.5916 secs</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary table for 2024</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>summary2024 <span class="ot">&lt;-</span> eclipse_total_2024 <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(lat, lon, eclipse_1, eclipse_2, eclipse_3, eclipse_4, eclipse_5</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                                      , eclipse_6, duration), mean))</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summary2024)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">region</th>
+<th style="text-align: right;">lat</th>
+<th style="text-align: right;">lon</th>
+<th style="text-align: left;">eclipse_1</th>
+<th style="text-align: left;">eclipse_2</th>
+<th style="text-align: left;">eclipse_3</th>
+<th style="text-align: left;">eclipse_4</th>
+<th style="text-align: left;">eclipse_5</th>
+<th style="text-align: left;">eclipse_6</th>
+<th style="text-align: left;">duration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Central</td>
+<td style="text-align: right;">36.89396</td>
+<td style="text-align: right;">-89.88413</td>
+<td style="text-align: left;">63635.40 secs</td>
+<td style="text-align: left;">66317.20 secs</td>
+<td style="text-align: left;">68221.10 secs</td>
+<td style="text-align: left;">68409.62 secs</td>
+<td style="text-align: left;">70311.13 secs</td>
+<td style="text-align: left;">72938.78 secs</td>
+<td style="text-align: left;">188.5168 secs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Northeastern</td>
+<td style="text-align: right;">42.87239</td>
+<td style="text-align: right;">-77.56089</td>
+<td style="text-align: left;">65212.29 secs</td>
+<td style="text-align: left;">67807.17 secs</td>
+<td style="text-align: left;">69610.56 secs</td>
+<td style="text-align: left;">69784.61 secs</td>
+<td style="text-align: left;">71558.35 secs</td>
+<td style="text-align: left;">73987.65 secs</td>
+<td style="text-align: left;">174.0438 secs</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In 2023, the central region experienced the longest average duration of the total eclipse at 225.2480 seconds, followed by the Southwestern and Northwestern regions, respectively. In 2024, the central region also experienced the longest average duration of the total eclipse at 188.5168 seconds, followed by the Northeastern region at 174.0438 seconds.</p>
+<p>These observations lead me to wonder what determines duration of a total eclipse since it appears to vary so much between states. I will create models with <code>duration</code> as the outcome of interest. I will use <code>state</code>, <code>region</code>, <code>eclipse_1</code>, and <code>eclipse_6</code> as the predictors. <code>eclipse_1</code> is the time at which the moon first contacts the sun in this location, and <code>eclipse_6</code> is the time at which the moon last contacts the sun in this location.</p>
+</section>
+<section id="further-pre-processs-and-clean-data-for-modeling" class="level1">
+<h1>Further pre-processs and clean data for modeling</h1>
+<p>Since I want to explore the factors that affect duration of total eclipse time. I want to combine the data from 2023 and 2024 into 1 dataset. I want the merged dataset to include all the cities that experienced a total eclipse in either year because that will increase my sample size and make my models more appropriate for the cross-validation I plan on doing. I chose to use a simple merge() function because I want the same 12 variables to be included inn the final dataset but with observations from every city that experienced the total eclipse in either 2023 or 2024. I want this long format to for my subsequent model instead of a wide format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create one dataset with observations from both years of total </span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>all_total <span class="ot">&lt;-</span> <span class="fu">merge</span>(eclipse_annular_2023, eclipse_total_2024, <span class="at">all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># glimpse at newly joined dataset </span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(all_total)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 4,141
+Columns: 12
+$ state     &lt;chr&gt; "AR", "AR", "AR", "AR", "AR", "AR", "AR", "AR", "AR", "AR", …
+$ name      &lt;chr&gt; "Acorn", "Adona", "Alexander", "Alicia", "Alix", "Alleene", …
+$ lat       &lt;dbl&gt; 34.63879, 35.03993, 34.61859, 35.89291, 35.42200, 33.76482, …
+$ lon       &lt;dbl&gt; -94.20011, -92.89913, -92.45122, -91.08345, -93.72878, -94.2…
+$ eclipse_1 &lt;time&gt; 17:30:40, 17:33:20, 17:33:20, 17:37:30, 17:32:50, 17:29:10,…
+$ eclipse_2 &lt;time&gt; 18:15:50, 18:18:30, 18:18:30, 18:22:40, 18:17:50, 18:14:20,…
+$ eclipse_3 &lt;time&gt; 18:47:35, 18:50:08, 18:51:09, 18:54:29, 18:49:54, 18:46:15,…
+$ eclipse_4 &lt;time&gt; 18:51:37, 18:54:22, 18:53:38, 18:58:05, 18:53:00, 18:50:16,…
+$ eclipse_5 &lt;time&gt; 19:23:40, 19:26:10, 19:26:20, 19:29:50, 19:25:20, 19:22:30,…
+$ eclipse_6 &lt;time&gt; 20:08:30, 20:10:50, 20:11:10, 20:14:10, 20:10:00, 20:07:40,…
+$ region    &lt;chr&gt; "Central", "Central", "Central", "Central", "Central", "Cent…
+$ duration  &lt;drtn&gt; 242 secs, 254 secs, 149 secs, 216 secs, 186 secs, 241 secs,…</code></pre>
+</div>
+</div>
+<p>This merge leaves me with a dataset containing 4,141 observations of 12 variables, including the two new ones I created, <code>region</code> and <code>duration</code>.</p>
+<p>I want to create a logistic model in the next section, so I will use the average duration to divide the observations into <code>short</code> eclipse and <code>long</code> eclipse to create a binary outcome variable, but this is not necessarily meaningful.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find average duration in the training data </span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(all_total<span class="sc">$</span>duration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 189.1538 secs</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create binary outcome for logistic regression</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>all_total <span class="ot">&lt;-</span> all_total <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">logoutcome =</span> <span class="fu">case_when</span>(duration <span class="sc">&lt;=</span> <span class="dv">189</span> <span class="sc">~</span> <span class="st">'short'</span>,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                                              duration <span class="sc">&gt;</span><span class="dv">189</span> <span class="sc">~</span> <span class="st">'long'</span>))</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co"># check if creation of new variable was successful </span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_total<span class="sc">$</span>logoutcome)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ long short 
+ 2512  1629 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change variable type to factor for logistic regression</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>logoutcome <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(all_total<span class="sc">$</span>logoutcome)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There appear to be more cities that experience a <code>long</code> eclipse, 2512 to be exact, compared to only 1629 cities who experience a <code>short</code> eclipse.</p>
+<p>It is likely that the <code>eclipse</code> variables are going to be correlated, so I need to address that before building models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert eclipse variables to numeric to determine correlation</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>eclipse_1 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(all_total<span class="sc">$</span>eclipse_1)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>eclipse_2 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(all_total<span class="sc">$</span>eclipse_2)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>eclipse_3 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(all_total<span class="sc">$</span>eclipse_3)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>eclipse_4 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(all_total<span class="sc">$</span>eclipse_4)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>eclipse_5 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(all_total<span class="sc">$</span>eclipse_5)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>eclipse_6 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(all_total<span class="sc">$</span>eclipse_6)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>all_total<span class="sc">$</span>duration <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(all_total<span class="sc">$</span>duration)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="co"># explore correlations between numeric predictors</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(all_total<span class="sc">$</span>lat, all_total<span class="sc">$</span>lon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4931961</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(all_total<span class="sc">$</span>eclipse_1, all_total<span class="sc">$</span>eclipse_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9996674</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(all_total<span class="sc">$</span>eclipse_2, all_total<span class="sc">$</span>eclipse_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9997357</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(all_total<span class="sc">$</span>eclipse_3, all_total<span class="sc">$</span>eclipse_4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.999836</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(all_total<span class="sc">$</span>eclipse_4, all_total<span class="sc">$</span>eclipse_5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9996481</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(all_total<span class="sc">$</span>eclipse_5, all_total<span class="sc">$</span>eclipse_6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.999159</code></pre>
+</div>
+</div>
+<p>As expected, each of the 6 eclipse variables are highly correlated with correlation coefficients of 0.99. I will only include one of these variables in my multivariate model. I think <code>eclipse_3</code> is the most interesting for the questions I want to answer because this variable includes the time at which annularity begins in this location.</p>
+<p>It is crucial to split the data into training and testing portions before I build my models. Since I have over 1,000 observations in my dataset, I have plenty of data to reasonably split into testing and training pieces.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="co"># put 75% into the training data </span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>datasplit <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(all_total, <span class="at">prop =</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create data frames for the two sections</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> <span class="fu">training</span>(datasplit)</span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> <span class="fu">testing</span>(datasplit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fit-3-different-model-types" class="level1">
+<h1>Fit 3 different model types</h1>
+<p>I want to build a simple linear model, a multivariate linear model, and a logistic model. For the purpose of this exercise, I will use my binary variable to use as my outcome for a logistic regression. Again, it is not necessarily very meaningful.</p>
+<p>I will create the workflows for each of my models first. The simple linear regression model with include the <code>region</code> as the single predictor for the duration outcome because I am most interested in this variable. I will add the <code>lat</code>, <code>lon</code>, and <code>eclipse_3</code> variables as predictors for the multivariate linear model. I considered using the <code>state</code> as a predictor as well, but that generates too many coefficients which decreases interpretability. The state is captured by the <code>region</code>, <code>lat</code>, and <code>lon</code> variables, so it still has an effect in the model. The logistic regression model will include all 4 predictors in the multivariate linear model for the binary outcome.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create simple linear regression workflow </span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>slm_mod <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">fit</span>(duration <span class="sc">~</span> region, <span class="at">data =</span> train_data)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(slm_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  term               estimate std.error statistic  p.value
+  &lt;chr&gt;                 &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)          193.        1.41   137.    0       
+2 regionNortheastern   -18.8       3.03    -6.23  5.38e-10
+3 regionNorthwestern     1.96      5.06     0.387 6.99e- 1
+4 regionSouthwestern     3.77      4.42     0.853 3.94e- 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create multivariate linear regression workflow </span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>mlr_mod <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">fit</span>(duration <span class="sc">~</span> lat <span class="sc">+</span> lon <span class="sc">+</span> eclipse_3 <span class="sc">+</span> region, <span class="at">data =</span> train_data)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(mlr_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 5
+  term                estimate std.error statistic  p.value
+  &lt;chr&gt;                  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)        737.      84.2         8.75   3.51e-18
+2 lat                 -1.56     0.702      -2.22   2.62e- 2
+3 lon                  1.30     0.441       2.94   3.33e- 3
+4 eclipse_3           -0.00547  0.000908   -6.03   1.87e- 9
+5 regionNortheastern -14.1      4.42       -3.18   1.48e- 3
+6 regionNorthwestern  -1.36    17.2        -0.0791 9.37e- 1
+7 regionSouthwestern -19.2      9.69       -1.99   4.72e- 2</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create logistic regression workflow </span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>log_mod <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">set_engine</span>(<span class="st">"glm"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">fit</span>(logoutcome <span class="sc">~</span> lat <span class="sc">+</span> lon <span class="sc">+</span> eclipse_3 <span class="sc">+</span> region, <span class="at">data =</span> train_data)</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(log_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 5
+  term                estimate std.error statistic  p.value
+  &lt;chr&gt;                  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)        -9.65     2.91         -3.32  0.000910
+2 lat                -0.00434  0.0233       -0.186 0.852   
+3 lon                -0.0131   0.0146       -0.897 0.370   
+4 eclipse_3           0.000120 0.0000324     3.70  0.000216
+5 regionNortheastern  0.415    0.141         2.94  0.00326 
+6 regionNorthwestern  0.639    0.579         1.10  0.270   
+7 regionSouthwestern  0.833    0.332         2.51  0.0121  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exponentiate region coefficients </span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fl">0.832</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.29791</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fl">0.639</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.894585</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fl">0.415</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.514371</code></pre>
+</div>
+</div>
+<p>The simple linear regression model reveals that the Southwestern region is the most strongly positively correlated with the outcome based on a coefficient of 3.770638. The Northeastern region is the most negatively correlated with the outcome based on a large coefficient of -18.844.</p>
+<p>The multivariate linear regression model shows a reversal of association for the Southwestern region, which now has a coefficient of -19.227. The Northeastern region is still negatively correlated with the outcome, but the magnitude of association decreased. The latitude and longtiude predictor have opposite effects on the outcome, and the <code>eclipse_3</code> predictor has a negligible effect on the outcome. It is clear that the <code>region</code> predictor is most strongly associated with the outcome.</p>
+<p>The logistic regression model draws similar conclusions with the <code>region</code> variable being the most impactful on the binary outcome. The odds of experiencing a long duration of the eclipse increase by a multiplicative factor of 2.29791 for the southwestern region, 1.894585 for the Northwestern region, and 1.514371 for the Northeastern region.</p>
+</section>
+<section id="choosing-the-best-model" class="level1">
+<h1>Choosing the best model</h1>
+<p>I need to make predictions for each of the models to explore performance metrics for my models. I have experience with interpreting RMSE and R-squared values, so I am going to experiment with MAE (mean absolute error) and MSE (mean square error) as well, which are appropriate performance metrics for models with a continuous outcome. I will explore accuracy and ROC for the linear regression model because I had trouble making the ROC curve during the first exercise with it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the simple linear regression model</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>pred1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(slm_mod, <span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(.pred)</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions and true values of duration</span></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(pred1, train_data<span class="sc">$</span>duration) <span class="sc">%&gt;%</span></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">duration =</span> <span class="st">"...2"</span>)</span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a><span class="co"># find performance metrics to determine model fit</span></span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>rmse1<span class="ot">&lt;-</span> <span class="fu">rmse</span>(data1, <span class="at">truth =</span> duration, <span class="at">estimate =</span> .pred)</span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>rsq1<span class="ot">&lt;-</span> <span class="fu">rsq</span>(data1, <span class="at">truth =</span> duration, <span class="at">estimate =</span> .pred)</span>
+<span id="cb68-15"><a href="#cb68-15" aria-hidden="true" tabindex="-1"></a>mae1<span class="ot">&lt;-</span> <span class="fu">mae</span>(data1, <span class="at">truth =</span> duration, <span class="at">estimate =</span> .pred)</span>
+<span id="cb68-16"><a href="#cb68-16" aria-hidden="true" tabindex="-1"></a>mse1 <span class="ot">&lt;-</span> <span class="fu">mean</span>((data1<span class="sc">$</span>duration <span class="sc">-</span> data1<span class="sc">$</span>.pred)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using the simple linear regression model</span></span>
+<span id="cb68-19"><a href="#cb68-19" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(mlr_mod, <span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb68-20"><a href="#cb68-20" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(.pred)</span>
+<span id="cb68-21"><a href="#cb68-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-22"><a href="#cb68-22" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions and true values of duration</span></span>
+<span id="cb68-23"><a href="#cb68-23" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(pred2, train_data<span class="sc">$</span>duration) <span class="sc">%&gt;%</span></span>
+<span id="cb68-24"><a href="#cb68-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">duration =</span> <span class="st">"...2"</span>)</span>
+<span id="cb68-25"><a href="#cb68-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-26"><a href="#cb68-26" aria-hidden="true" tabindex="-1"></a><span class="co"># find performance metrics to determine model fit</span></span>
+<span id="cb68-27"><a href="#cb68-27" aria-hidden="true" tabindex="-1"></a>rmse2<span class="ot">&lt;-</span> <span class="fu">rmse</span>(data2, <span class="at">truth =</span> duration, <span class="at">estimate =</span> .pred)</span>
+<span id="cb68-28"><a href="#cb68-28" aria-hidden="true" tabindex="-1"></a>rsq2<span class="ot">&lt;-</span> <span class="fu">rsq</span>(data2, <span class="at">truth =</span> duration, <span class="at">estimate =</span> .pred)</span>
+<span id="cb68-29"><a href="#cb68-29" aria-hidden="true" tabindex="-1"></a>mae2 <span class="ot">&lt;-</span> <span class="fu">mae</span>(data2, <span class="at">truth =</span> duration, <span class="at">estimate =</span> .pred)</span>
+<span id="cb68-30"><a href="#cb68-30" aria-hidden="true" tabindex="-1"></a>mse2 <span class="ot">&lt;-</span> <span class="fu">mean</span>((data2<span class="sc">$</span>duration <span class="sc">-</span> data2<span class="sc">$</span>.pred)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb68-31"><a href="#cb68-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-32"><a href="#cb68-32" aria-hidden="true" tabindex="-1"></a><span class="do">## display results</span></span>
+<span id="cb68-33"><a href="#cb68-33" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard        64.6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rmse2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard        63.8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rsq1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rsq     standard      0.0137</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rsq2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rsq     standard      0.0394</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mae1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 mae     standard        51.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mae2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 mae     standard        50.9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mse1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4175.899</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mse2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4067.012</code></pre>
+</div>
+</div>
+<p>The RMSE for the SLM model is 64.6212 compared to 63.77313 for the MLR model, which is slightly better. The R-squared value for the SLM model is extremely low at 0.01375. The MLR model has a higher R-squared value of 0.03944, which shows some improvement. The MAE for the simple linear regression model is 51.29597 compared to 50.88217 for the multiple linear regression model. While the MLR performs slightly better, I was expecting a larger improvement in performance with the addition of the other 3 predictors. The MSE for the SLR model is 4175.899 compared to 4067.012 for the MLR model, which reaches the same conclusions as the MAE performance metric.</p>
+<p>I will explore accuracy and ROC for the linear regression model because I had trouble making the ROC curve during the first exercise with it. I cannot use the method that Dr.&nbsp;Handel used in one of his previous keys because I include a factor variable in the formula, which prevents the metric set from running. I will create the ROC curve manually instead.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make predictions using the logistic model </span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>pred3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(log_mod, <span class="at">new_data =</span> train_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(.pred_class)</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predicted and true values </span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(pred3, train_data<span class="sc">$</span>logoutcome) <span class="sc">%&gt;%</span> </span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">logoutcome =</span> <span class="st">"...2"</span>)</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a><span class="co"># find accuracy of the logistic model</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>acc1 <span class="ot">&lt;-</span> <span class="fu">accuracy</span>(data3, <span class="at">truth =</span> logoutcome , <span class="at">estimate =</span> .pred_class)</span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a><span class="co"># create data set with truth and prediction variables for logistic model </span></span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>data4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">truth =</span> train_data<span class="sc">$</span>logoutcome,</span>
+<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">estimate =</span> <span class="fu">as.numeric</span>(pred3<span class="sc">$</span>.pred_class))</span>
+<span id="cb84-15"><a href="#cb84-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-16"><a href="#cb84-16" aria-hidden="true" tabindex="-1"></a><span class="co"># find the ROC curve</span></span>
+<span id="cb84-17"><a href="#cb84-17" aria-hidden="true" tabindex="-1"></a>roc_curve1 <span class="ot">&lt;-</span> <span class="fu">roc</span>(data4<span class="sc">$</span>truth, data4<span class="sc">$</span>estimate)</span>
+<span id="cb84-18"><a href="#cb84-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-19"><a href="#cb84-19" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate area under the curve score</span></span>
+<span id="cb84-20"><a href="#cb84-20" aria-hidden="true" tabindex="-1"></a>roc_auc1 <span class="ot">&lt;-</span> <span class="fu">auc</span>(roc_curve1)</span>
+<span id="cb84-21"><a href="#cb84-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-22"><a href="#cb84-22" aria-hidden="true" tabindex="-1"></a><span class="co"># print results </span></span>
+<span id="cb84-23"><a href="#cb84-23" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(acc1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.607</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(roc_auc1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area under the curve: 0.5</code></pre>
+</div>
+</div>
+<p>The accuracy for the SLR model is 0.6074074, and the area under the curve is 0.5 for this model.</p>
+<p>I will use cross-validation with 10 folds for each of the linear models to see if there is improvement in the performance metrics.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create 10 folds</span></span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train_data, <span class="at">v=</span><span class="dv">10</span>)</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a><span class="co"># define your model specification</span></span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb88-9"><a href="#cb88-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb88-10"><a href="#cb88-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-11"><a href="#cb88-11" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a workflow and fit it to the training data for the simple linear model</span></span>
+<span id="cb88-12"><a href="#cb88-12" aria-hidden="true" tabindex="-1"></a>slm_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb88-13"><a href="#cb88-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb88-14"><a href="#cb88-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(duration <span class="sc">~</span> region) <span class="sc">%&gt;%</span> <span class="co">#specify the formula since we are not using a recipe</span></span>
+<span id="cb88-15"><a href="#cb88-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_data) </span>
+<span id="cb88-16"><a href="#cb88-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-17"><a href="#cb88-17" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the SLM model </span></span>
+<span id="cb88-18"><a href="#cb88-18" aria-hidden="true" tabindex="-1"></a>slm_wf_rs <span class="ot">&lt;-</span> slm_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb88-19"><a href="#cb88-19" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb88-20"><a href="#cb88-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-21"><a href="#cb88-21" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a workflow and fit it to the training data for the multiple linear regresion model</span></span>
+<span id="cb88-22"><a href="#cb88-22" aria-hidden="true" tabindex="-1"></a>mlr_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb88-23"><a href="#cb88-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb88-24"><a href="#cb88-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(duration <span class="sc">~</span> lat <span class="sc">+</span> lon <span class="sc">+</span> eclipse_3 <span class="sc">+</span> region) <span class="sc">%&gt;%</span> <span class="co">#specify the formula since we are not using a recipe</span></span>
+<span id="cb88-25"><a href="#cb88-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> train_data) </span>
+<span id="cb88-26"><a href="#cb88-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-27"><a href="#cb88-27" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the MLR model </span></span>
+<span id="cb88-28"><a href="#cb88-28" aria-hidden="true" tabindex="-1"></a>mlr_wf_rs <span class="ot">&lt;-</span> mlr_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb88-29"><a href="#cb88-29" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb88-30"><a href="#cb88-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-31"><a href="#cb88-31" aria-hidden="true" tabindex="-1"></a><span class="co"># find the performance metrics </span></span>
+<span id="cb88-32"><a href="#cb88-32" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(slm_wf_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator    mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   64.7       10 0.536   Preprocessor1_Model1
+2 rsq     standard    0.0146    10 0.00369 Preprocessor1_Model1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mlr_wf_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator    mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   63.9       10 0.508   Preprocessor1_Model1
+2 rsq     standard    0.0379    10 0.00609 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+<p>The cross-validation results yield an RMSE of 64.7009 for the SLM model and an R-squared of 0.01458156. The original RMSE value of 64.6212 indicates that the cross-validated results are slightly worse because the RMSE is a little higher, and the original R-squared of 0.01375 indicates the cross-validated model performs slightly worse. The cross-validated results for the MLR model yield an RSE of 63.9469 compared to an original RMSE of 63.77313, which shows slightly worse performance. The cross-validated R-squared value is 0.03789013 compared to the original R-squared of 0.03944, which also suggests slightly worse performance. Since these differences are so small, the conclusions from both processes should be the same: the MLR model out-performs the SLM model by a slight margin.</p>
+</section>
+<section id="pick-final-model" class="level1">
+<h1>Pick Final Model</h1>
+<p>Since I created the binary outcome for the purpose of practicing logistic regression, I will not consider that model as the final model because the outcome is not particularly meaningful. Before I can pick the final model, I need to assess the predicted versus observed outcomes, the residuals, and the uncertainty for the SLM and MLR models.</p>
+<p>I will model the predicted versus the observed outcomes first.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create data frame with the observed values and both sets of predicted values </span></span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>plotdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">observed =</span> <span class="fu">c</span>(train_data<span class="sc">$</span>duration), </span>
+<span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">predicted_SLM =</span> <span class="fu">c</span>(pred1<span class="sc">$</span>.pred), </span>
+<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">predicted_MLR =</span> <span class="fu">c</span>(pred2<span class="sc">$</span>.pred), </span>
+<span id="cb92-9"><a href="#cb92-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"SLM model"</span>, <span class="st">"MLR model"</span>), <span class="at">each =</span> <span class="fu">nrow</span>(train_data))) <span class="co"># add label indicating the model</span></span>
+<span id="cb92-10"><a href="#cb92-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-11"><a href="#cb92-11" aria-hidden="true" tabindex="-1"></a><span class="co"># create a visual representation</span></span>
+<span id="cb92-12"><a href="#cb92-12" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plotdata, <span class="fu">aes</span>(<span class="at">x =</span> observed)) <span class="sc">+</span></span>
+<span id="cb92-13"><a href="#cb92-13" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> predicted_SLM, <span class="at">color =</span> <span class="st">"SLM model"</span>), <span class="at">shape =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb92-14"><a href="#cb92-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> predicted_MLR, <span class="at">color =</span> <span class="st">"MLR model"</span>), <span class="at">shape =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb92-15"><a href="#cb92-15" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> <span class="co">#add the 45 degree line</span></span>
+<span id="cb92-16"><a href="#cb92-16" aria-hidden="true" tabindex="-1"></a>          <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">300</span>) <span class="sc">+</span> <span class="co">#limit the x-axis values</span></span>
+<span id="cb92-17"><a href="#cb92-17" aria-hidden="true" tabindex="-1"></a>          <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">300</span>) <span class="sc">+</span> <span class="co">#limit the y-axis values</span></span>
+<span id="cb92-18"><a href="#cb92-18" aria-hidden="true" tabindex="-1"></a>          <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Observed Values"</span>, <span class="at">y =</span> <span class="st">"Predicted Values"</span>, <span class="at">title =</span> <span class="st">"Observed vs Predicted Values for Both Models"</span>)</span>
+<span id="cb92-19"><a href="#cb92-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-20"><a href="#cb92-20" aria-hidden="true" tabindex="-1"></a><span class="co"># save figure</span></span>
+<span id="cb92-21"><a href="#cb92-21" aria-hidden="true" tabindex="-1"></a>figure_file <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"tidytuesday-exercise"</span>, <span class="st">"obs_pred_plot.png"</span>)</span>
+<span id="cb92-22"><a href="#cb92-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> figure_file, <span class="at">plot=</span>plot) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="obs_pred_plot.png" class="img-fluid figure-img" width="1050"></p>
+<figcaption>Predicted Versus Observed Outcomes in Both Models</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This graph is really disappointing. We expect the observed versus predicted plot to follow the 45 degree line that represents a 1:1 ratio. Clearly, neither model is close to achieving this expectation. The blue circles representing the SLM model are in a single horizontal line, which suggests that the model is just predicting the average duration time. The MLR model is a little better because there is some variation in predictions, but it is still not close to the preferred 45 degree relationship.</p>
+<p>I want to see if there is a pattern in the residuals next.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create data frame with predictions and residuals for SLM model</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>SLMresiduals <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">predicted_SLMmodel =</span> <span class="fu">c</span>(pred1<span class="sc">$</span>.pred), </span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">residuals =</span> <span class="fu">c</span>(pred1<span class="sc">$</span>.pred <span class="sc">-</span> train_data<span class="sc">$</span>duration)) <span class="co"># calculate residuals</span></span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plot predictions versus residuals for MLR model</span></span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>SLM_res_plot<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(SLMresiduals, <span class="fu">aes</span>(<span class="at">x=</span>predicted_SLMmodel, <span class="at">y=</span>residuals)) <span class="sc">+</span> </span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">0</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"pink"</span>, <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span> </span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">100</span>,<span class="dv">100</span>) <span class="sc">+</span> <span class="co">#ensure equal amounts in positive and negative direction</span></span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">labs</span>(<span class="at">x=</span> <span class="st">"Predicted Values"</span>, <span class="at">y=</span> <span class="st">"Residuals"</span>, <span class="at">title =</span> <span class="st">"SLM Model Residual Plot"</span>)</span>
+<span id="cb93-11"><a href="#cb93-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-12"><a href="#cb93-12" aria-hidden="true" tabindex="-1"></a><span class="co"># create data frame with predictions and residuals for MLR model</span></span>
+<span id="cb93-13"><a href="#cb93-13" aria-hidden="true" tabindex="-1"></a>MLRresiduals <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">predicted_MLRmodel =</span> <span class="fu">c</span>(pred2<span class="sc">$</span>.pred), </span>
+<span id="cb93-14"><a href="#cb93-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">residuals =</span> <span class="fu">c</span>(pred2<span class="sc">$</span>.pred <span class="sc">-</span> train_data<span class="sc">$</span>duration)) <span class="co"># calculate residuals</span></span>
+<span id="cb93-15"><a href="#cb93-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-16"><a href="#cb93-16" aria-hidden="true" tabindex="-1"></a><span class="co"># plot predictions versus residuals for MLR model</span></span>
+<span id="cb93-17"><a href="#cb93-17" aria-hidden="true" tabindex="-1"></a>MLR_res_plot<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(MLRresiduals, <span class="fu">aes</span>(<span class="at">x=</span>predicted_MLRmodel, <span class="at">y=</span>residuals)) <span class="sc">+</span> </span>
+<span id="cb93-18"><a href="#cb93-18" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb93-19"><a href="#cb93-19" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">0</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"pink"</span>, <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span> </span>
+<span id="cb93-20"><a href="#cb93-20" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">100</span>,<span class="dv">100</span>) <span class="sc">+</span> <span class="co">#ensure equal amounts in positive and negative direction</span></span>
+<span id="cb93-21"><a href="#cb93-21" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">labs</span>(<span class="at">x=</span> <span class="st">"Predicted Values"</span>, <span class="at">y=</span> <span class="st">"Residuals"</span>, <span class="at">title =</span> <span class="st">"MLR Model Residual Plot"</span>)</span>
+<span id="cb93-22"><a href="#cb93-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-23"><a href="#cb93-23" aria-hidden="true" tabindex="-1"></a><span class="co"># compare the two plots </span></span>
+<span id="cb93-24"><a href="#cb93-24" aria-hidden="true" tabindex="-1"></a>SLM_res_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 306 rows containing missing values (`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save MLR residuals plot </span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>figure_file2 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"tidytuesday-exercise"</span>, <span class="st">"mlr_residuals.png"</span>)</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> figure_file2, <span class="at">plot=</span>MLR_res_plot) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 301 rows containing missing values (`geom_point()`).</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr_residuals.png" class="img-fluid figure-img" width="1050"></p>
+<figcaption>Residuals from the MLR Model</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The SLM model residual plot is interesting because there are 4 vertical lines of residuals for 4 predicted values, which helps explain the horizontal line seen in the previous plot. This must be resulting from the 4 region options in the <code>region</code> variable, so the model is predicting an average duration for each region. The residuals appear to be fairly balanced between positive and negative values, especially for the predicted value around 191. The MLR residual plot shows more variation, but there still appear to be 4 bands of residuals in the plot. There is a cluster of negative residuals between the 185 and 195 predicted values which is likely due to the large number of cities classified in the Central region, so there appear to be more negative residuals than positive residuals.</p>
+<p>The last factor I need to consider before choosing the model is the uncertainty. I need to bootstrap the data 100 times to find confidence intervals for the predicted values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create 100 bootstraps with the training data</span></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a>bootstraps <span class="ot">&lt;-</span> <span class="fu">bootstraps</span>(train_data, <span class="at">times =</span> <span class="dv">100</span>)</span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create empty vector to store predictions list </span></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>preds_bs <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length =</span> <span class="fu">length</span>(bootstraps))</span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a><span class="co"># write a loop to fit the SLM model to each bootstrap and make predictions</span></span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(bootstraps)) {</span>
+<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb97-13"><a href="#cb97-13" aria-hidden="true" tabindex="-1"></a>  bootstrap_sample <span class="ot">&lt;-</span> <span class="fu">analysis</span>(bootstraps<span class="sc">$</span>splits[[i]])  <span class="co"># isolate the bootstrap sample</span></span>
+<span id="cb97-14"><a href="#cb97-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb97-15"><a href="#cb97-15" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">lm</span>(duration <span class="sc">~</span> region, <span class="at">data =</span> bootstrap_sample) <span class="co"># fit the model using the bootstrap    sample</span></span>
+<span id="cb97-16"><a href="#cb97-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb97-17"><a href="#cb97-17" aria-hidden="true" tabindex="-1"></a>  predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> train_data) <span class="co"># make predictions with the training data</span></span>
+<span id="cb97-18"><a href="#cb97-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb97-19"><a href="#cb97-19" aria-hidden="true" tabindex="-1"></a>  preds_bs[[i]] <span class="ot">&lt;-</span> predictions <span class="co"># store predictions in the empty vector</span></span>
+<span id="cb97-20"><a href="#cb97-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that I have my bootstrap predictions for the SLM model, I need to find the median and 95% confidence intervals for the each of the 100 predictions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an empty array to store the predictions</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>num_samples <span class="ot">&lt;-</span> <span class="fu">length</span>(preds_bs)</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>num_datapoints <span class="ot">&lt;-</span> <span class="fu">length</span>(preds_bs[[<span class="dv">1</span>]])  </span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a>preds_array <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">c</span>(num_samples, num_datapoints))</span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fill the array with predictions from bootstrappping</span></span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_samples) {</span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>  preds_array[i,] <span class="ot">&lt;-</span> <span class="fu">unlist</span>(preds_bs[[i]])</span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a><span class="co"># find the median and 95% confidence intervals of each prediction with SLM model</span></span>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> preds_array <span class="sc">%&gt;%</span></span>
+<span id="cb98-13"><a href="#cb98-13" aria-hidden="true" tabindex="-1"></a>          <span class="fu">apply</span>(<span class="dv">2</span>, quantile,  <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb98-14"><a href="#cb98-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">t</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I will combine these variables to create a visualization of the uncertainty.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with all the necessary variables for SLM uncertainty</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>SLMdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">observed =</span> <span class="fu">c</span>(train_data<span class="sc">$</span>duration), </span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">point_estimates =</span> <span class="fu">c</span>(pred1<span class="sc">$</span>.pred),</span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">medians =</span> preds[, <span class="dv">2</span>],</span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower_bound =</span> preds[, <span class="dv">1</span>],</span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">upper_bound =</span> preds[, <span class="dv">3</span>]</span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create uncertainty visualization </span></span>
+<span id="cb99-11"><a href="#cb99-11" aria-hidden="true" tabindex="-1"></a>SLM_uncertainty <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(SLMdata, <span class="fu">aes</span>(<span class="at">x =</span> observed, <span class="at">y =</span> point_estimates)) <span class="sc">+</span></span>
+<span id="cb99-12"><a href="#cb99-12" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  </span>
+<span id="cb99-13"><a href="#cb99-13" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> medians), <span class="at">color =</span> <span class="st">"green"</span>) <span class="sc">+</span> </span>
+<span id="cb99-14"><a href="#cb99-14" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower_bound, <span class="at">ymax =</span> upper_bound), <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span> </span>
+<span id="cb99-15"><a href="#cb99-15" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  <span class="co"># add 45 degree line</span></span>
+<span id="cb99-16"><a href="#cb99-16" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">xlim</span>(<span class="dv">225</span>, <span class="dv">300</span>) <span class="sc">+</span> <span class="co">#zoom in on confidence intervals</span></span>
+<span id="cb99-17"><a href="#cb99-17" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">ylim</span>(<span class="dv">150</span>, <span class="dv">250</span>) <span class="sc">+</span> <span class="co">#zoom in on confidence intervals</span></span>
+<span id="cb99-18"><a href="#cb99-18" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Observed Values"</span>, <span class="at">y =</span> <span class="st">"Predicted Values"</span>, <span class="at">title =</span> <span class="st">"SLM Model Uncertainty"</span>)</span>
+<span id="cb99-19"><a href="#cb99-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-20"><a href="#cb99-20" aria-hidden="true" tabindex="-1"></a>SLM_uncertainty</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1959 rows containing missing values (`geom_point()`).
+Removed 1959 rows containing missing values (`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This plot is not particularly helpful because all the observations are grouped together so densley, but it appears that the point estimates align with the predicted values for 2 of the regions, which are seen in the center of the graph. The region indicated by the predicted value of 175 has a lot of uncertainty because the confidence intervals from the median do not overlap with the point estimates. The region with the highest predicted value also seems to have a high degree of uncertinay, but at least some of the confidence intervals overlap with the predictions here.</p>
+<p>I will repeat this process for the MLR model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create 100 bootstraps with the training data</span></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>bootstraps <span class="ot">&lt;-</span> <span class="fu">bootstraps</span>(train_data, <span class="at">times =</span> <span class="dv">100</span>)</span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create empty vector to store predictions list </span></span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>preds_bs <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="at">length =</span> <span class="fu">length</span>(bootstraps))</span>
+<span id="cb101-9"><a href="#cb101-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-10"><a href="#cb101-10" aria-hidden="true" tabindex="-1"></a><span class="co"># write a loop to fit the SLM model to each bootstrap and make predictions for the MLR model </span></span>
+<span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(bootstraps)) {</span>
+<span id="cb101-12"><a href="#cb101-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb101-13"><a href="#cb101-13" aria-hidden="true" tabindex="-1"></a>  bootstrap_sample <span class="ot">&lt;-</span> <span class="fu">analysis</span>(bootstraps<span class="sc">$</span>splits[[i]])  <span class="co"># isolate the bootstrap sample</span></span>
+<span id="cb101-14"><a href="#cb101-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb101-15"><a href="#cb101-15" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">lm</span>(duration <span class="sc">~</span> lat <span class="sc">+</span> lon <span class="sc">+</span> eclipse_3 <span class="sc">+</span> region, <span class="at">data =</span> bootstrap_sample) <span class="co"># fit the model using the bootstrap sample</span></span>
+<span id="cb101-16"><a href="#cb101-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb101-17"><a href="#cb101-17" aria-hidden="true" tabindex="-1"></a>  predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> train_data) <span class="co"># make predictions with the training data</span></span>
+<span id="cb101-18"><a href="#cb101-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb101-19"><a href="#cb101-19" aria-hidden="true" tabindex="-1"></a>  preds_bs[[i]] <span class="ot">&lt;-</span> predictions <span class="co"># store predictions in the empty vector</span></span>
+<span id="cb101-20"><a href="#cb101-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb101-21"><a href="#cb101-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-22"><a href="#cb101-22" aria-hidden="true" tabindex="-1"></a><span class="co"># create an empty array to store the predictions</span></span>
+<span id="cb101-23"><a href="#cb101-23" aria-hidden="true" tabindex="-1"></a>num_samples2 <span class="ot">&lt;-</span> <span class="fu">length</span>(preds_bs)</span>
+<span id="cb101-24"><a href="#cb101-24" aria-hidden="true" tabindex="-1"></a>num_datapoints2 <span class="ot">&lt;-</span> <span class="fu">length</span>(preds_bs[[<span class="dv">1</span>]])  </span>
+<span id="cb101-25"><a href="#cb101-25" aria-hidden="true" tabindex="-1"></a>preds_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">c</span>(num_samples, num_datapoints))</span>
+<span id="cb101-26"><a href="#cb101-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-27"><a href="#cb101-27" aria-hidden="true" tabindex="-1"></a><span class="co"># fill the array with predictions from bootstrappping</span></span>
+<span id="cb101-28"><a href="#cb101-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_samples2) {</span>
+<span id="cb101-29"><a href="#cb101-29" aria-hidden="true" tabindex="-1"></a>  preds_array2[i,] <span class="ot">&lt;-</span> <span class="fu">unlist</span>(preds_bs[[i]])</span>
+<span id="cb101-30"><a href="#cb101-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb101-31"><a href="#cb101-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-32"><a href="#cb101-32" aria-hidden="true" tabindex="-1"></a><span class="co"># find the median and 95% confidence intervals of each prediction</span></span>
+<span id="cb101-33"><a href="#cb101-33" aria-hidden="true" tabindex="-1"></a>preds2 <span class="ot">&lt;-</span> preds_array2 <span class="sc">%&gt;%</span></span>
+<span id="cb101-34"><a href="#cb101-34" aria-hidden="true" tabindex="-1"></a>          <span class="fu">apply</span>(<span class="dv">2</span>, quantile,  <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb101-35"><a href="#cb101-35" aria-hidden="true" tabindex="-1"></a>          <span class="fu">t</span>()</span>
+<span id="cb101-36"><a href="#cb101-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-37"><a href="#cb101-37" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with all the necessary variables for MLR uncertainty</span></span>
+<span id="cb101-38"><a href="#cb101-38" aria-hidden="true" tabindex="-1"></a>MLRdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb101-39"><a href="#cb101-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">observed =</span> <span class="fu">c</span>(train_data<span class="sc">$</span>duration), </span>
+<span id="cb101-40"><a href="#cb101-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">point_estimates =</span> <span class="fu">c</span>(pred2<span class="sc">$</span>.pred),</span>
+<span id="cb101-41"><a href="#cb101-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">medians =</span> preds2[, <span class="dv">2</span>],</span>
+<span id="cb101-42"><a href="#cb101-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower_bound =</span> preds2[, <span class="dv">1</span>],</span>
+<span id="cb101-43"><a href="#cb101-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">upper_bound =</span> preds2[, <span class="dv">3</span>]</span>
+<span id="cb101-44"><a href="#cb101-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb101-45"><a href="#cb101-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-46"><a href="#cb101-46" aria-hidden="true" tabindex="-1"></a><span class="co"># create uncertainty visualization </span></span>
+<span id="cb101-47"><a href="#cb101-47" aria-hidden="true" tabindex="-1"></a>MLR_uncertainty <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(MLRdata, <span class="fu">aes</span>(<span class="at">x =</span> observed, <span class="at">y =</span> point_estimates)) <span class="sc">+</span></span>
+<span id="cb101-48"><a href="#cb101-48" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  </span>
+<span id="cb101-49"><a href="#cb101-49" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> medians), <span class="at">color =</span> <span class="st">"green"</span>) <span class="sc">+</span> </span>
+<span id="cb101-50"><a href="#cb101-50" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower_bound, <span class="at">ymax =</span> upper_bound), <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span> </span>
+<span id="cb101-51"><a href="#cb101-51" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  <span class="co"># add 45 degree line</span></span>
+<span id="cb101-52"><a href="#cb101-52" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">300</span>) <span class="sc">+</span> <span class="co">#zoom in on confidence intervals</span></span>
+<span id="cb101-53"><a href="#cb101-53" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">ylim</span>(<span class="dv">150</span>, <span class="dv">250</span>) <span class="sc">+</span> <span class="co">#zoom in on confidence intervals</span></span>
+<span id="cb101-54"><a href="#cb101-54" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Observed Values"</span>, <span class="at">y =</span> <span class="st">"Predicted Values"</span>, <span class="at">title =</span> <span class="st">"MLR Model Uncertainty"</span>)</span>
+<span id="cb101-55"><a href="#cb101-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-56"><a href="#cb101-56" aria-hidden="true" tabindex="-1"></a><span class="co"># save MLR uncertainty plot </span></span>
+<span id="cb101-57"><a href="#cb101-57" aria-hidden="true" tabindex="-1"></a>figure_file3 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"tidytuesday-exercise"</span>, <span class="st">"mlr_uncertainty.png"</span>)</span>
+<span id="cb101-58"><a href="#cb101-58" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> figure_file3, <span class="at">plot=</span>MLR_uncertainty) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mlr_uncertainty.png" class="img-fluid figure-img" width="1050"></p>
+<figcaption>Uncertainty in the MLR Model</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This model is more helpful because I can see that there is strong overlap between the confidence intervals and the point estimates for predicted values greater than 175. For the point estimates around the predicted value of 175, there is high uncertainty because the confidence intervals do not overlap with the point estimates very often.</p>
+<p>I think that the MLR model with the latitude, longitude, time at which the eclipse began in the location, and region variables is the best choice because it has lower uncertainty than the SLM model. The SLM model appears to only predict the average duration for each region based on the <span class="citation" data-cites="obs_pred_plot">@obs_pred_plot</span>, which is not very helpful. Including the model with more predictors provides more information on the duration of the eclipse. This variation in predictions can be seen in the <span class="citation" data-cites="mlr_residuals">@mlr_residuals</span> plot which shows 4 bands of residuals that appear to be fairly balanced among 3 bands. While there is one cluster of negative residuals, I think it is reasonable to conclude that there are an equal amount of positive residuals in that band even though they are more spread out. The uncertainty in the MLR model is lower compared to the SLR model as seen in <span class="citation" data-cites="ml_uncertainty">@ml_uncertainty</span>. There is strong overlap in confidence intervals and predicted values for 3 out of 4 regions, which is much better than the lack of overlap between these values for any region in the SLM model. Based on the more equal distribution of residuals, lower uncertainty, better performance metrics and my research question about factors determining duration of eclipse, I choose the MLR model as my final model.</p>
+</section>
+<section id="evaluate-on-test-data" class="level1">
+<h1>Evaluate on Test Data</h1>
+<p>It is now time to use the test data to determine how well my model performs on data it has not seen before. I want to make a plot with the observed and predicted values from both sets of data to see how well they overlap.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create predictions using MLR with the test data</span></span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>testpred <span class="ot">&lt;-</span> <span class="fu">predict</span>(mlr_mod, <span class="at">new_data =</span> test_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb102-6"><a href="#cb102-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(.pred)</span>
+<span id="cb102-7"><a href="#cb102-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-8"><a href="#cb102-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame with the predictions and true values of duration</span></span>
+<span id="cb102-9"><a href="#cb102-9" aria-hidden="true" tabindex="-1"></a>testdata2 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(testpred, test_data<span class="sc">$</span>duration) <span class="sc">%&gt;%</span></span>
+<span id="cb102-10"><a href="#cb102-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rename</span>(<span class="at">duration =</span> <span class="st">"...2"</span>)</span>
+<span id="cb102-11"><a href="#cb102-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-12"><a href="#cb102-12" aria-hidden="true" tabindex="-1"></a><span class="co"># create visualization of testing and training data</span></span>
+<span id="cb102-13"><a href="#cb102-13" aria-hidden="true" tabindex="-1"></a>testtrain <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb102-14"><a href="#cb102-14" aria-hidden="true" tabindex="-1"></a>                <span class="fu">geom_point</span>(<span class="at">data =</span> testdata2, <span class="fu">aes</span>(<span class="at">x =</span> duration, <span class="at">y =</span> .pred, <span class="at">color =</span> <span class="st">"test"</span>)) <span class="sc">+</span> </span>
+<span id="cb102-15"><a href="#cb102-15" aria-hidden="true" tabindex="-1"></a>                <span class="fu">geom_point</span>(<span class="at">data =</span> data2, <span class="fu">aes</span>(<span class="at">x =</span> duration, <span class="at">y =</span> .pred, <span class="at">color =</span> <span class="st">"train"</span>)) <span class="sc">+</span> </span>
+<span id="cb102-16"><a href="#cb102-16" aria-hidden="true" tabindex="-1"></a>                <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"pink"</span>)) <span class="sc">+</span> </span>
+<span id="cb102-17"><a href="#cb102-17" aria-hidden="true" tabindex="-1"></a>                <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Observed Values"</span>, <span class="at">y=</span><span class="st">"Predicted Values"</span>, <span class="at">title =</span> <span class="st">"Observed vs Predicted Values for Test and Train Data"</span>)</span>
+<span id="cb102-18"><a href="#cb102-18" aria-hidden="true" tabindex="-1"></a>testtrain</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I am very pleased with the amount of overlap between the testing and training data. The band representing the Central region, which has the most observations, has the best overlap, and all four regions are clearly discernable in the testing and training data. I feel more confident about my model based on how well it performed with the testing data.</p>
+<p>I also want to compare the residuals from the training data to the residuals from the testing data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create data frame with predictions and residuals for testing data using MLR model</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>testresiduals <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">predicted_MLRmodel =</span> <span class="fu">c</span>(testdata2<span class="sc">$</span>.pred), </span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">residuals =</span> <span class="fu">c</span>(testdata2<span class="sc">$</span>.pred <span class="sc">-</span> testdata2<span class="sc">$</span>duration)) <span class="co"># calculate residuals</span></span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plot predictions versus residuals for MLR model</span></span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a>test_res_plot<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(testresiduals, <span class="fu">aes</span>(<span class="at">x=</span>predicted_MLRmodel, <span class="at">y=</span>residuals)) <span class="sc">+</span> </span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb103-8"><a href="#cb103-8" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">0</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"pink"</span>, <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span> </span>
+<span id="cb103-9"><a href="#cb103-9" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">100</span>,<span class="dv">100</span>) <span class="sc">+</span> <span class="co">#ensure equal amounts in positive and negative direction</span></span>
+<span id="cb103-10"><a href="#cb103-10" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">labs</span>(<span class="at">x=</span> <span class="st">"Predicted Values"</span>, <span class="at">y=</span> <span class="st">"Residuals"</span>, <span class="at">title =</span> <span class="st">"MLR Model Residual Plot with Test Data"</span>)</span>
+<span id="cb103-11"><a href="#cb103-11" aria-hidden="true" tabindex="-1"></a>test_res_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 119 rows containing missing values (`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tidytuesday-exercise_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This residual plot looks exactly like the first one with the training data, just with less observations. There is still a large cluster of observations between predicted values of 185 and 195. Since there are less observations here, it is easier to see that there is likely more negative residuals, which indicates that the model might underestimate the outcome of eclipse duration.</p>
+<p>Lastly, I want to use cross-valdiation to find performance metrics for the model using the testing data only.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed for reproducibility</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2468</span>)</span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a workflow and fit it to the testing data for the multiple linear regresion model</span></span>
+<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>mlr_wf_test <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">add_formula</span>(duration <span class="sc">~</span> lat <span class="sc">+</span> lon <span class="sc">+</span> eclipse_3 <span class="sc">+</span> region) <span class="sc">%&gt;%</span> <span class="co">#specify the formula since we are not using a recipe</span></span>
+<span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">fit</span>(<span class="at">data =</span> test_data) </span>
+<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a><span class="co"># resample the MLR model </span></span>
+<span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a>mlr_wf_rs_test <span class="ot">&lt;-</span> mlr_wf_test <span class="sc">%&gt;%</span> </span>
+<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">fit_resamples</span>(folds)</span>
+<span id="cb105-13"><a href="#cb105-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-14"><a href="#cb105-14" aria-hidden="true" tabindex="-1"></a><span class="co"># find performance metricsc </span></span>
+<span id="cb105-15"><a href="#cb105-15" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(mlr_wf_rs_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator    mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   63.9       10 0.508   Preprocessor1_Model1
+2 rsq     standard    0.0379    10 0.00609 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+<p>The RMSE for the model using test data is 63.9469 which is exactly the same as the RMSE of 63.9469 found with the training data. This is a good sign that my model is performing well because it does not perform any worse on the test data. The same conclusion can be drawn from the R-squared value of 0.03789013. I am very pleased with the results of this test, and I feel more confident in my model.</p>
+</section>
+<section id="summary-of-findings" class="level1">
+<h1>Summary of findings</h1>
+<p>I started this analysis with several different questions in mind ranging from which states experienced an eclipse in both 2023 and 2024 to the length of the average duration of eclipses to which region of the US experienced the longest amount of time in a total eclipse.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create final figure with state level information from both years </span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>final_figure1 <span class="ot">&lt;-</span> states_2023 <span class="sc">+</span> states_2024</span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a><span class="co"># save final figure</span></span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>figure_file4 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"tidytuesday-exercise"</span>, <span class="st">"final_figure1.png"</span>)</span>
+<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> figure_file4, <span class="at">plot=</span>final_figure1) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="final_figure1.png" class="img-fluid figure-img" width="1050"></p>
+<figcaption>States Experiencing Total Eclipse in Both Years</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>As seen in the <span class="citation" data-cites="final-figure1">@final-figure1</span>, Texas is the only state that experiences a total eclipse in both 2023 and 2024. New Mexico had the most cities experiencing total eclipse in 2023 followed by Texas and Oregon. Ohio had the most cities experiencing total eclipse in 2024 followed by Texas and Indiana.</p>
+<p>After combining the data of states experiencing total eclipse in both years, I found that the average duration of the eclipse was 189.1538 seconds, and there are more cities that experience a longer eclipse, 2512 to be exact, compared to only 1629 cities who experience a shorter eclipse based on the binary classification of eclipse duration. I was also curious about how these durations differed by region.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create data frame with summary of duration by region</span></span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>duration_summary <span class="ot">&lt;-</span> all_total <span class="sc">%&gt;%</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">summarise</span>(<span class="at">mean_duration =</span> <span class="fu">mean</span>(duration),</span>
+<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">min_duration =</span> <span class="fu">min</span>(duration),</span>
+<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">max_duration =</span> <span class="fu">max</span>(duration),</span>
+<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">total_count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb109-8"><a href="#cb109-8" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">rename</span>(</span>
+<span id="cb109-9"><a href="#cb109-9" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">Average_Duration =</span> mean_duration,</span>
+<span id="cb109-10"><a href="#cb109-10" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">Minimum_Duration =</span> min_duration,</span>
+<span id="cb109-11"><a href="#cb109-11" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">Maximum_Duration =</span> max_duration,</span>
+<span id="cb109-12"><a href="#cb109-12" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">Cities =</span> total_count)</span>
+<span id="cb109-13"><a href="#cb109-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-14"><a href="#cb109-14" aria-hidden="true" tabindex="-1"></a><span class="co">#clean up the table </span></span>
+<span id="cb109-15"><a href="#cb109-15" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> <span class="fu">kable</span>(duration_summary)</span>
+<span id="cb109-16"><a href="#cb109-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-17"><a href="#cb109-17" aria-hidden="true" tabindex="-1"></a><span class="co"># save the table </span></span>
+<span id="cb109-18"><a href="#cb109-18" aria-hidden="true" tabindex="-1"></a>summarytable_file <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"tidytuesday-exercise"</span>, <span class="st">"summarytable.rds"</span>)</span>
+<span id="cb109-19"><a href="#cb109-19" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(summary_table, <span class="at">file =</span> summarytable_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">region</th>
+<th style="text-align: right;">Average_Duration</th>
+<th style="text-align: right;">Minimum_Duration</th>
+<th style="text-align: right;">Maximum_Duration</th>
+<th style="text-align: right;">Cities</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Central</td>
+<td style="text-align: right;">191.8668</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">293</td>
+<td style="text-align: right;">2785</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Northeastern</td>
+<td style="text-align: right;">174.0438</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">234</td>
+<td style="text-align: right;">799</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Northwestern</td>
+<td style="text-align: right;">196.8496</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">282</td>
+<td style="text-align: right;">246</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Southwestern</td>
+<td style="text-align: right;">197.5916</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">285</td>
+<td style="text-align: right;">311</td>
+</tr>
+</tbody>
+</table>
+<p>Duration of Total Eclipse by Region</p>
+</div>
+</div>
+<p>According to <span class="citation" data-cites="summary-table">@summary-table</span>, the Southwestern region experienced the longest average duration of 197.5916 seconds, but only 311 cities fall in this region. The Central region has the most cities, and the average duration for these 2785 cities is 191.8668 seconds. The Northeastern region experienced the shortest average eclipse time of 174.0438 seconds.</p>
+<p>After exploring 3 models to explore the outcome of interest, I found that the strongest predictor of average duration of eclipse time is the region variable. The Southwestern region has the strongest relationship with the average duration variable, followed by the Northeastern region. The Central region had the weakest association with the outcome variable, which could be explained by the fact that it contained the most cities with the widest distribution of average eclipse duration. The latitude and longitude variables were not strong predictors of the outcome variable, and the time at which annularity begins in this location variable was the least impactful on the outcome.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
